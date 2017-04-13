@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="Price Summary"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/paym_details"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/textView"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:orientation="vertical"
+            android:background="@drawable/rounded_corner">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_number_of_salads"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="Items(19):" />
+                <TextView
+                    android:id="@+id/tv_price_of_salads"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:layout_alignParentRight="true"
+                    android:text="\u20ac 345.00"/>
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_number_of_topping"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="Charges:" />
+                <TextView
+                    android:id="@+id/tv_price_of_topping"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="\u20ac 145.00"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_number_of_discount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:layout_alignParentLeft="true"
+                    android:text="Discount:"/>
+                <TextView
+                    android:id="@+id/tv_price_of_discount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:layout_alignParentRight="true"
+                    android:text="\u20ac 45.00"/>
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/tv_number_of_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="left"
+                    android:text="Order Total:"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_price_of_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:gravity="left"
+                    android:text="\u20ac 577.00"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:gravity="center_vertical">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_weight=".25"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/rounded_corner"
+                    />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_weight=".75"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center"
+                    android:background="@color/appy_btn"
+                    android:text="apply"/>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/tv_price_of_total_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="20dp"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/colorPrimary"
+                android:text="Promocode applied successfully"/>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_payment_method"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/paym_details"
+            android:layout_marginLeft="20dp"
+            android:text="Payment Method"
+            android:textSize="24sp"
+            android:layout_marginBottom="5dp"
+            android:textStyle="bold"/>
+        <LinearLayout
+            android:id="@+id/tv_change_address"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/tv_payment_method"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical"
+            android:background="@drawable/rounded_corner">
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="10dp"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/avalibailty"
+                android:orientation="vertical">
+
+
+                <RadioButton
+                    android:id="@+id/rb_yes"
+                    style="@style/radioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/avalibailty"
+                    android:layout_toLeftOf="@+id/radioGroup"
+                    android:layout_toStartOf="@+id/radioGroup"
+                    android:buttonTint="@color/radio_btn"
+                    android:padding="15dp"
+                    android:text="Paypal" />
+
+                <RadioButton
+                    android:id="@+id/rb_no"
+                    style="@style/radioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/line1"
+                    android:buttonTint="@color/radio_btn"
+                    android:padding="15dp"
+                    android:text="Stripe" />
+
+
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+
+            android:layout_below="@+id/tv_change_address"
+            android:background="@color/payment_btn_color"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_margin="20dp"
+
+
+            android:text="Make Payment" />
+    </RelativeLayout>
+

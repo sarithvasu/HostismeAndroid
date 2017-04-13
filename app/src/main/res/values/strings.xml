@@ -8,4 +8,14 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_search_city">SearchCityActivity</string>
+    <string name="title_activity_restaurant_list_acitivity">RestaurantListAcitivity</string>
+    <string name="title_activity_payment">PaymentActivity</string>
+    <string name="title_activity_menu">MenuActivity</string>
+    <string name="submit">Submit</string>
+    <string name="comments_status">Maximun 400 Character only</string>
+    <string name="call_waiter">Call waiter</string>
+    <string name="clear_table">Clear table</string>
+    <string name="dinner">Dinner</string>
+    <string name="starter">Starters</string>
 </resources>
