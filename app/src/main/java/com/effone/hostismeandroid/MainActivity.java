@@ -1,14 +1,9 @@
 package com.effone.hostismeandroid;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -17,14 +12,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.effone.hostismeandroid.adapter.MyPagerAdapter;
+import com.effone.hostismeandroid.activity.MenuActivity;
+import com.effone.hostismeandroid.activity.My_BookingActivity;
+import com.effone.hostismeandroid.activity.PaymentActivity;
+import com.effone.hostismeandroid.activity.RestaurantListAcitivity;
+import com.effone.hostismeandroid.activity.View_Pay_BillActivity;
 import com.effone.hostismeandroid.adapter.ScreenSlidePagerAdapter;
 
 import java.util.ArrayList;
@@ -33,12 +31,12 @@ import java.util.Arrays;
 import cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     private AutoScrollViewPager mPager;
     private ScreenSlidePagerAdapter mPagerAdapter;
     private static final int NUM_PAGES = 5;
     private ArrayList<Integer> ids;
-
+    private TextView mTvRestaurantList,mTvMenu,mTvBook_a_table,mTvService_Request,mTvViewPay,mTvBooking_History;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +65,22 @@ public class MainActivity extends AppCompatActivity
         mPager.animate();
         mPager.setInterval(2000);
         mPager.startAutoScroll();
+        declerations();
+    }
 
-
+    private void declerations() {
+        mTvRestaurantList=(TextView)findViewById(R.id.btn_res_list);
+        mTvBook_a_table=(TextView)findViewById(R.id.btn_book_table);
+        mTvMenu=(TextView)findViewById(R.id.btn_res_menu);
+        mTvService_Request=(TextView)findViewById(R.id.btn_view_pay);
+        mTvViewPay=(TextView)findViewById(R.id.btn_view_pay);
+        mTvBooking_History=(TextView)findViewById(R.id.btn_my_booking);
+        mTvBooking_History.setOnClickListener(this);
+        mTvViewPay.setOnClickListener(this);
+        mTvRestaurantList.setOnClickListener(this);
+        mTvBook_a_table.setOnClickListener(this);
+        mTvMenu.setOnClickListener(this);
+        mTvService_Request.setOnClickListener(this);
     }
 
     @Override
@@ -80,6 +92,35 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
+
+    @Override
+    public void onClick(View view) {
+        Intent intent;
+        switch (view.getId()){
+
+            case R.id.btn_res_list:
+                 intent=new Intent(this,RestaurantListAcitivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_res_menu:
+                 intent=new Intent(this,MenuActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_book_table:
+                intent=new Intent(this,PaymentActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_view_pay:
+                intent=new Intent(this,View_Pay_BillActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_my_booking:
+                intent=new Intent(this,My_BookingActivity.class);
+                startActivity(intent);
+                break;
+        }
+    }
+
     private class CustomPagerAdapter extends PagerAdapter {
 
         Context mContext;

@@ -20,6 +20,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_menu" />
+  <include layout="@layout/content_menu"
+      tools:ignore="ResourceCycle" />
 
 </android.support.design.widget.CoordinatorLayout>

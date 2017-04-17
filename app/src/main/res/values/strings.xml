@@ -18,4 +18,27 @@
     <string name="clear_table">Clear table</string>
     <string name="dinner">Dinner</string>
     <string name="starter">Starters</string>
+
+
+    <string name="address">Address</string>
+    <string name="price_summary">price summary</string>
+    <string name="items">Items</string>
+    <string name="charges">Chargers</string>
+    <string name="estimated_total">Estimated Total</string>
+    <string name="proceed">proceed to Checkout</string>
+    <string name="item_summary">Item Summary</string>
+    <string name="bill_details">Bill Details</string>
+    <string name="discount">Discount</string>
+    <string name="order_total">Order Total</string>
+    <string name="order_summary">Order Summary</string>
+    <string name="servi">Serv. Charge</string>
+    <string name="vat">VAT. Tax</string>
+    <string name="ser_tax">Serv. Tax</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="paypal">Paypal</string>
+    <string name="stripe">Stripe</string>
+    <string name="make_payment">Make Payment</string>
+    <string name="book_a_table">Book a Table</string>
+    <string name="view_pay">View pay</string>
+    <string name="booking_history">Booking History</string>
 </resources>

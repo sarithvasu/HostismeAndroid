@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="2">
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:id="@+id/tv_confiramtion_msg"
+    android:layout_marginBottom="10dp"
+    android:padding="5dp"
+     />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_order_Summery"
+        android:text="@string/order_summary"
+        android:padding="5dp"
+        style="@style/delivery"
+        android:layout_below="@+id/tv_confiramtion_msg"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+       />
+    <include layout="@layout/booking_history_activity"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_height="176dp"
+        android:layout_width="match_parent" />
+
+    <include
+        layout="@layout/bill_details"
+        android:layout_height="449dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tv_order_Summery" />
+</LinearLayout>
