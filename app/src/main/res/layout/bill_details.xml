@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+    <RelativeLayout android:layout_height="match_parent" android:layout_width="match_parent" android:orientation="vertical" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView android:layout_height="wrap_content" android:layout_width="match_parent" android:padding="5dp" android:textStyle="bold" android:textSize="15sp" android:textColor="@color/fontColor" android:text="@string/bill_details" android:id="@+id/tv_bill_table"/>
+
+
+    <RelativeLayout android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/linearLayout1" android:weightSum="3.5" android:background="@drawable/payment_background"
+        android:layout_below="@+id/tv_bill_table"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+    <ListView android:layout_height="50dp" android:layout_width="match_parent" android:id="@+id/lv_items_list" android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:id="@+id/tv_discount"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_below="@+id/lv_items_list"
+            android:padding="5dp"
+            android:text="@string/discount"
+            android:textColor="@color/fontColor"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_discount_price_bill"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignBottom="@+id/tv_discount"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/lv_items_list"
+            android:padding="5dp"
+            android:text="TextView"
+            android:textStyle="bold" />
+
+    <View android:layout_height="1dp" android:layout_width="match_parent" android:id="@+id/line2" android:background="@color/fontColor" android:layout_below="@+id/tv_discount_price_bill" android:layout_marginBottom="5dp"/>
+
+    <ListView android:layout_height="50dp" android:layout_width="match_parent" android:id="@+id/lv_tax_menu" android:layout_below="@+id/line2"/>
+
+    <View android:layout_height="1dp" android:layout_width="match_parent" android:id="@+id/line3" android:background="@color/fontColor" android:layout_below="@+id/lv_tax_menu" android:layout_marginBottom="5dp"/>
+
+        <TextView
+            android:id="@+id/tv_order_total"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_below="@+id/line3"
+            android:padding="5dp"
+            android:text="@string/order_total"
+            android:textColor="@color/fontColor"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_total_price"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/line3"
+            android:padding="5dp"
+            android:text="TextView"
+            android:textStyle="bold" />
+
+</RelativeLayout>
+
+</RelativeLayout>

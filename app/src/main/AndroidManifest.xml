@@ -41,7 +41,11 @@
         <activity
             android:name=".activity.My_BookingActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.Search_ItemActivity"></activity>
+        <activity android:name=".activity.Search_ItemActivity" />
+        <activity
+            android:name=".activity.ViewCartActivity"
+            android:label="@string/title_activity_view_cart"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

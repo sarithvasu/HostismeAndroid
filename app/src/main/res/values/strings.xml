@@ -41,4 +41,5 @@
     <string name="book_a_table">Book a Table</string>
     <string name="view_pay">View pay</string>
     <string name="booking_history">Booking History</string>
+    <string name="title_activity_view_cart">ViewCartActivity</string>
 </resources>
