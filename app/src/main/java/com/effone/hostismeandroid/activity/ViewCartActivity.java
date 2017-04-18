@@ -19,6 +19,10 @@ public class ViewCartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_cart);
         mItemSummeryList=(ListView)findViewById(R.id.item_summery_list);
+        init();
+    }
+
+    private void init() {
     }
 
 }
