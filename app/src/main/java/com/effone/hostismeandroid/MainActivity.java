@@ -22,6 +22,8 @@ import com.effone.hostismeandroid.activity.MenuActivity;
 import com.effone.hostismeandroid.activity.My_BookingActivity;
 import com.effone.hostismeandroid.activity.PaymentActivity;
 import com.effone.hostismeandroid.activity.RestaurantListAcitivity;
+import com.effone.hostismeandroid.activity.Search_ItemActivity;
+import com.effone.hostismeandroid.activity.Service_RequestActivity;
 import com.effone.hostismeandroid.activity.View_Pay_BillActivity;
 import com.effone.hostismeandroid.adapter.ScreenSlidePagerAdapter;
 
@@ -45,7 +47,13 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Location");
-
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this, Search_ItemActivity.class);
+                startActivity(intent);
+            }
+        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -72,7 +80,7 @@ public class MainActivity extends AppCompatActivity
         mTvRestaurantList=(TextView)findViewById(R.id.btn_res_list);
         mTvBook_a_table=(TextView)findViewById(R.id.btn_book_table);
         mTvMenu=(TextView)findViewById(R.id.btn_res_menu);
-        mTvService_Request=(TextView)findViewById(R.id.btn_view_pay);
+        mTvService_Request=(TextView)findViewById(R.id.btn_appointments);
         mTvViewPay=(TextView)findViewById(R.id.btn_view_pay);
         mTvBooking_History=(TextView)findViewById(R.id.btn_my_booking);
         mTvBooking_History.setOnClickListener(this);
@@ -97,7 +105,10 @@ public class MainActivity extends AppCompatActivity
     public void onClick(View view) {
         Intent intent;
         switch (view.getId()){
-
+            case R.id.btn_appointments:
+                intent=new Intent(this,Service_RequestActivity.class);
+                startActivity(intent);
+                break;
             case R.id.btn_res_list:
                  intent=new Intent(this,RestaurantListAcitivity.class);
                 startActivity(intent);

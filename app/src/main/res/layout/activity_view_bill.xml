@@ -3,8 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="5dp">
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,11 +22,15 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
-
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/appbAR">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_below="@+id/appbAR"
-        android:layout_height="match_parent">
+
+        android:layout_height="match_parent"
+        android:padding="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -63,5 +70,8 @@
         android:layout_below="@+id/includes"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+    </RelativeLayout>
+
+</ScrollView>
     </RelativeLayout>
 </RelativeLayout>

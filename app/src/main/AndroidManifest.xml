@@ -39,9 +39,18 @@
             android:name=".activity.View_Pay_BillActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".activity.ConfirmationActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".activity.My_BookingActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.Search_ItemActivity"></activity>
+        <activity
+            android:name=".activity.Search_ItemActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activity.Service_RequestActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustNothing|stateUnchanged"
+        ></activity>
     </application>
 
 </manifest>

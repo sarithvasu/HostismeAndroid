@@ -14,8 +14,7 @@
     <string name="title_activity_menu">MenuActivity</string>
     <string name="submit">Submit</string>
     <string name="comments_status">Maximun 400 Character only</string>
-    <string name="call_waiter">Call waiter</string>
-    <string name="clear_table">Clear table</string>
+
     <string name="dinner">Dinner</string>
     <string name="starter">Starters</string>
 
@@ -41,4 +40,15 @@
     <string name="book_a_table">Book a Table</string>
     <string name="view_pay">View pay</string>
     <string name="booking_history">Booking History</string>
+    <string name="current_city">Current city:</string>
+
+    <string name="move_a_table">Move a table</string>
+    <string name="service">Service</string>
+    <string name="complaints">Complaint</string>
+    <string name="call_waiter">Call waiter</string>
+    <string name="clear_table">Clear table</string>
+    <string name="from">From</string>
+    <string name="to">to</string>
+    <string name="complaints_hint">Maximum 400 character only.</string>
+    <string name="search">Search</string>
 </resources>

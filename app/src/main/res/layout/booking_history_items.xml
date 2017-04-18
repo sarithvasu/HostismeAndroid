@@ -2,34 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/titel_na"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </android.support.design.widget.AppBarLayout>
-<ListView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/relativeLayout"
+    android:layout_alignParentLeft="true"
     android:layout_below="@+id/titel_na"
-    android:id="@+id/historyView"></ListView>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/relativeLayout"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/titel_na"
-        android:padding="5dp"
-        android:layout_alignParentStart="true">
+    android:padding="5dp"
+    android:layout_alignParentStart="true">
     <TextView
         android:id="@+id/Date"
 
@@ -44,12 +22,12 @@
         android:id="@+id/tv_data_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_rest_name"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="TextView"
-        android:layout_alignLeft="@+id/tv_rest_name"
-        android:layout_alignStart="@+id/tv_rest_name" />
+        android:layout_alignStart="@+id/tv_rest_name"
+        android:text="TextView" />
 
     <TextView
         android:id="@+id/rest.name"
@@ -152,15 +130,15 @@
         android:layout_alignLeft="@+id/tv_descrption"
         android:layout_alignStart="@+id/tv_descrption" />
 
-      <TextView
-          android:id="@+id/tv_order_status"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_below="@+id/tv_order_total"
-          android:layout_toRightOf="@+id/order_status"
-          android:text="TextView"
-          android:layout_alignParentRight="true"
-          android:layout_alignParentEnd="true" />
+    <TextView
+        android:id="@+id/tv_order_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_order_total"
+        android:layout_toRightOf="@+id/order_status"
+        android:text="TextView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:id="@+id/tv_quantitys"
@@ -173,7 +151,7 @@
         android:layout_alignLeft="@+id/tv_table_no"
         android:layout_alignStart="@+id/tv_table_no" />
 
-      <TextView
+    <TextView
         android:id="@+id/tv_order_total"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -181,14 +159,13 @@
         android:layout_alignStart="@+id/tv_quantitys"
         android:layout_below="@+id/tv_quantitys"
         android:text="TextView" />
-      <TextView
-          android:id="@+id/tv_stataus"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="Status"
-          android:layout_below="@+id/order_status"
-          android:layout_alignParentLeft="true"
-          android:layout_alignParentStart="true" />
-    </RelativeLayout>
-
+    <TextView
+        android:id="@+id/tv_stataus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Status"
+        android:layout_alignBaseline="@+id/tv_order_status"
+        android:layout_alignBottom="@+id/tv_order_status"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

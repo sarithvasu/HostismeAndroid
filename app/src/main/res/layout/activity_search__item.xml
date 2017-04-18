@@ -2,14 +2,43 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/titel_na"
+            android:theme="@style/AppTheme.AppBarOverlay">
 
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </android.support.design.widget.AppBarLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/secondHeader"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:text="@string/current_city"
+        />
     <!-- Editext for Search -->
-    <EditText android:id="@+id/inputSearch"
+    <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="Search products.."
-        android:inputType="textVisiblePassword"/>
+        android:text="" />
+
+    <com.effone.hostismeandroid.changeListener.CustomAutoCompleteView
+        android:id="@+id/myautocomplete"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:completionThreshold="1" >
+    </com.effone.hostismeandroid.changeListener.CustomAutoCompleteView>
 
     <!-- List View -->
     <ListView
