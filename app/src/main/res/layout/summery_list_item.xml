@@ -1,26 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<?xml version="1.0" encoding="UTF-8"?>
 
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv_summery_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="fjdksjfj"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:text="fjdksjfj" />
 
     <TextView
         android:id="@+id/tv_item_total_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:text="sdsajdj"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:text="sdsajdj" />
 
     <TextView
         android:id="@+id/charges_heading"
@@ -29,7 +31,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/tv_summery_item_name"
-        android:text="TextView" />
+        android:text="Charges" />
 
     <TextView
         android:id="@+id/tv_service_charges"
@@ -38,68 +40,50 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/charges_heading"
-        android:text="TextView" />
+        android:text="Service Charge" />
 
     <TextView
-        android:id="@+id/tv_service_charges"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tv_item_total_price"
-        android:layout_alignStart="@+id/tv_item_total_price"
-        android:layout_below="@+id/charges_heading"
-        android:text="$ 1.6" />
-
-    <TextView
-        android:id="@+id/textView17"
+        android:id="@+id/tv_vat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/tv_service_charges"
-        android:text="TextView" />
+        android:text="VAT" />
 
     <TextView
-        android:id="@+id/textView20"
+        android:id="@+id/tv_vat_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/tv_service_charges"
-        android:text="TextView" />
+        android:text="$ 3.6" />
 
     <TextView
-        android:id="@+id/textView21"
+        android:id="@+id/tv_service_tax"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/textView17"
-        android:layout_alignRight="@+id/textView17"
-        android:layout_below="@+id/textView17"
-        android:text="TextView" />
+        android:layout_below="@+id/tv_vat"
+        android:text="Service Tax" />
 
     <TextView
-        android:id="@+id/textView22"
+        android:id="@+id/tv_total"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/textView20"
-        android:text="TextView" />
+        android:layout_below="@+id/tv_service_tax_value"
+        android:text="$ 120.00" />
 
-    <TextView
-        android:id="@+id/textView23"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView22"
-        android:layout_alignStart="@+id/textView22"
-        android:layout_below="@+id/textView22"
-        android:text="TextView" />
+
     <LinearLayout
         android:id="@+id/btn_lay"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
+        android:layout_width="60dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/tv_total"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/rounded_corner"
-        android:layout_below="@+id/textView23">
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tv_minus"
@@ -107,26 +91,57 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:textSize="12sp"
-            android:text="-" />
+            android:text="-"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/tv_qutity"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            android:textSize="12sp"
             android:background="@color/payment_btn_color"
-            android:text="10" />
+            android:gravity="center"
+            android:text="10"
+            android:textSize="12sp" />
+
         <TextView
             android:id="@+id/tv_plus"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:textSize="12sp"
-            android:text="+" />
+            android:text="+"
+            android:textSize="12sp" />
+
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_service_tax_value"
+        android:layout_alignStart="@+id/tv_service_tax_value"
+        android:layout_alignTop="@+id/btn_lay"
+        android:gravity="center"
+        android:text="X"
+        android:textColor="@color/colorAccent" />
+
+    <TextView
+        android:id="@+id/tv_service_charges_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tv_vat_value"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="$ 1.6" />
+
+    <TextView
+        android:id="@+id/tv_service_tax_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tv_vat_value"
+        android:text="$ 6.0" />
 
 </RelativeLayout>

@@ -12,6 +12,15 @@ public class OrderedItemSummary {
     private float vat;
     private float serviceTax;
 
+    public OrderedItemSummary(String itemName, int quatity, float price, float serviceCharges, float vat, float serviceTax) {
+        ItemName = itemName;
+        this.quatity = quatity;
+        this.price = price;
+        this.serviceCharges = serviceCharges;
+        this.vat = vat;
+        this.serviceTax = serviceTax;
+    }
+
     public String getItemName() {
         return ItemName;
     }

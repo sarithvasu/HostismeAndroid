@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.effone.hostismeandroid.activity.Book_a_tableActivity;
 import com.effone.hostismeandroid.activity.MenuActivity;
 import com.effone.hostismeandroid.activity.My_BookingActivity;
 import com.effone.hostismeandroid.activity.PaymentActivity;
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity
         mTvService_Request=(TextView)findViewById(R.id.btn_appointments);
         mTvViewPay=(TextView)findViewById(R.id.btn_view_pay);
         mTvBooking_History=(TextView)findViewById(R.id.btn_my_booking);
+
         mTvBooking_History.setOnClickListener(this);
         mTvViewPay.setOnClickListener(this);
         mTvRestaurantList.setOnClickListener(this);
@@ -118,7 +120,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             case R.id.btn_book_table:
-                intent=new Intent(this,PaymentActivity.class);
+                intent=new Intent(this,Book_a_tableActivity.class);
                 startActivity(intent);
                 break;
             case R.id.btn_view_pay:

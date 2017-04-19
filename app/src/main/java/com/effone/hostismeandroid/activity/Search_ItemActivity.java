@@ -53,7 +53,7 @@ public class Search_ItemActivity extends AppCompatActivity {
         databaseH = new DatabaseHandler(this);
         listView=new ArrayList<>();
         mListView=(ListView)findViewById(R.id.list_view);
-        addinf();
+        adding();
         try {
 
             // put sample data to database
@@ -100,7 +100,7 @@ public class Search_ItemActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    private void addinf() {
+    private void adding() {
         listView.add( "January");
         listView.add( "February" );
         listView.add( "March");

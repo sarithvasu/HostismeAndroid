@@ -48,6 +48,8 @@
     <string name="service">Service</string>
     <string name="complaints">Complaint</string>
     <string name="complaints_hint">Maximum 400 character only.</string>
+    <string name="inputAddress">Restayrant Name One  \\n 39 Lime St, Sydney NSW 2000,Austraila</string>
+    <string name="view_cart">View Cart</string>
 
 
 </resources>

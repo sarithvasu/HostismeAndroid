@@ -7,23 +7,23 @@
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.effone.hostismeandroid.activity.MenuActivity"
-    tools:showIn="@layout/activity_menu">
+    tools:showIn="@layout/activity_menu"
+    android:padding="5dp">
 
 
     <TextView
         android:id="@+id/tv_menu_heading"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="10dp"
-        android:paddingLeft="5dp"
+        android:gravity="center"
+      android:textAlignment="center"
         android:text="@string/dinner"
         android:textSize="24sp" />
 
 <ExpandableListView
     android:id="@+id/elv_menu"
-    android:layout_margin="10dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="1"
@@ -32,36 +32,33 @@
 </ExpandableListView>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:paddingTop="10dp"
+        android:layout_height="50dp"
         android:id="@+id/btn_lay"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:paddingBottom="5dp"
-
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tv_summary_details"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.39"
+            android:layout_weight="1"
             android:background="@color/dinner"
-            android:text="20 Items in Cart\n $ 200.00\nPlus charges
-"           android:padding="5dp"
+            android:text="20 Items in Cart\n $ 200.00\nPlus charges"
             android:textColor="@android:color/white"
+            android:drawableLeft="@drawable/cart"
+            android:drawablePadding="5dp"
+            android:drawableTint="@android:color/white"
             android:textSize="12dp" />
 
         <TextView
             android:id="@+id/tv_confirm"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:textAlignment="center"
             android:gravity="center"
             android:textColor="@android:color/white"
-            android:layout_weight="0.39"
+            android:layout_weight="1"
             android:textSize="18sp"
             android:background="@color/confirm"
-            android:text="Confirm" />
+            android:text="View Cart" />
     </LinearLayout>
 </LinearLayout>

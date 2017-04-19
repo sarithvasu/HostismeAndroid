@@ -49,10 +49,11 @@
             android:textSize="18sp" />
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="46dp"
+        android:layout_height="50dp"
         android:background="@drawable/rounded_corner"
         android:id="@+id/tv_address_area"
-
+        android:padding="5dp"
+        android:text="@string/inputAddress"
         />
 </LinearLayout>
     <include layout="@layout/bill_details"

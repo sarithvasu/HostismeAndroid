@@ -33,16 +33,16 @@ public class My_BookingActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Booking History");
+        appPreferences=new AppPreferences(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        appPreferences=new AppPreferences(this);
-        if(appPreferences.getREST_NAME()!= null)
+      /*  if(appPreferences.getREST_NAME()!= null)
         {
 
         }else {
             toolbar.setTitle(""+appPreferences.getREST_NAME());
 
-        }
+        }*/
         init();
     }
 

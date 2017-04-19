@@ -41,7 +41,20 @@
         <activity
             android:name=".activity.My_BookingActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.Search_ItemActivity"></activity>
+        <activity
+            android:name=".activity.Search_ItemActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.Service_RequestActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.ConfirmationActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.ViewCartActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.Book_a_tableActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
-
 </manifest>
