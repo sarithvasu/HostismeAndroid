@@ -3,10 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/titel_na"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/titel_na"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
@@ -17,178 +18,185 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
-<ListView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_below="@+id/titel_na"
-    android:id="@+id/historyView"></ListView>
-    <RelativeLayout
+
+    <ListView
+        android:id="@+id/historyView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/relativeLayout"
-        android:layout_alignParentLeft="true"
+        android:layout_height="match_parent"
         android:layout_below="@+id/titel_na"
-        android:padding="5dp"
-        android:layout_alignParentStart="true">
-    <TextView
-        android:id="@+id/Date"
+        android:padding="5dp"></ListView>
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:text="Date" />
-
-    <TextView
-        android:id="@+id/tv_data_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="TextView"
-        android:layout_alignLeft="@+id/tv_rest_name"
-        android:layout_alignStart="@+id/tv_rest_name" />
-
-    <TextView
-        android:id="@+id/rest.name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/Date"
-        android:text="Rest. Name"
-        android:layout_toLeftOf="@+id/tv_data_time"
-        android:layout_toStartOf="@+id/tv_data_time" />
-
-    <TextView
-        android:id="@+id/booking_id"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/rest.name"
-        android:text="Booking ID" />
-
-    <TextView
-        android:id="@+id/desctiption"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/booking_id"
-        android:text="Description"
-        android:layout_alignRight="@+id/rest.name"
-        android:layout_alignEnd="@+id/rest.name"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:id="@+id/table_no"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/desctiption"
-        android:text="Table No"
-        android:layout_toLeftOf="@+id/tv_descrption"
-        android:layout_toStartOf="@+id/tv_descrption" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Quantity"
-        android:id="@+id/quantity"
-        android:layout_below="@+id/table_no" />
-    <TextView
-        android:id="@+id/order_status"
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/desctiption"
-        android:layout_alignRight="@+id/desctiption"
-        android:layout_below="@+id/quantity"
-        android:text="Order total" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/titel_na"
+        android:padding="5dp">
 
-    <TextView
-        android:id="@+id/tv_rest_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/booking_id"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:text="TextView"
-        android:layout_toRightOf="@+id/booking_id"
-        android:layout_toEndOf="@+id/booking_id" />
+        <TextView
+            android:id="@+id/Date"
 
-    <TextView
-        android:id="@+id/tv_booking_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/desctiption"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:text="Sy560002019798"
-        android:layout_toEndOf="@+id/booking_id"
-        android:layout_toRightOf="@+id/booking_id" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="Date" />
 
-    <TextView
-        android:id="@+id/tv_descrption"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/tv_booking_id"
-        android:text="TextView"
-        android:layout_toRightOf="@+id/booking_id"
-        android:layout_toEndOf="@+id/booking_id" />
+        <TextView
+            android:id="@+id/tv_data_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_rest_name"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/tv_rest_name"
+            android:text="TextView" />
 
-    <TextView
-        android:id="@+id/tv_table_no"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/table_no"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:text="TextView"
-        android:layout_alignLeft="@+id/tv_descrption"
-        android:layout_alignStart="@+id/tv_descrption" />
+        <TextView
+            android:id="@+id/rest.name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/Date"
+            android:layout_toLeftOf="@+id/tv_data_time"
+            android:layout_toStartOf="@+id/tv_data_time"
+            android:text="Rest. Name" />
 
-      <TextView
-          android:id="@+id/tv_order_status"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_below="@+id/tv_order_total"
-          android:layout_toRightOf="@+id/order_status"
-          android:text="TextView"
-          android:layout_alignParentRight="true"
-          android:layout_alignParentEnd="true" />
+        <TextView
+            android:id="@+id/booking_id"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/rest.name"
+            android:text="Booking ID" />
 
-    <TextView
-        android:id="@+id/tv_quantitys"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/tv_table_no"
-        android:text="TextView"
-        android:layout_alignLeft="@+id/tv_table_no"
-        android:layout_alignStart="@+id/tv_table_no" />
+        <TextView
+            android:id="@+id/desctiption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/rest.name"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/rest.name"
+            android:layout_below="@+id/booking_id"
+            android:text="Description" />
 
-      <TextView
-        android:id="@+id/tv_order_total"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tv_quantitys"
-        android:layout_alignStart="@+id/tv_quantitys"
-        android:layout_below="@+id/tv_quantitys"
-        android:text="TextView" />
-      <TextView
-          android:id="@+id/tv_stataus"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="Status"
-          android:layout_below="@+id/order_status"
-          android:layout_alignParentLeft="true"
-          android:layout_alignParentStart="true" />
+        <TextView
+            android:id="@+id/table_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/desctiption"
+            android:layout_toLeftOf="@+id/tv_descrption"
+            android:layout_toStartOf="@+id/tv_descrption"
+            android:text="Table No" />
+
+        <TextView
+            android:id="@+id/quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/table_no"
+            android:text="Quantity" />
+
+        <TextView
+            android:id="@+id/order_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/desctiption"
+            android:layout_alignRight="@+id/desctiption"
+            android:layout_below="@+id/quantity"
+            android:text="Order total" />
+
+        <TextView
+            android:id="@+id/tv_rest_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/booking_id"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_toEndOf="@+id/booking_id"
+            android:layout_toRightOf="@+id/booking_id"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/tv_booking_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/desctiption"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_toEndOf="@+id/booking_id"
+            android:layout_toRightOf="@+id/booking_id"
+            android:text="Sy560002019798" />
+
+        <TextView
+            android:id="@+id/tv_descrption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tv_booking_id"
+            android:layout_toEndOf="@+id/booking_id"
+            android:layout_toRightOf="@+id/booking_id"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/tv_table_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/table_no"
+            android:layout_alignLeft="@+id/tv_descrption"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignStart="@+id/tv_descrption"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/tv_order_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tv_order_total"
+            android:layout_toRightOf="@+id/order_status"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/tv_quantitys"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_table_no"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignStart="@+id/tv_table_no"
+            android:layout_below="@+id/tv_table_no"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/tv_order_total"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_quantitys"
+            android:layout_alignStart="@+id/tv_quantitys"
+            android:layout_below="@+id/tv_quantitys"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/tv_stataus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/order_status"
+            android:text="Status" />
     </RelativeLayout>
 
 </RelativeLayout>

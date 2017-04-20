@@ -59,16 +59,16 @@ public class Booking_HistoryAdapter  extends ArrayAdapter<OrderSummary> {
             /***** Get each Model object from Arraylist ********/
             OrderSummary value = (OrderSummary) orderSummaries.get(position);
             /************  Set Model values in Holder elements ***********/
-            holder.tv_date_time.setText(value.getData_time());
+            holder.tv_date_time.setText(":"+value.getData_time());
 
 
 
-            holder.tv_rest_name.setText(value.getRest_name());
+            holder.tv_rest_name.setText(":"+value.getRest_name());
 
-            holder.tv_booking_id.setText(value.getOrder_id());
-            holder.tv_table_no.setText(""+value.getTable_no());
-            holder.tv_order_total.setText(""+value.getTotal());
-            holder.tv_order_status.setText(value.getStatus());
+            holder.tv_booking_id.setText(":"+value.getOrder_id());
+            holder.tv_table_no.setText(":"+value.getTable_no());
+            holder.tv_order_total.setText(":"+value.getTotal());
+            holder.tv_order_status.setText(":"+value.getStatus());
 
         }
 

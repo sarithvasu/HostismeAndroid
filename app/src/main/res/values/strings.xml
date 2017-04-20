@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">HostismeAndroid</string>
-
+    <string name="home">Location</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -50,6 +50,7 @@
     <string name="complaints_hint">Maximum 400 character only.</string>
     <string name="inputAddress">Restayrant Name One  \\n 39 Lime St, Sydney NSW 2000,Austraila</string>
     <string name="view_cart">View Cart</string>
+    <string name="request_service">Request Service</string>
 
 
 </resources>

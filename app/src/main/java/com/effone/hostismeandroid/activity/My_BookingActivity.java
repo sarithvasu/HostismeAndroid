@@ -32,7 +32,7 @@ public class My_BookingActivity extends AppCompatActivity {
         setContentView(R.layout.booking_history_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Booking History");
+        getSupportActionBar().setTitle("Booking History");
         appPreferences=new AppPreferences(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);

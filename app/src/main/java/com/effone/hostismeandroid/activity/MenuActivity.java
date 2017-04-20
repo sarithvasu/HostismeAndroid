@@ -76,7 +76,8 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
       //  for (int i = 1; i < 5; i++) {
             header.add("Starters");
             header.add("Mains");
-            header.add("Disserts");
+            header.add("Desserts");
+
        // }
         // Adding child data
         for (int i = 1; i < 3; i++) {

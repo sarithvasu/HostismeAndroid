@@ -3,16 +3,19 @@ package com.effone.hostismeandroid;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.PagerAdapter;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,7 +24,6 @@ import android.widget.TextView;
 import com.effone.hostismeandroid.activity.Book_a_tableActivity;
 import com.effone.hostismeandroid.activity.MenuActivity;
 import com.effone.hostismeandroid.activity.My_BookingActivity;
-import com.effone.hostismeandroid.activity.PaymentActivity;
 import com.effone.hostismeandroid.activity.RestaurantListAcitivity;
 import com.effone.hostismeandroid.activity.Search_ItemActivity;
 import com.effone.hostismeandroid.activity.Service_RequestActivity;
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity
     private ScreenSlidePagerAdapter mPagerAdapter;
     private static final int NUM_PAGES = 5;
     private ArrayList<Integer> ids;
-    private TextView mTvRestaurantList,mTvMenu,mTvBook_a_table,mTvService_Request,mTvViewPay,mTvBooking_History;
+    private TextView mTvRestaurantList, mTvMenu, mTvBook_a_table, mTvService_Request, mTvViewPay, mTvBooking_History;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +49,21 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Location");
+        getSupportActionBar().setTitle(R.string.home);
+       /* int titleId = getResources().getIdentifier("action_bar_title", "id", "android");
+        TextView abTitle = (TextView) findViewById(titleId);
+        abTitle.setTextColor(getResources().getColor(R.color.white));
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        abTitle.setGravity(Gravity.CENTER);
+        abTitle.setWidth(metrics.widthPixels);
+        getActionBar().setTitle("I am center now");*/
         toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(MainActivity.this, Search_ItemActivity.class);
+                Intent intent = new Intent(MainActivity.this, Search_ItemActivity.class);
                 startActivity(intent);
             }
         });
@@ -68,22 +80,27 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void init(View N) {
-      ids=new ArrayList<Integer>(Arrays.asList(R.drawable.a,R.drawable.b,R.drawable.c,R.drawable.d));
-        mPager = (AutoScrollViewPager)findViewById(R.id.view_pager);
+        ids = new ArrayList<Integer>(Arrays.asList(R.drawable.a, R.drawable.b, R.drawable.c, R.drawable.d));
+        mPager = (AutoScrollViewPager) findViewById(R.id.view_pager);
+
         mPager.setAdapter(new CustomPagerAdapter(this));
         mPager.animate();
         mPager.setInterval(2000);
         mPager.startAutoScroll();
+        mPager.setBorderAnimation(true);
+        mPager.getSlideBorderMode();
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(mPager, true);
         declerations();
     }
 
     private void declerations() {
-        mTvRestaurantList=(TextView)findViewById(R.id.btn_res_list);
-        mTvBook_a_table=(TextView)findViewById(R.id.btn_book_table);
-        mTvMenu=(TextView)findViewById(R.id.btn_res_menu);
-        mTvService_Request=(TextView)findViewById(R.id.btn_appointments);
-        mTvViewPay=(TextView)findViewById(R.id.btn_view_pay);
-        mTvBooking_History=(TextView)findViewById(R.id.btn_my_booking);
+        mTvRestaurantList = (TextView) findViewById(R.id.btn_res_list);
+        mTvBook_a_table = (TextView) findViewById(R.id.btn_book_table);
+        mTvMenu = (TextView) findViewById(R.id.btn_res_menu);
+        mTvService_Request = (TextView) findViewById(R.id.btn_appointments);
+        mTvViewPay = (TextView) findViewById(R.id.btn_view_pay);
+        mTvBooking_History = (TextView) findViewById(R.id.btn_my_booking);
 
         mTvBooking_History.setOnClickListener(this);
         mTvViewPay.setOnClickListener(this);
@@ -106,29 +123,29 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onClick(View view) {
         Intent intent;
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.btn_appointments:
-                intent=new Intent(this,Service_RequestActivity.class);
+                intent = new Intent(this, Service_RequestActivity.class);
                 startActivity(intent);
                 break;
             case R.id.btn_res_list:
-                 intent=new Intent(this,RestaurantListAcitivity.class);
+                intent = new Intent(this, RestaurantListAcitivity.class);
                 startActivity(intent);
                 break;
             case R.id.btn_res_menu:
-                 intent=new Intent(this,MenuActivity.class);
+                intent = new Intent(this, MenuActivity.class);
                 startActivity(intent);
                 break;
             case R.id.btn_book_table:
-                intent=new Intent(this,Book_a_tableActivity.class);
+                intent = new Intent(this, Book_a_tableActivity.class);
                 startActivity(intent);
                 break;
             case R.id.btn_view_pay:
-                intent=new Intent(this,View_Pay_BillActivity.class);
+                intent = new Intent(this, View_Pay_BillActivity.class);
                 startActivity(intent);
                 break;
             case R.id.btn_my_booking:
-                intent=new Intent(this,My_BookingActivity.class);
+                intent = new Intent(this, My_BookingActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -171,6 +188,7 @@ public class MainActivity extends AppCompatActivity
             container.removeView((LinearLayout) object);
         }
     }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

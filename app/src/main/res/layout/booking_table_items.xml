@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,11 +9,29 @@
     android:orientation="vertical"
     android:padding="5dp">
 
-    <TextView
-        android:id="@+id/tv_data_time"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/Date"
+            android:layout_weight=".5"
+            android:textColor="@color/fontColor"
+            android:text="Date" />
+
+        <TextView
+            android:id="@+id/tv_data_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:textColor="@color/fontColor"
+            android:text="TextView" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,6 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/Date"
             android:layout_weight=".5"
+            android:textColor="@color/fontColor"
             android:text="Rest. Name" />
 
         <TextView
@@ -36,10 +54,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
+            android:textColor="@color/fontColor"
             android:text="TextView" />
 
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -52,6 +72,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
+            android:textColor="@color/fontColor"
             android:text="Booking ID" />
 
         <TextView
@@ -59,30 +80,37 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
+            android:textColor="@color/fontColor"
             android:text="Sy560002019798" />
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+
         android:weightSum="1">
+
         <TextView
             android:id="@+id/table_no"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/desctiption"
-            android:text="Table No"
-            android:layout_weight=".5"/>
+            android:textColor="@color/fontColor"
+            android:layout_weight=".5"
+            android:text="Table No" />
+
         <TextView
             android:id="@+id/tv_table_no"
             android:layout_width="0dp"
-            android:layout_weight=".5"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/table_no"
-            android:text="TextView"
-         />
+            android:textColor="@color/fontColor"
+            android:layout_weight=".5"
+            android:text="TextView" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -95,6 +123,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/desctiption"
+            android:textColor="@color/fontColor"
             android:layout_weight=".5"
             android:text="Order Total" />
 
@@ -102,11 +131,11 @@
         <TextView
             android:id="@+id/tv_order_total"
             android:layout_width="0dp"
-            android:layout_weight=".5"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/table_no"
-            android:text="TextView"
-            />
+            android:textColor="@color/fontColor"
+            android:layout_weight=".5"
+            android:text="TextView" />
 
     </LinearLayout>
 
@@ -117,25 +146,24 @@
         android:weightSum="1">
 
 
-
         <TextView
             android:id="@+id/order_status"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight=".5"
             android:layout_below="@+id/quantity"
+            android:layout_weight=".5"
+            android:textColor="@color/fontColor"
             android:text="Status" />
-
 
 
         <TextView
             android:id="@+id/tv_order_status"
             android:layout_width="0dp"
-            android:layout_weight=".5"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/table_no"
-            android:text="TextView"
-            />
+            android:textColor="@color/fontColor"
+            android:layout_weight=".5"
+            android:text="TextView" />
 
     </LinearLayout>
 </LinearLayout>

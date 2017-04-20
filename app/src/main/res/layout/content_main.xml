@@ -7,20 +7,42 @@
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.effone.hostismeandroid.MainActivity"
-    android:background="@color/colorPrimary"
-    tools:showIn="@layout/app_bar_main">
 
-    <cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager
-        android:id="@+id/view_pager"
+    tools:showIn="@layout/app_bar_main">
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight=".60"
-        />
+        android:weightSum="1"
+        android:background="@android:color/transparent">
+    <cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_weight="1.08"
+        android:background="@android:color/transparent">
+
+    </cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:foregroundGravity="bottom"
+            android:keepScreenOn="true"
+            android:layout_alignParentBottom="true"
+            app:tabBackground="@drawable/tab_selector"
+            app:tabGravity="center"
+            app:tabIndicatorHeight="0dp" />
+
+    </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:weightSum="3"
+        android:background="@color/colorPrimary"
         android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
@@ -67,7 +89,7 @@
                 style="@style/HomepageTextView"
                 android:id="@+id/btn_appointments"
                 android:drawableTop="@drawable/service_request"
-                android:text="Service Request"
+                android:text="@string/request_service"
                 />
     </LinearLayout>
     <LinearLayout
@@ -85,13 +107,13 @@
             style="@style/HomepageTextView"
             android:id="@+id/btn_view_pay"
             android:drawableTop="@drawable/view_and_pay_bill"
-            android:text="View  &amp; Pay"
+            android:text="View  &amp; Pay Bill"
             />
         <TextView
             style="@style/HomepageTextView"
             android:id="@+id/btn_my_booking"
             android:drawableTop="@drawable/my_booking"
-            android:text="My Booking"
+            android:text="@string/booking_history"
             />
     </LinearLayout>
 
