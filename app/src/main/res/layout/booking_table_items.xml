@@ -22,7 +22,8 @@
             android:layout_below="@+id/Date"
             android:layout_weight=".5"
             android:textColor="@color/fontColor"
-            android:text="Date" />
+            android:text="Date"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/tv_data_time"
@@ -30,7 +31,8 @@
             android:layout_height="wrap_content"
             android:layout_weight=".5"
             android:textColor="@color/fontColor"
-            android:text="TextView" />
+            android:text="12 Apr 2017 -07:30 PM"
+            android:textStyle="bold"/>
     </LinearLayout>
 
     <LinearLayout
@@ -55,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_weight=".5"
             android:textColor="@color/fontColor"
-            android:text="TextView" />
+            android:text="Restaurant Name One" />
 
 
     </LinearLayout>
@@ -72,8 +74,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
-            android:textColor="@color/fontColor"
-            android:text="Booking ID" />
+            android:text="Order ID"
+            android:textColor="@color/fontColor" />
 
         <TextView
             android:id="@+id/tv_booking_id"
@@ -84,7 +86,31 @@
             android:text="Sy560002019798" />
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
 
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/desctiption"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/desctiption"
+            android:layout_weight=".5"
+            android:text="Description"
+            android:textColor="@color/fontColor" />
+
+        <TextView
+            android:id="@+id/tv_decription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/table_no"
+            android:layout_weight=".5"
+            android:text=": Dinner"
+            android:textColor="@color/fontColor" />
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -97,9 +123,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/desctiption"
-            android:textColor="@color/fontColor"
             android:layout_weight=".5"
-            android:text="Table No" />
+            android:text="Table No"
+            android:textColor="@color/fontColor" />
 
         <TextView
             android:id="@+id/tv_table_no"
@@ -108,7 +134,7 @@
             android:layout_alignBottom="@+id/table_no"
             android:textColor="@color/fontColor"
             android:layout_weight=".5"
-            android:text="TextView" />
+            android:text=": 99" />
     </LinearLayout>
 
     <LinearLayout
@@ -125,7 +151,7 @@
             android:layout_below="@+id/desctiption"
             android:textColor="@color/fontColor"
             android:layout_weight=".5"
-            android:text="Order Total" />
+            android:text="Bill No" />
 
 
         <TextView
@@ -135,7 +161,34 @@
             android:layout_alignBottom="@+id/table_no"
             android:textColor="@color/fontColor"
             android:layout_weight=".5"
-            android:text="TextView" />
+            android:text=": 55596" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+
+        <TextView
+            android:id="@+id/billl_ammount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/desctiption"
+            android:layout_weight=".5"
+            android:text="Bill Amount"
+            android:textColor="@color/fontColor" />
+
+
+        <TextView
+            android:id="@+id/tv_bill_ammount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/table_no"
+            android:layout_weight=".5"
+            android:text=": $ 2456.00"
+            android:textColor="@color/fontColor" />
 
     </LinearLayout>
 
@@ -163,7 +216,7 @@
             android:layout_alignBottom="@+id/table_no"
             android:textColor="@color/fontColor"
             android:layout_weight=".5"
-            android:text="TextView" />
+            android:text="Received" />
 
     </LinearLayout>
 </LinearLayout>

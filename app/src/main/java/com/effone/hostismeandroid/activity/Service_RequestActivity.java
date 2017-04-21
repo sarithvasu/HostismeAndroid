@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.effone.hostismeandroid.R;
+import com.effone.hostismeandroid.common.Common;
 
 public class Service_RequestActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText mEtTableToNo,mTvComplaintList;
@@ -26,11 +27,10 @@ public class Service_RequestActivity extends AppCompatActivity implements View.O
         setContentView(R.layout.activity_service__request);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Service Request");
-        // getSupportActionBar().setTitle(getString(R.string.booking_history));
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        // getSupportActionBar().setTitle(getString(R.string.booking_history));
+        Common.setCustomTitile(this,"Request Service",null);
+
         init();
     }
 

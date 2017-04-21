@@ -2,16 +2,22 @@ package com.effone.hostismeandroid.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.effone.hostismeandroid.R;
+import com.effone.hostismeandroid.common.Common;
 
 /**
  * Created by sumanth.peddinti on 4/12/2017.
@@ -26,11 +32,13 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.book_a_table);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getString(R.string.book_a_table));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        Common.setCustomTitile(this,getString(R.string.book_a_table),"Restaurant Name One");
         init();
     }
+
+
 
     private void init() {
         mEtTableNo=(EditText)findViewById(R.id.et_table_no);

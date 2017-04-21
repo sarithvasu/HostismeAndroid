@@ -9,8 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/linearLayout1"
-        android:layout_marginBottom="5dp"
-        android:padding="5dp"
+        android:paddingTop="7dp"
+        android:paddingBottom="5dp"
+        android:gravity="bottom|left"
         android:text="@string/payment_method"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -23,7 +24,8 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/tv_payment_method"
         android:background="@drawable/payment_background"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <RadioButton
             android:id="@+id/rb_paypal"
@@ -36,6 +38,7 @@
             android:layout_marginBottom="10dp"
             android:paddingRight="10dp"
             android:text="@string/paypal"
+            android:buttonTint="@android:color/holo_green_light"
             android:textSize="18sp" />
 
         <RadioButton
@@ -49,6 +52,7 @@
             android:layout_below="@+id/rb_paypal"
             android:paddingRight="10dp"
             android:text="@string/stripe"
+            android:buttonTint="@android:color/holo_green_light"
             android:textSize="18sp" />
 
     </RadioGroup>
@@ -62,11 +66,12 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/radioGroup"
         android:layout_gravity="center"
-        android:layout_marginTop="39dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/button_background"
         android:gravity="center"
         android:text="@string/make_payment"
         android:textAlignment="center"
+        android:layout_marginBottom="5dp"
         android:textColor="@android:color/white"
         android:textSize="24sp" />
 </RelativeLayout>

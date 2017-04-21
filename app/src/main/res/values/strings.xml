@@ -21,13 +21,14 @@
 
 
     <string name="address">Address</string>
-    <string name="price_summary">price summary</string>
-    <string name="items">Items</string>
-    <string name="charges">Chargers</string>
+    <string name="price_summary">Price Summary</string>
+    <string name="items">Items (20)        </string>
+    <string name="charges">Chargers       </string>
     <string name="estimated_total">Estimated Total</string>
     <string name="proceed">proceed to Checkout</string>
+    <string name="place_order">Place Order</string>
     <string name="item_summary">Item Summary</string>
-    <string name="bill_details">Bill Details</string>
+    <string name="bill_details">Bill Detail</string>
     <string name="discount">Discount</string>
     <string name="order_total">Order Total</string>
     <string name="order_summary">Order Summary</string>
@@ -42,15 +43,20 @@
     <string name="view_pay">View pay</string>
     <string name="booking_history">Booking History</string>
     <string name="current_city">Current city:</string>
-    <string name="move_a_table">Move a table</string>
+    <string name="move_a_table">Move a Table</string>
     <string name="from">From</string>
-    <string name="to">to</string>
+    <string name="to">To</string>
     <string name="service">Service</string>
     <string name="complaints">Complaint</string>
     <string name="complaints_hint">Maximum 400 character only.</string>
     <string name="inputAddress">Restayrant Name One  \\n 39 Lime St, Sydney NSW 2000,Austraila</string>
     <string name="view_cart">View Cart</string>
     <string name="request_service">Request Service</string>
+    <string name="bill_date">Bill Date</string>
+    <string name="bill_no">Bill No</string>
+    <string name="Order_id">Order ID</string>
+    <string name="title_menu">Menu</string>
+    <string name="bill_summary">Bill Summary</string>
 
 
 </resources>

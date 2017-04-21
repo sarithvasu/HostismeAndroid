@@ -5,8 +5,10 @@ import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.effone.hostismeandroid.R;
@@ -105,7 +107,15 @@ public class MenuExpandableListViewAdapter extends BaseExpandableListAdapter {
         }
 
         TextView child_text = (TextView) convertView.findViewById(R.id.tv_dish_name);
-
+        TextView tv_add_item=(TextView)convertView.findViewById(R.id.tv_add_item);
+        LinearLayout tv_Add_Min_Quan=(LinearLayout)convertView.findViewById(R.id.btn_lay);
+        if(groupPosition == 0) {
+            tv_add_item.setVisibility(View.GONE);
+            tv_Add_Min_Quan.setVisibility(LinearLayout.VISIBLE);
+        }else {
+            tv_Add_Min_Quan.setVisibility(LinearLayout.GONE);
+            tv_add_item.setVisibility(View.VISIBLE);
+        }
        child_text.setText(childText);
         return convertView;
     }

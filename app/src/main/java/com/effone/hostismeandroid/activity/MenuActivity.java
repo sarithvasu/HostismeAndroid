@@ -7,11 +7,16 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.effone.hostismeandroid.R;
@@ -39,6 +44,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         mExpandableMenu=(ExpandableListView)findViewById(R.id.elv_menu);
         init();
         setItems();
+        setToolbar();
         appPreferences=new AppPreferences(this);
         if(appPreferences.getREST_NAME()!= null)
         {
@@ -47,6 +53,28 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
             toolbar.setTitle(""+appPreferences.getREST_NAME());
 
         }
+    }
+    private void setToolbar() {
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        LinearLayout customView = (LinearLayout)
+                LayoutInflater.from(this).inflate(R.layout.default_custom_title,
+                        null);
+        ActionBar.LayoutParams params = new
+                ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT,
+                ActionBar.LayoutParams.MATCH_PARENT, Gravity.CENTER);
+        getSupportActionBar().setCustomView(customView, params);
+        TextView cust_ttile=(TextView)getSupportActionBar().getCustomView().findViewById(R.id.tv_custom_titile);
+        cust_ttile.setText(getString(R.string.title_menu));
+        TextView cust_sub_ttile=(TextView)getSupportActionBar().getCustomView().findViewById(R.id.tv_custom_sub_titile);
+        cust_sub_ttile.setText("Restaurant Name One");
+        ImageView iv_back=(ImageView) getSupportActionBar().getCustomView().findViewById(R.id.iv_back);
+        iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
     }
 
     private void init() {

@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -49,7 +50,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.home);
+     /*   getSupportActionBar().setTitle(R.string.home);*/
+     setToolbar();
        /* int titleId = getResources().getIdentifier("action_bar_title", "id", "android");
         TextView abTitle = (TextView) findViewById(titleId);
         abTitle.setTextColor(getResources().getColor(R.color.white));
@@ -60,14 +62,14 @@ public class MainActivity extends AppCompatActivity
         abTitle.setGravity(Gravity.CENTER);
         abTitle.setWidth(metrics.widthPixels);
         getActionBar().setTitle("I am center now");*/
-        toolbar.setOnClickListener(new View.OnClickListener() {
+       /* toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, Search_ItemActivity.class);
                 startActivity(intent);
             }
         });
-
+*/
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -77,6 +79,22 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         init(drawer);
+    }
+
+    private void setToolbar() {
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        LinearLayout customView = (LinearLayout)
+                LayoutInflater.from(this).inflate(R.layout.title_custom,
+                        null);
+        ActionBar.LayoutParams params = new
+                ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT,
+                ActionBar.LayoutParams.MATCH_PARENT, Gravity.CENTER);
+        getSupportActionBar().setCustomView(customView, params);
+        TextView cust_ttile=(TextView)getSupportActionBar().getCustomView().findViewById(R.id.tv_custom_titile);
+        cust_ttile.setText(getString(R.string.home));
+        TextView cust_sub_ttile=(TextView)getSupportActionBar().getCustomView().findViewById(R.id.tv_custom_sub_titile);
+        cust_sub_ttile.setText("Syndey");
+
     }
 
     private void init(View N) {

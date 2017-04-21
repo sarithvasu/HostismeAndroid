@@ -12,6 +12,7 @@ import android.widget.ListView;
 import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.adapter.RestaurantListAdapter;
 import com.effone.hostismeandroid.common.AppPreferences;
+import com.effone.hostismeandroid.common.Common;
 import com.effone.hostismeandroid.model.Restaurant;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class RestaurantListAcitivity extends AppCompatActivity implements Adapte
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setTitle("Restaurant List");
+        Common.setCustomTitile(this,"Restaurant List","Sydney");
         init();
 
     }

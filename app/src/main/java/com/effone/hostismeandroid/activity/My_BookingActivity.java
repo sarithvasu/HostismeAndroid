@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.adapter.Booking_HistoryAdapter;
 import com.effone.hostismeandroid.common.AppPreferences;
+import com.effone.hostismeandroid.common.Common;
 import com.effone.hostismeandroid.model.OrderSummary;
 import com.effone.hostismeandroid.model.Order_Items;
 
@@ -31,11 +32,12 @@ public class My_BookingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.booking_history_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Booking History");
+
         appPreferences=new AppPreferences(this);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        Common.setCustomTitile(this,"Booking History",null);
       /*  if(appPreferences.getREST_NAME()!= null)
         {
 

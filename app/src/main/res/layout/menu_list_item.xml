@@ -34,22 +34,23 @@
 
     <LinearLayout
         android:id="@+id/btn_lay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignBottom="@+id/tv_ingredients"
-        android:layout_alignLeft="@+id/tv_price"
-        android:layout_alignStart="@+id/tv_price"
+        android:layout_width="60dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="10dp"
+       android:layout_alignParentRight="true"
         android:orientation="horizontal"
         android:background="@drawable/rounded_corner"
-        android:layout_below="@+id/tv_dish_name">
+        android:layout_below="@+id/tv_price">
 
         <TextView
             android:id="@+id/tv_minus"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:textColor="@color/secondHeader"
             android:gravity="center"
             android:textSize="12sp"
+            android:textStyle="bold"
             android:text="-" />
 
         <TextView
@@ -59,6 +60,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textSize="12sp"
+            android:textColor="@color/white"
             android:background="@color/payment_btn_color"
             android:text="10" />
         <TextView
@@ -68,33 +70,25 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/secondHeader"
             android:text="+" />
     </LinearLayout>
-    <View
-        android:id="@+id/line"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="10dp"
+
+    <TextView
+        android:layout_width="60dp"
+        android:layout_height="20dp"
+        android:background="@drawable/rounded_corner"
+        android:gravity="center"
+        android:text="Add"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_below="@+id/btn_lay"/>
+        android:id="@+id/tv_add_item"
+        android:textColor="@color/secondHeader"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tv_price"
+        android:textStyle="bold"
 
-    <TextView
-        android:id="@+id/textView18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:layout_below="@+id/line"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        />
 
-    <TextView
-        android:id="@+id/textView19"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/btn_lay"
-        android:layout_alignStart="@+id/btn_lay"
-        android:layout_below="@+id/line"
-        android:text="" />
 
 </RelativeLayout>

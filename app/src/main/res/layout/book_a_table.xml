@@ -4,6 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     >
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbAR"
@@ -13,7 +14,7 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="390dp"
+            android:layout_width="match_parent"
             android:layout_gravity="center_horizontal"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
@@ -25,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:layout_margin="5dp"
+        android:layout_margin="10dp"
         android:layout_below="@+id/appbAR"
         android:background="@drawable/payment_background">
 
@@ -35,9 +36,10 @@
             android:layout_height="40dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:text="Enter table no:"
+            android:text="Enter table no :"
            android:gravity="left|center_vertical"
             android:layout_alignParentTop="true"
+            android:textSize="18sp"
             android:layout_toLeftOf="@+id/et_table_no"
             android:layout_toStartOf="@+id/et_table_no" />
 
@@ -51,9 +53,9 @@
             android:layout_alignParentTop="true"
             android:layout_marginEnd="12dp"
             android:layout_marginRight="12dp"
-            android:hint="99"
             android:inputType="number"
             android:maxLength="5"
+            android:textCursorDrawable="@drawable/custom_edit_text_cursor"
             android:textColor="@color/fontColor"
             android:background="@drawable/payment_background"
             android:gravity="center"
@@ -68,15 +70,16 @@
     <Button
         android:id="@+id/bt_subit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:textAllCaps="false"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="@color/payment_btn_color"
+        android:background="@drawable/button_rounded_corner"
         android:text="View Menu"
         android:textSize="24sp"
-        android:layout_margin="5dp"
-        android:textColor="@android:color/white"
-        android:textStyle="bold" />
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="@android:color/white" />
 </RelativeLayout>

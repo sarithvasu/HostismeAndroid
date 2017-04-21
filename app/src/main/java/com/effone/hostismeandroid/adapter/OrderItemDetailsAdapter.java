@@ -56,7 +56,7 @@ public class OrderItemDetailsAdapter extends ArrayAdapter<Order_Items> {
             Order_Items value = (Order_Items) taxItemses.get(position);
             /************  Set Model values in Holder elements ***********/
             holder.tv_tax_name.setText(value.getName());
-            holder.tv_tax_money.setText(""+value.getPrice()*value.getQuantity());
+            holder.tv_tax_money.setText("$ "+value.getPrice()*value.getQuantity());
             holder.tv_tax_quantity.setText(value.getPrice()+" * "+ value.getQuantity());
 
         }

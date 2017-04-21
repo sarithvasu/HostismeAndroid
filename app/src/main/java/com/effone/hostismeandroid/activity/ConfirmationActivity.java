@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.adapter.OrderItemDetailsAdapter;
 import com.effone.hostismeandroid.adapter.TaxDetailsAdapter;
+import com.effone.hostismeandroid.common.Common;
 import com.effone.hostismeandroid.model.OrderSummary;
 import com.effone.hostismeandroid.model.Order_Items;
 import com.effone.hostismeandroid.model.TaxItems;
@@ -38,16 +39,14 @@ public class ConfirmationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confiramtion);
-        orderSummary= new OrderSummary("12 Apr 2017 – 07:30 PM","Restaurant Name One","SY56002019924","Dinner",99,20,246.0,"BOOKED");
+        orderSummary= new OrderSummary(": 12 Apr 2017 – 07:30 PM",": Restaurant Name One",": SY56002019924",": Dinner",99,20,246.0,": Booked");
         mAppBarToolBar=(AppBarLayout)findViewById(R.id.titel_na);
         mAppBarToolBar.setVisibility(View.GONE);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Payment");
-       // getSupportActionBar().setTitle(getString(R.string.booking_history));
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        Common.setCustomTitile(this,"Order Confirmation",null);
         init();
     }
 
@@ -75,9 +74,9 @@ public class ConfirmationActivity extends AppCompatActivity {
         mTvRestName.setText(orderSummary.getRest_name());
         mTvBookingId.setText(orderSummary.getOrder_id());
         mTvDescription.setText(orderSummary.getDescription());
-        mTvTableNo.setText(""+orderSummary.getTable_no());
-        mTvQuantits.setText(""+orderSummary.getQuantity());
-        mTvOrderTotal.setText(""+orderSummary.getTotal());
+        mTvTableNo.setText(": "+orderSummary.getTable_no());
+        mTvQuantits.setText(": "+orderSummary.getQuantity());
+        mTvOrderTotal.setText(": $ "+orderSummary.getTotal());
         mTvStatus.setText(orderSummary.getStatus());
 
         taxItemses = new ArrayList<TaxItems>();
@@ -88,10 +87,10 @@ public class ConfirmationActivity extends AppCompatActivity {
         order_itemses.add(order_items);
         order_itemses.add(order_items1);
 
-        TaxItems res1 = new TaxItems(" Total before Tax", 200);
-        TaxItems res2 = new TaxItems("Service Charges", 200);
-        TaxItems res3 = new TaxItems("Service Tax",200);
-        TaxItems res4 = new TaxItems("VAT Tax", 200);
+        TaxItems res1 = new TaxItems("Total before Tax", 200.00);
+        TaxItems res2 = new TaxItems("Service Charges", 200.00);
+        TaxItems res3 = new TaxItems("Service Tax",200.00);
+        TaxItems res4 = new TaxItems("VAT Tax", 200.00);
         taxItemses.add(res1);
         taxItemses.add(res2);
         taxItemses.add(res3);

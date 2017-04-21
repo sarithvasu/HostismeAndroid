@@ -6,9 +6,9 @@ package com.effone.hostismeandroid.model;
 
 public class TaxItems {
     private String name;
-    private int  value;
+    private double  value;
 
-    public TaxItems(String name, int price) {
+    public TaxItems(String name, double price) {
         this.name=name;
         this.value=price;
     }
@@ -21,7 +21,7 @@ public class TaxItems {
         this.name = name;
     }
 
-    public int getValue() {
+    public double getValue() {
         return value;
     }
 

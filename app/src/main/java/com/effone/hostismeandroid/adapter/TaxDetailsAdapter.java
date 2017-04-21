@@ -56,7 +56,7 @@ public class TaxDetailsAdapter  extends ArrayAdapter<TaxItems> {
             TaxItems value = (TaxItems) taxItemses.get(position);
             /************  Set Model values in Holder elements ***********/
             holder.tv_tax_name.setText(value.getName());
-            holder.tv_tax_money.setText(""+value.getValue());
+            holder.tv_tax_money.setText("$ "+value.getValue());
         }
 
         return vi;

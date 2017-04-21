@@ -39,6 +39,7 @@
                 android:text="@string/move_a_table"
                 android:textColor="@color/fontColor"
                 android:textSize="18sp"
+                android:layout_marginBottom="5dp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -61,10 +62,11 @@
                 <TextView
                     android:id="@+id/tv_from"
                     android:layout_width="0dp"
-                    android:layout_height="30dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_weight="0.22"
                     android:gravity="center"
+                    android:textSize="18sp"
                     android:text="@string/from"
                     android:textAlignment="center"
                     android:textColor="@color/fontColor" />
@@ -72,37 +74,40 @@
                 <TextView
                     android:id="@+id/tv_table_no_form"
                     android:layout_width="0dp"
-                    android:layout_height="30dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_weight="0.25"
                     android:background="@drawable/payment_background"
                     android:gravity="center"
                     android:text="99"
+                    android:textSize="18sp"
                     android:textAlignment="center"
                     android:textColor="@color/fontColor" />
 
                 <TextView
                     android:id="@+id/tv_to"
                     android:layout_width="0dp"
-                    android:layout_height="30dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_weight="0.25"
                     android:gravity="center"
+                    android:textSize="18sp"
                     android:text="@string/to"
                     android:textColor="@color/fontColor" />
 
                 <EditText
                     android:id="@+id/tv_table_no_to"
                     android:layout_width="0dp"
-                    android:layout_height="30dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:inputType="number"
                     android:maxLength="3"
-
+                    android:textCursorDrawable="@drawable/custom_edit_text_cursor"
                     android:layout_weight="0.26"
                     android:layout_marginRight="5dp"
                     android:background="@drawable/payment_background"
                     android:gravity="center"
+                    android:textSize="18sp"
                     android:textAlignment="center"
                     android:textColor="@color/fontColor" >
                 <requestFocus /></EditText>
@@ -111,11 +116,12 @@
 
             <TextView
                 android:id="@+id/tv_service_request"
-                android:layout_width="82dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/linearLayout"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:text="@string/service"
+                android:layout_marginBottom="5dp"
                 android:textColor="@color/fontColor"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -123,10 +129,11 @@
             <LinearLayout
                 android:id="@+id/linearLayout1"
                 android:layout_width="match_parent"
-                android:layout_height="42dp"
+                android:layout_height="60dp"
                 android:layout_below="@+id/tv_service_request"
                 android:background="@drawable/payment_background"
-                android:padding="10dp">
+                android:padding="10dp"
+                >
 
 
                 <RadioGroup
@@ -137,12 +144,14 @@
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/tv_payment_method"
                     android:orientation="horizontal"
-                    android:weightSum="1">
+                    android:weightSum="1"
+                    android:padding="5dp">
 
                     <RadioButton
                         android:id="@+id/rb_clear_table"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:buttonTint="@android:color/holo_green_light"
                         android:layout_alignBaseline="@+id/setStatus"
                         android:layout_alignBottom="@+id/setStatus"
                         android:layout_alignParentEnd="true"
@@ -158,6 +167,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignLeft="@+id/rb_paypal"
                         android:layout_alignParentEnd="true"
+                        android:buttonTint="@android:color/holo_green_light"
                         android:layout_alignParentRight="true"
                         android:layout_alignStart="@+id/rb_paypal"
                         android:layout_below="@+id/rb_paypal"
@@ -176,9 +186,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_below="@+id/linearLayout1"
-                android:layout_marginTop="10dp"
+
                 android:gravity="bottom"
                 android:text="@string/complaints"
+                android:layout_marginBottom="5dp"
                 android:textColor="@color/fontColor"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -191,9 +202,11 @@
                 android:background="@drawable/payment_background"
                 android:gravity="top|left"
                 android:hint="@string/complaints_hint"
-                android:inputType="textMultiLine|textNoSuggestions"
+                android:inputType="textMultiLine|textNoSuggestions|"
                 android:lines="5"
                 android:maxHeight="100dp"
+                android:privateImeOptions="nm"
+                android:textCursorDrawable="@drawable/custom_edit_text_cursor"
                 android:maxLength="355"
                 android:maxLines="6"
                 android:overScrollMode="always"
@@ -201,6 +214,7 @@
                 android:scrollbarStyle="insideInset"
                 android:scrollbars="vertical"
                 android:singleLine="false"
+                android:paddingBottom="5dp"
                 android:textColor="@android:color/black"
                 android:textColorHint="@android:color/darker_gray" />
 
@@ -209,6 +223,7 @@
                 layout="@layout/search_box"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_marginBottom="7dp"
                 android:layout_alignParentBottom="true"
                 />
         </RelativeLayout>
