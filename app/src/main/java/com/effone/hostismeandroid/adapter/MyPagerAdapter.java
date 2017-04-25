@@ -17,7 +17,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.effone.hostismeandroid.R;
+import com.effone.hostismeandroid.app.AppController;
+import com.effone.hostismeandroid.model.HomePageDish;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -31,20 +35,22 @@ public class MyPagerAdapter extends PagerAdapter {
 
     Context context;
     TextView tv1, tv2, readMore;
-    ArrayList<Integer> podCasts;
+    ArrayList<HomePageDish> podCasts;
     public static final String
 
+
             READ_MORE_HEADER = "read_more_header";
+    ImageLoader imageLoader = AppController.getInstance().getImageLoader();
     public static final String
 
             READ_MORE_CONTENT = "read_more_content";
     private static final int
 
             IO_BUFFER_SIZE = 4 * 1024;
-    ImageView webView;
+    NetworkImageView webView;
     String url = "http://www.dot-combustion.com/clients/drupal/sites/default/files/pictures/";
 
-    public MyPagerAdapter(Context context, ArrayList<Integer> podCasts) {
+    public MyPagerAdapter(Context context, ArrayList<HomePageDish> podCasts) {
         super();
         this.context = context;
         this.podCasts = podCasts;
@@ -61,17 +67,19 @@ public class MyPagerAdapter extends PagerAdapter {
         LayoutInflater inflater =(LayoutInflater) collection.getContext().getSystemService
 
                         (Context.LAYOUT_INFLATER_SERVICE);
-        final Integer podCast = podCasts.get
+        final HomePageDish podCast = podCasts.get
 
                 (pos);
         View view = inflater.inflate
 
                 (R.layout.fragment_hot_dish_home_page_image, null);
-        webView = (ImageView) view.findViewById
+        if (imageLoader == null)
+            imageLoader = AppController.getInstance().getImageLoader();
+        webView = (NetworkImageView) view.findViewById
 
                 (R.id.iv_dish);
 
-            webView.setImageResource(podCast);
+        webView.setImageUrl(podCast.getThumbnailUrl(), imageLoader);
 
         return view;
 

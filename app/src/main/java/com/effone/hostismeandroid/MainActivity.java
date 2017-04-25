@@ -1,5 +1,6 @@
 package com.effone.hostismeandroid;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -22,6 +24,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.NetworkImageView;
 import com.effone.hostismeandroid.activity.Book_a_tableActivity;
 import com.effone.hostismeandroid.activity.MenuActivity;
 import com.effone.hostismeandroid.activity.My_BookingActivity;
@@ -30,6 +38,12 @@ import com.effone.hostismeandroid.activity.Search_ItemActivity;
 import com.effone.hostismeandroid.activity.Service_RequestActivity;
 import com.effone.hostismeandroid.activity.View_Pay_BillActivity;
 import com.effone.hostismeandroid.adapter.ScreenSlidePagerAdapter;
+import com.effone.hostismeandroid.app.AppController;
+import com.effone.hostismeandroid.model.HomePageDish;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,8 +55,13 @@ public class MainActivity extends AppCompatActivity
     private AutoScrollViewPager mPager;
     private ScreenSlidePagerAdapter mPagerAdapter;
     private static final int NUM_PAGES = 5;
-    private ArrayList<Integer> ids;
+    ArrayList<HomePageDish>  ids;
+    private static final String url = "http://api.androidhive.info/json/movies.json";
+    private static final String TAG = MainActivity.class.getSimpleName();
     private TextView mTvRestaurantList, mTvMenu, mTvBook_a_table, mTvService_Request, mTvViewPay, mTvBooking_History;
+    private ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+    private ProgressDialog pDialog;
+    private CustomPagerAdapter mCustomPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,10 +117,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void init(View N) {
-        ids = new ArrayList<Integer>(Arrays.asList(R.drawable.a, R.drawable.b, R.drawable.c, R.drawable.d));
+        //ids = new ArrayList<Integer>(Arrays.asList(R.drawable.a, R.drawable.b, R.drawable.c, R.drawable.d));
         mPager = (AutoScrollViewPager) findViewById(R.id.view_pager);
+        dummyUrlCode();
 
-        mPager.setAdapter(new CustomPagerAdapter(this));
         mPager.animate();
         mPager.setInterval(2000);
         mPager.startAutoScroll();
@@ -109,9 +128,75 @@ public class MainActivity extends AppCompatActivity
         mPager.getSlideBorderMode();
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(mPager, true);
+
         declerations();
     }
 
+    private void dummyUrlCode() {
+        pDialog = new ProgressDialog(this);
+        // Showing progress dialog before making http request
+        pDialog.setMessage("Loading...");
+        pDialog.show();
+        JsonArrayRequest movieReq = new JsonArrayRequest(url,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, response.toString());
+                        hidePDialog();
+
+                        // Parsing json
+                        ids=new ArrayList<HomePageDish>();
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+
+                                JSONObject obj = response.getJSONObject(i);
+                                HomePageDish movie = new HomePageDish();
+                                movie.setTitle(obj.getString("title"));
+                                movie.setThumbnailUrl(obj.getString("image"));
+                                movie.setRating(((Number) obj.get("rating"))
+                                        .doubleValue());
+                                movie.setYear(obj.getInt("releaseYear"));
+
+                                // Genre is json array
+                                JSONArray genreArry = obj.getJSONArray("genre");
+                                ArrayList<String> genre = new ArrayList<String>();
+                                for (int j = 0; j < genreArry.length(); j++) {
+                                    genre.add((String) genreArry.get(j));
+                                }
+                                movie.setGenre(genre);
+
+                                // adding movie to movies array
+                                ids.add(movie);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                        // notifying list adapter about data changes
+                        // so that it renders the list view with updated data
+                        mCustomPagerAdapter=new CustomPagerAdapter(MainActivity.this);
+                        mPager.setAdapter(mCustomPagerAdapter);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                hidePDialog();
+
+            }
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(movieReq);
+    }
+    private void hidePDialog() {
+        if (pDialog != null) {
+            pDialog.dismiss();
+            pDialog = null;
+        }
+    }
     private void declerations() {
         mTvRestaurantList = (TextView) findViewById(R.id.btn_res_list);
         mTvBook_a_table = (TextView) findViewById(R.id.btn_book_table);
@@ -192,9 +277,10 @@ public class MainActivity extends AppCompatActivity
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             View itemView = mLayoutInflater.inflate(R.layout.fragment_hot_dish_home_page_image, container, false);
-
-            ImageView imageView = (ImageView) itemView.findViewById(R.id.iv_dish);
-            imageView.setImageResource(ids.get(position));
+            if (imageLoader == null)
+                imageLoader = AppController.getInstance().getImageLoader();
+            NetworkImageView imageView = (NetworkImageView) itemView.findViewById(R.id.iv_dish);
+            imageView.setImageUrl(ids.get(position).getThumbnailUrl(), imageLoader);
 
             container.addView(itemView);
 

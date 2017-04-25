@@ -6,7 +6,7 @@
    >
 
     <!-- TODO: Update blank fragment layout -->
-   <ImageView
+   <com.android.volley.toolbox.NetworkImageView
        android:id="@+id/iv_dish"
        android:layout_width="match_parent"
        android:layout_height="255dp"

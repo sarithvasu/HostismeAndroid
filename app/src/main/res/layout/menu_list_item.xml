@@ -80,6 +80,7 @@
         android:layout_height="20dp"
         android:background="@drawable/rounded_corner"
         android:gravity="center"
+        android:textAlignment="center"
         android:text="Add"
         android:layout_marginTop="10dp"
         android:id="@+id/tv_add_item"

@@ -67,6 +67,7 @@
             <include
                 android:layout_marginTop="5dp"
                 android:id="@+id/ic_bill_details"
+                android:layout_width="match_parent"
                 layout="@layout/bill_details"
                 android:layout_height="449dp"
                 android:layout_alignParentLeft="true"
