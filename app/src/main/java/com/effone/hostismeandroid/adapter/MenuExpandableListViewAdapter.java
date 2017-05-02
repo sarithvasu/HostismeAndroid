@@ -1,17 +1,16 @@
 package com.effone.hostismeandroid.adapter;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.effone.hostismeandroid.R;
+import com.effone.hostismeandroid.model.HISMenuItem;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,9 +24,10 @@ public class MenuExpandableListViewAdapter extends BaseExpandableListAdapter {
     private Context _context;
     private List<String> header; // header titles
     // Child data in format of header title, child title
-    private HashMap<String, List<String>> child;
+    private HashMap<String, List<HISMenuItem>> child;
 
-    public MenuExpandableListViewAdapter(Context context, List<String> listDataHeader, HashMap<String, List<String>> listChildData) {
+
+    public MenuExpandableListViewAdapter(Context context, List<String> listDataHeader, HashMap<String, List<HISMenuItem>> listChildData) {
         this._context = context;
         this.header = listDataHeader;
         this.child = listChildData;
@@ -99,24 +99,61 @@ public class MenuExpandableListViewAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         // Getting child text
-        final String childText = (String) getChild(groupPosition, childPosition);
+        final HISMenuItem childMenu= (HISMenuItem) getChild(groupPosition, childPosition);
+        final ViewHolder holder;
         // Inflating child layout and setting textview
         if (convertView == null) {
+            holder = new ViewHolder();
             LayoutInflater infalInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.menu_list_item, parent, false);
+            holder.child_text = (TextView) convertView.findViewById(R.id.tv_dish_name);
+            holder.tv_add_item=(TextView)convertView.findViewById(R.id.tv_add_item);
+            holder.tv_Add_Min_Quan=(LinearLayout)convertView.findViewById(R.id.btn_lay);
+            holder.minusBtn=(TextView)convertView.findViewById(R.id.tv_minus);
+            holder.tvPrice=(TextView)convertView.findViewById(R.id.tv_price);
+            holder.tvQuatity=(TextView)convertView.findViewById(R.id.tv_qutity);
+            holder.addBtn=(TextView)convertView.findViewById(R.id.tv_plus);
+        }
+        else {
+            holder = (ViewHolder) convertView.getTag();
         }
 
-        TextView child_text = (TextView) convertView.findViewById(R.id.tv_dish_name);
-        TextView tv_add_item=(TextView)convertView.findViewById(R.id.tv_add_item);
-        LinearLayout tv_Add_Min_Quan=(LinearLayout)convertView.findViewById(R.id.btn_lay);
-        if(groupPosition == 0) {
-            tv_add_item.setVisibility(View.GONE);
-            tv_Add_Min_Quan.setVisibility(LinearLayout.VISIBLE);
+        final int[] qty = new int[1];
+        if(! holder.tvQuatity.getText().toString().equals(""))
+            qty[0] =Integer.parseInt(holder.tvQuatity.getText().toString());
+
+        holder.minusBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(qty[0] >0){
+                    qty[0]--;
+                    holder.tvQuatity.setText(""+ qty[0]);
+                    childMenu.setQty(qty[0]);
+
+                }
+            }
+        });
+        holder.addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(qty[0] <99){
+                    qty[0]++;
+                    holder.tvQuatity.setText(""+ qty[0]);
+                    childMenu.setQty(qty[0]);
+                }
+            }
+        });
+
+        if(childMenu.isAllowMultiple()) {
+            holder.tv_add_item.setVisibility(View.GONE);
+            holder.tv_Add_Min_Quan.setVisibility(LinearLayout.VISIBLE);
         }else {
-            tv_Add_Min_Quan.setVisibility(LinearLayout.GONE);
-            tv_add_item.setVisibility(View.VISIBLE);
+            holder.tv_Add_Min_Quan.setVisibility(LinearLayout.GONE);
+            holder.tv_add_item.setVisibility(View.VISIBLE);
         }
-       child_text.setText(childText);
+        holder.child_text.setText(childMenu.getName());
+        holder.tvPrice.setText("$ "+childMenu.getPrice());
         return convertView;
     }
 
@@ -125,5 +162,16 @@ public class MenuExpandableListViewAdapter extends BaseExpandableListAdapter {
         // TODO Auto-generated method stub
         return true;
     }
+    public static class ViewHolder {
 
+        public TextView child_text;
+        public TextView tv_add_item;
+        public LinearLayout tv_Add_Min_Quan;
+        public TextView minusBtn;
+        public TextView tvQuatity;
+        public TextView tvPrice;
+        public TextView addBtn;
+
+
+    }
 }
