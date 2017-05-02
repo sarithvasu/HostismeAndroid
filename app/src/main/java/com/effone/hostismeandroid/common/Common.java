@@ -44,4 +44,12 @@ public class Common {
             }
         });
     }
+    public static String commonUrlBuilder(String uri, String appendQuery)  {
+        String newQuery=uri;
+        if (appendQuery != null) {
+            newQuery += "&" + appendQuery;
+        }
+        return newQuery;
+    }
+
 }

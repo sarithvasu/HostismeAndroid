@@ -38,13 +38,13 @@ public class RestaurantListAcitivity extends AppCompatActivity implements Adapte
 
     private void init() {
         restaurants = new ArrayList<Restaurant>();
-        Restaurant res1 = new Restaurant("Restaurant name One", "39,Lime St", "Sydney NSW 2000", "Australia");
-        Restaurant res2 = new Restaurant("Restaurant name Two", "1 maquarie St", "Sydney NSW 2000", "Australia");
-        Restaurant res3 = new Restaurant("Restaurant name Three", "corner Pitt + Hunder Street", "Sydney NSW 2000", "Australia");
-        Restaurant res4 = new Restaurant("Restaurant name Four", "11/ O' Connel St", "Sydney NSW 2000", "Australia");
-        Restaurant res5 = new Restaurant("Restaurant name Five", "Overseas Passager Terminal Hickson Rd", "Sydney NSW 2000", "Australia");
-        Restaurant res6 = new Restaurant("Restaurant name Six", "Establishment 1 establishment george Street", "Sydney NSW 2000", "Australia");
-        Restaurant res7 = new Restaurant("Restaurant name Seven", "corner Pitt maquarie St", "Sydney NSW 2000", "Australia");
+        Restaurant res1 = new Restaurant(1,"Restaurant name One", "39,Lime St", "Sydney NSW 2000", "Australia");
+        Restaurant res2 = new Restaurant(2,"Restaurant name Two", "1 maquarie St", "Sydney NSW 2000", "Australia");
+        Restaurant res3 = new Restaurant(3,"Restaurant name Three", "corner Pitt + Hunder Street", "Sydney NSW 2000", "Australia");
+        Restaurant res4 = new Restaurant(4,"Restaurant name Four", "11/ O' Connel St", "Sydney NSW 2000", "Australia");
+        Restaurant res5 = new Restaurant(5,"Restaurant name Five", "Overseas Passager Terminal Hickson Rd", "Sydney NSW 2000", "Australia");
+        Restaurant res6 = new Restaurant(6,"Restaurant name Six", "Establishment 1 establishment george Street", "Sydney NSW 2000", "Australia");
+        Restaurant res7 = new Restaurant(7,"Restaurant name Seven", "corner Pitt maquarie St", "Sydney NSW 2000", "Australia");
         restaurants.add(res1);
         restaurants.add(res2);
         restaurants.add(res3);

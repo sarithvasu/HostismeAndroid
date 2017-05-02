@@ -119,8 +119,8 @@ public class MainActivity extends AppCompatActivity
     private void init(View N) {
         //ids = new ArrayList<Integer>(Arrays.asList(R.drawable.a, R.drawable.b, R.drawable.c, R.drawable.d));
         mPager = (AutoScrollViewPager) findViewById(R.id.view_pager);
-        dummyUrlCode();
 
+        dummyUrlCode();
         mPager.animate();
         mPager.setInterval(2000);
         mPager.startAutoScroll();
@@ -130,6 +130,12 @@ public class MainActivity extends AppCompatActivity
         tabLayout.setupWithViewPager(mPager, true);
 
         declerations();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //dummyUrlCode();
     }
 
     private void dummyUrlCode() {

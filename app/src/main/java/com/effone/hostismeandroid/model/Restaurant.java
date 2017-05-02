@@ -5,15 +5,30 @@ package com.effone.hostismeandroid.model;
  */
 
 public class Restaurant {
+
+    private int restId;
     private String restName;
     private String restAdress;
     private String city;
+    private String country;
 
-    public Restaurant(String restName, String restAdress, String city, String country) {
+
+    public Restaurant(int restId, String restName, String restAdress, String city, String country) {
+        this.restId = restId;
         this.restName = restName;
         this.restAdress = restAdress;
         this.city = city;
         this.country = country;
+    }
+
+
+
+    public int getRestId() {
+        return restId;
+    }
+
+    public void setRestId(int restId) {
+        this.restId = restId;
     }
 
     public String getRestName() {
@@ -48,5 +63,5 @@ public class Restaurant {
         this.country = country;
     }
 
-    private String country;
+
 }
