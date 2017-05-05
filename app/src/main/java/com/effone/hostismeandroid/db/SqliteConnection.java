@@ -19,8 +19,8 @@ public class SqliteConnection  extends SQLiteOpenHelper {
     String sqlCreateTableOrder= "CREATE TABLE OrderClient (_id INTEGER PRIMARY KEY, index_category INTEGER, index_food INTEGER, quantity INTEGER, price TEXT, food_name TEXT,order_id TEXT)";
 
     String sqlCreateTableTotal= "CREATE TABLE PriceClient (_id INTEGER PRIMARY KEY, total TEXT)";
-    String sqlCreateTablePlaceOrder="CREATE TABLE OrderPlace (_id TEXT PRIMARY KEY,table_no INTEGER,rest_name TEXT,time_stamp TEXT,status Text,description TEXT,totalPrice REAL,quantity INTEGER";
-    String getSqlCreateBookHistory="CREATE TABLE booking_history(_id TEXT,order_id Text,date TEXT,rest_name TEXT,description TEXT,table_no int,bill_no String,bill_ammount Real,status TEXT)";
+    String sqlCreateTablePlaceOrder="CREATE TABLE OrderPlace (_id TEXT PRIMARY KEY,table_no INTEGER,rest_name TEXT,time_stamp TEXT,status Text,description TEXT,totalPrice REAL,quantity INTEGER)";
+    String getSqlCreateBookHistory="CREATE TABLE booking_history (_id INTEGER,order_id Text,date TEXT,rest_name TEXT,description TEXT,table_no INTEGER,bill_no REAL,bill_ammount Real,status TEXT)";
 
 
     public SqliteConnection(Context context) {

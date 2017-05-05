@@ -93,6 +93,10 @@ public class ViewCartActivity extends AppCompatActivity implements View.OnClickL
 
         mTvPlaceOrder=(TextView)findViewById(R.id.tv_place_order);
         mEtTableNo=(EditText)findViewById(R.id.et_table_no) ;
+        if(appPreferences.getTABLE_NAME() !=  0){
+            mEtTableNo.setText(""+appPreferences.getTABLE_NAME());
+            mEtTableNo.setFocusable(false);
+        }
         mTvPlaceOrder.setOnClickListener(this);
         setValuesInto();
     }
@@ -102,8 +106,8 @@ public class ViewCartActivity extends AppCompatActivity implements View.OnClickL
         try {
             mTvItemPrice.setText(""+totalbyOrder);
             mTvItemCount.setText("Items ("+ Math.round(totalNumberOfItems)+")");
-            mTvChargers.setText(""+taxAmountCalculation()*Math.round(totalNumberOfItems));
-            double sum=totalbyOrder+taxAmountCalculation()*Math.round(totalNumberOfItems);
+            mTvChargers.setText(""+taxAmountCalculation());
+            double sum=totalbyOrder+taxAmountCalculation();
             mTvEstimatedTotal.setText(""+sum);
         } catch (Exception e) {
             e.printStackTrace();
@@ -191,21 +195,22 @@ public class ViewCartActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.tv_place_order) {
-            if(mEtTableNo.getText().toString().trim().length()> 3) {
+            if(mEtTableNo.getText().toString().trim().length()> 2) {
                 Long tsLong = System.currentTimeMillis()/1000;
                 String ts = tsLong.toString();
                 String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
                 sqliteoperation = new SqlOperations(getApplicationContext());
                 sqliteoperation.open();
+                int table_no = Integer.parseInt(mEtTableNo.getText().toString().trim());
+                   if(sqliteoperation.updateOrderId(mEtTableNo.getText().toString().trim()) != 0) {
 
-                   if(sqliteoperation.updateOrderId(ts) != 0) {
-                       int table_no = Integer.parseInt(mEtTableNo.getText().toString().trim());
-                       sqliteoperation.placeOrder(ts, table_no, appPreferences.getREST_NAME(), currentDateTimeString, "BOOKED", item_cata, totalbyOrder, Math.round(totalNumberOfItems));
+                       appPreferences.setTABLE_NAME(table_no);
+                       sqliteoperation.placeOrder(mEtTableNo.getText().toString().trim(), table_no, appPreferences.getRESTAURANT_NAME(), currentDateTimeString, "BOOKED", item_cata, totalbyOrder, Math.round(totalNumberOfItems));
                    }
                 sqliteoperation.close();
 
                 Intent intent = new Intent(this, ConfirmationActivity.class);
-                intent.putExtra("Order_id",ts);
+                intent.putExtra("Order_id",mEtTableNo.getText().toString().trim());
                 startActivity(intent);
             }else{
                 Toast.makeText(this,"enter the Table.no",Toast.LENGTH_SHORT).show();

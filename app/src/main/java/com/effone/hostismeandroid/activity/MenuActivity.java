@@ -51,11 +51,11 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         setItems();
         setToolbar();
         appPreferences=new AppPreferences(this);
-        if(appPreferences.getREST_NAME()!= null)
+        if(appPreferences.getRESTAURANT_NAME()!= null)
         {
 
         }else {
-            toolbar.setTitle(""+appPreferences.getREST_NAME());
+            toolbar.setTitle(""+appPreferences.getRESTAURANT_NAME());
 
         }
     }

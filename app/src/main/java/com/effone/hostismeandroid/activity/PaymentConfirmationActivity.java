@@ -1,5 +1,6 @@
 package com.effone.hostismeandroid.activity;
 
+import android.content.Intent;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,21 +13,40 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.effone.hostismeandroid.R;
+import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.common.Common;
+import com.effone.hostismeandroid.db.SqlOperations;
+import com.effone.hostismeandroid.db.SqliteConnection;
+import com.effone.hostismeandroid.model.BookingHistoryItem;
 import com.effone.hostismeandroid.model.OrderSummary;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class PaymentConfirmationActivity extends AppCompatActivity {
 
     private TextView mTvDateTime, mTvRestName, mTvBookingId, mTvDescription, mTvTableNo, mTvQuantits, mTvOrderTotal, mTvStatus,mTvHeadingText;
     private ListView mListView;
-    private OrderSummary orderSummary;
     private AppBarLayout mAppBarLayout;
     private RelativeLayout mRelativeLayout;
+    private SqlOperations sqliteoperation;
+    private AppPreferences appPreferences;
+    Long bill_no;
+    List<BookingHistoryItem> mBookingHistoryItem;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_confirmation);
-        orderSummary = new OrderSummary(": 12 Apr 2017 – 07:30 PM", ": Restaurant Name One", ": SY56002019924", ": Dinner", 99, 20, 246.0, ": Received");
+        Intent intent=getIntent();
+        bill_no=intent.getLongExtra("bill_no",0);
+        sqliteoperation = new SqlOperations(getApplicationContext());
+        sqliteoperation.open();
+        appPreferences=new AppPreferences(this);
+        appPreferences.setRRESTAURANT_NAME(null);
+        appPreferences.setTABLE_NAME(0);
+        mBookingHistoryItem = sqliteoperation.getBookedHistory(bill_no);
+        sqliteoperation.close();
+       // orderSummary = new OrderSummary(, ": Restaurant Name One", ": SY56002019924", ": Dinner", 99, 20, 246.0, ": Received");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbars);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -56,14 +76,14 @@ public class PaymentConfirmationActivity extends AppCompatActivity {
     }
 
     private void settingValues() {
-        mTvDateTime.setText(orderSummary.getData_time());
-        mTvRestName.setText(orderSummary.getRest_name());
-        mTvBookingId.setText(orderSummary.getOrder_id());
-        mTvDescription.setText(orderSummary.getDescription());
-        mTvTableNo.setText(": " + orderSummary.getTable_no());
-        mTvQuantits.setText(": $ " + orderSummary.getTotal());
-        mTvOrderTotal.setText(": " + orderSummary.getQuantity());
-        mTvStatus.setText(orderSummary.getStatus());
+        mTvDateTime.setText(mBookingHistoryItem.get(0).getDate());
+        mTvRestName.setText(mBookingHistoryItem.get(0).getRest_name());
+        mTvBookingId.setText(mBookingHistoryItem.get(0).getOrder_id());
+        mTvDescription.setText(mBookingHistoryItem.get(0).getDescription());
+        mTvTableNo.setText(": " + mBookingHistoryItem.get(0).getTable_no());
+        //mTvQuantits.setText(": $ " + mBookingHistoryItem.get(0).getBill_ammount());
+        mTvOrderTotal.setText(": " + mBookingHistoryItem.get(0).getBill_ammount());
+        mTvStatus.setText(mBookingHistoryItem.get(0).getStatus());
 
     }
 

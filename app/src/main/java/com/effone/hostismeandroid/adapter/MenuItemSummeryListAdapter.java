@@ -1,6 +1,7 @@
 package com.effone.hostismeandroid.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.effone.hostismeandroid.R;
+import com.effone.hostismeandroid.activity.MenusActivity;
 import com.effone.hostismeandroid.common.OnDataChangeListener;
 import com.effone.hostismeandroid.db.SqlOperations;
 import com.effone.hostismeandroid.model.OrderedItemSummary;
@@ -86,7 +88,14 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<OrderedItemSummary>
             public void onClick(View v) {
                 sqliteoperation = new SqlOperations(mContext);
                 sqliteoperation.open();
-                sqliteoperation.itemDelete(value.getItem_cat(), value.getItem_food());
+                if(sqliteoperation.getCartItem()!=1) {
+                    sqliteoperation.itemDelete(value.getItem_cat(), value.getItem_food());
+                }else{
+                    sqliteoperation.itemDelete(value.getItem_cat(), value.getItem_food());
+                    Intent intent=new Intent(mContext, MenusActivity.class);
+                    intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    mContext.startActivity(intent);
+                }
                 sqliteoperation.close();
                 mOnDataChangeListener.onDataChanged(1);
 

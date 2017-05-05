@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.adapter.OrderItemDetailsAdapter;
 import com.effone.hostismeandroid.adapter.TaxDetailsAdapter;
+import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.common.Common;
 import com.effone.hostismeandroid.db.SqlOperations;
 import com.effone.hostismeandroid.model.Order_Items;
@@ -52,6 +53,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
     private  TextView mTvSubmit,mEtPromocodeMsg;
     private RadioGroup mRadioGroup;
     ArrayList<TaxItems> taxItemses;
+    private AppPreferences appPreferences;
 
     private EditText mEtPromoCodeNumber;
     private Button mBtApply;
@@ -59,10 +61,12 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
     ArrayList<Order_Items> order_itemses;
     private  TextView mTvRestName;
     private  SqlOperations sqliteoperation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_bill);
+        appPreferences=new AppPreferences(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -87,7 +91,8 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
         mBtApply=(Button)findViewById(R.id.bt_apply);
         mBtApply.setOnClickListener(this);
     }
-
+    String currentDateTimeString;
+    Long tsLong;
     private void init() {
 
         mLvItemQuantity=(ListView)findViewById(R.id.lv_items_list);
@@ -99,9 +104,9 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
         order_itemses=new ArrayList<Order_Items>();
         order_itemses= getOrderHistory();
         mTvOrderId.setText(": "+order_id);
-        Long tsLong = System.currentTimeMillis()/1000;
+            tsLong= System.currentTimeMillis()/1000;
         String ts = tsLong.toString();
-        String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+        currentDateTimeString  = DateFormat.getDateTimeInstance().format(new Date());
         mTvBillDate.setText(": "+currentDateTimeString);
         mTvBillNo.setText(": "+tsLong);
         //adding oreder_items:
@@ -174,7 +179,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
             price = map.get("price");
             quantity = map.get("quantity");
             foodName = map.get("food_name");
-            order_id=map.get("order_id");
+            order_id = map.get("order_id");
             messageOrder += "\n " + j + " - " + foodName + " (" + price + " $  x  " + quantity + ")  " + totalbyFood + "$";
             totalbyOrder += Float.parseFloat(totalbyFood);
             totalNumberOfItems += Float.parseFloat(quantity);
@@ -220,13 +225,18 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
     if (v.getId() == R.id.tv_submit){
         int selectedId = mRadioGroup.getCheckedRadioButtonId();
         if(selectedId != -1){
-
+            totalbyOrder +=serviceTax+ser+vatTax;
             RadioButton radioButton = (RadioButton) mRadioGroup.findViewById(selectedId);
             Toast.makeText(this, radioButton.getText(), Toast.LENGTH_SHORT).show();
+            sqliteoperation.open();
             for(int i=0;i<order_ids.size();i++) {
                 sqliteoperation.updatePlaceOrderStatus(order_ids.get(i));
             }
+            sqliteoperation.pymentStatment(appPreferences.getTABLE_NAME(),currentDateTimeString,appPreferences.getRESTAURANT_NAME(),order_id,appPreferences.getTABLE_NAME(),"Dinner",tsLong,totalbyOrder,"Received");
+            sqliteoperation.close();
+
             Intent intent=new Intent(this,PaymentConfirmationActivity.class);
+            intent.putExtra("bill_no",tsLong);
             startActivity(intent);
              //   mSelectDbHelper.updateOrderHistory(mOrderId,comments, (String) radioButton.getText());
 

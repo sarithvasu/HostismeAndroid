@@ -41,6 +41,7 @@ import com.effone.hostismeandroid.activity.Service_RequestActivity;
 import com.effone.hostismeandroid.activity.View_Pay_BillActivity;
 import com.effone.hostismeandroid.adapter.ScreenSlidePagerAdapter;
 import com.effone.hostismeandroid.app.AppController;
+import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.db.SqlOperations;
 import com.effone.hostismeandroid.model.HomePageDish;
 
@@ -65,6 +66,8 @@ public class MainActivity extends AppCompatActivity
     private ImageLoader imageLoader = AppController.getInstance().getImageLoader();
     private ProgressDialog pDialog;
     private CustomPagerAdapter mCustomPagerAdapter;
+    private AppPreferences appPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +95,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 */
+       appPreferences=new AppPreferences(this);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -237,36 +241,59 @@ public class MainActivity extends AppCompatActivity
         Intent intent;
         switch (view.getId()) {
             case R.id.btn_appointments:
-                intent = new Intent(this, Service_RequestActivity.class);
-                startActivity(intent);
+                if(appPreferences.getRESTAURANT_NAME()!= "") {
+                    intent = new Intent(this, Service_RequestActivity.class);
+                    startActivity(intent);
+                }else {
+                    sendalert("Please Select the location");
+                }
                 break;
             case R.id.btn_res_list:
-                intent = new Intent(this, RestaurantListAcitivity.class);
-                startActivity(intent);
+
+                    intent = new Intent(this, RestaurantListAcitivity.class);
+                    startActivity(intent);
+
                 break;
             case R.id.btn_res_menu:
-                intent = new Intent(this, MenusActivity.class);
-                startActivity(intent);
+        if(appPreferences.getRESTAURANT_NAME()!= "") {
+            intent = new Intent(this, MenusActivity.class);
+            startActivity(intent);
+        } else {
+                sendalert("Please Select the location");
+            }
                 break;
             case R.id.btn_book_table:
+                if(appPreferences.getRESTAURANT_NAME()!= "") {
                 intent = new Intent(this, Book_a_tableActivity.class);
                 startActivity(intent);
+                } else {
+                    sendalert("Please Select the location");
+                }
                 break;
             case R.id.btn_view_pay:
+                if(appPreferences.getRESTAURANT_NAME()!= "") {
                 SqlOperations    sqliteoperation = new SqlOperations(getApplicationContext());
                 sqliteoperation.open();
+
                 if(sqliteoperation.getPayItems().size()>0) {
                     intent = new Intent(this, View_Pay_BillActivity.class);
                     startActivity(intent);
                 }else {
                     Toast.makeText(this,"Please Place a order",Toast.LENGTH_SHORT).show();
                 }
+        } else {
+            sendalert("Please Select the location");
+        }
                 break;
             case R.id.btn_my_booking:
                 intent = new Intent(this, My_BookingActivity.class);
                 startActivity(intent);
                 break;
         }
+    }
+
+    private void sendalert(String s) {
+        Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
     }
 
     private class CustomPagerAdapter extends PagerAdapter {

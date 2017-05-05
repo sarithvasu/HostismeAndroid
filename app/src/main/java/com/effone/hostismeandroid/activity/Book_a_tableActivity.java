@@ -38,8 +38,8 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        if(mAppPreferences.getREST_NAME()!= "") {
-            Common.setCustomTitile(this, getString(R.string.book_a_table), mAppPreferences.getREST_NAME());
+        if(mAppPreferences.getRESTAURANT_NAME()!= "") {
+            Common.setCustomTitile(this, getString(R.string.book_a_table), mAppPreferences.getRESTAURANT_NAME());
         }
             init();
 
@@ -70,8 +70,9 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
             case R.id.bt_subit:
                 String tableNo=mEtTableNo.getText().toString();
                 if(tableNo.length() >= 2){
-                    Toast.makeText(this,"done",Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(this,MenuActivity.class);
+                    mAppPreferences.setTABLE_NAME(Integer.parseInt(tableNo));
+               //     Toast.makeText(this,"done",Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(this,MenusActivity.class);
                     startActivity(intent);
                 }else{
                     Toast.makeText(this,"Enter the table no",Toast.LENGTH_SHORT).show();

@@ -76,9 +76,9 @@ public class RestaurantListAcitivity extends AppCompatActivity implements Adapte
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Intent showLocationsIntent = new Intent(this, MenusActivity.class);
+        Intent showLocationsIntent = new Intent(this, Book_a_tableActivity.class);
         String restaurant = restaurants[i].getRestName();
-        appPreferences.setREST_NAME(restaurant);
+        appPreferences.setRRESTAURANT_NAME(restaurant);
         startActivity(showLocationsIntent);
     }
     @Override

@@ -73,7 +73,7 @@ public class ConfirmationActivity extends AppCompatActivity {
         Common.setCustomTitile(this,"Order Confirmation",null);
         init();
 
-        sqliteoperation.updatetheCart();
+      // sqliteoperation.updatetheCart();
     }
 
 

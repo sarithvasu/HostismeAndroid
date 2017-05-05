@@ -12,10 +12,13 @@ import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.adapter.Booking_HistoryAdapter;
 import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.common.Common;
+import com.effone.hostismeandroid.db.SqlOperations;
+import com.effone.hostismeandroid.model.BookingHistoryItem;
 import com.effone.hostismeandroid.model.OrderSummary;
 import com.effone.hostismeandroid.model.Order_Items;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sarith.vasu on 14-04-2017.
@@ -27,12 +30,18 @@ public class My_BookingActivity extends AppCompatActivity {
     private Booking_HistoryAdapter bookingHistoryAdapter;
     private ArrayList<OrderSummary> orderSummaries;
     private RelativeLayout mRelativeLayout;
+    private SqlOperations sqliteoperation;
+    Long bill_no= Long.valueOf(000000);
+    ArrayList<BookingHistoryItem> mBookingHistoryItem;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.booking_history_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
+        sqliteoperation = new SqlOperations(getApplicationContext());
+        sqliteoperation.open();
+        mBookingHistoryItem = (ArrayList<BookingHistoryItem>) sqliteoperation.getBookedHistory(bill_no);
+        sqliteoperation.close();
         appPreferences=new AppPreferences(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -53,7 +62,7 @@ public class My_BookingActivity extends AppCompatActivity {
         mRelativeLayout.setVisibility(View.GONE);
         mLvBookingHistory=(ListView)findViewById(R.id.historyView);
         virtualMethod();
-        bookingHistoryAdapter=new Booking_HistoryAdapter(this,R.layout.booking_history_items,orderSummaries);
+        bookingHistoryAdapter=new Booking_HistoryAdapter(this,R.layout.booking_history_items,mBookingHistoryItem);
         mLvBookingHistory.setAdapter(bookingHistoryAdapter);
     }
 

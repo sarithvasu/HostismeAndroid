@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.activity.My_BookingActivity;
+import com.effone.hostismeandroid.model.BookingHistoryItem;
 import com.effone.hostismeandroid.model.OrderSummary;
 import com.effone.hostismeandroid.model.Order_Items;
 
@@ -20,13 +21,13 @@ import java.util.ArrayList;
  * Created by sumanth.peddinti on 4/18/2017.
  */
 
-public class Booking_HistoryAdapter  extends ArrayAdapter<OrderSummary> {
-    private ArrayList<OrderSummary> orderSummaries;
+public class Booking_HistoryAdapter  extends ArrayAdapter<BookingHistoryItem> {
+    private ArrayList<BookingHistoryItem> orderSummaries;
     private LayoutInflater inflater;
     private Context context;
-    public Booking_HistoryAdapter(Context context, int resource, ArrayList<OrderSummary> orderSummaries) {
+    public Booking_HistoryAdapter(Context context, int resource, ArrayList<BookingHistoryItem> orderSummaries) {
         super(context, resource,  orderSummaries);
-        this.orderSummaries =(ArrayList<OrderSummary>) orderSummaries;
+        this.orderSummaries =(ArrayList<BookingHistoryItem>) orderSummaries;
         inflater = (LayoutInflater)context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -57,13 +58,13 @@ public class Booking_HistoryAdapter  extends ArrayAdapter<OrderSummary> {
 
         } else {
             /***** Get each Model object from Arraylist ********/
-            OrderSummary value = (OrderSummary) orderSummaries.get(position);
+            BookingHistoryItem value = (BookingHistoryItem) orderSummaries.get(position);
             /************  Set Model values in Holder elements ***********/
-            holder.tv_date_time.setText(": "+value.getData_time());
+            holder.tv_date_time.setText(": "+value.getDate());
             holder.tv_rest_name.setText(": "+value.getRest_name());
             holder.tv_booking_id.setText(": "+value.getOrder_id());
             holder.tv_table_no.setText(": "+value.getTable_no());
-            holder.tv_order_total.setText(": "+value.getTotal());
+            holder.tv_order_total.setText(": "+value.getBill_ammount());
             holder.tv_order_status.setText(": "+value.getStatus());
 
         }

@@ -8,6 +8,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.effone.hostismeandroid.activity.Booking_History;
+import com.effone.hostismeandroid.model.BookingHistoryItem;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -383,21 +386,23 @@ public class SqlOperations {
     }
 
 
-    public long updatePlaceOrderStatus(String order_id){
+    public void updatePlaceOrderStatus(String order_id){
+        if(database.isOpen()){
         ContentValues row = new ContentValues();
         row.put("status", "Received" );//add  1
-
-        return database.update(SqliteConnection.TABLE_ORDER, row, KEY_ORDER_ID+"=" + "'SUMANTH'", null);
+        database.update(SqliteConnection.TABLE_ORDER, row, "_id"+" = '" + order_id + "'", null);
+        }else {
+        }
     }
 
-    public long pymentStatment(String id, String date, String rest_name, String order_id,
-                           int  table_no,String description,int bill_no,double bill_ammount,String status) {
+    public long pymentStatment(int id, String date, String rest_name, String order_id,
+                           int  table_no,String description,double bill_no,double bill_ammount,String status) {
 
         ContentValues row=new ContentValues();
         row.put("_id", id);
         row.put("date", date);
         row.put("rest_name", rest_name);
-        row.put("order_ids", order_id);
+        row.put("order_id", order_id);
         row.put("table_no", table_no);
         row.put("description",description);
         row.put("bill_no",bill_no);
@@ -406,4 +411,66 @@ public class SqlOperations {
 
         return  database.insert(SqliteConnection.BOOKING_HISTORY, null, row); //insert in DB the request
     }
+
+
+
+
+
+    public List<BookingHistoryItem> getBookedHistory(Long value) {
+
+        Cursor cursor;
+        List<BookingHistoryItem> allElementsDictionarys = new ArrayList<>();
+        String select;
+        if(value == 000000) {
+            select = "SELECT * from " + SqliteConnection.BOOKING_HISTORY;
+        }else{
+            select = "SELECT * from " + SqliteConnection.BOOKING_HISTORY +" where bill_no = '"+ value +"'";
+        }
+        cursor = database.rawQuery(select, null);
+        if (cursor.getCount() == 0) // if there are no elements do nothing
+        {
+            Log.d(TAG, "no elements");
+        } else { //if there are elemnts
+            Log.d(TAG, "there are elemnets");
+            //get all the rows and pass the data to allElements dictionary.
+            float totalByOrder = 0;
+
+            while (cursor.moveToNext()) {
+
+
+                BookingHistoryItem bookingHistoryItem= new BookingHistoryItem();
+
+                bookingHistoryItem.setId(cursor.getInt(cursor.getColumnIndex("_id")));
+                bookingHistoryItem.setOrder_id( cursor.getString(cursor.getColumnIndex("order_id")));
+                bookingHistoryItem.setDate( cursor.getString(cursor.getColumnIndex("date")));
+                bookingHistoryItem.setRest_name( cursor.getString(cursor.getColumnIndex("rest_name")));
+                bookingHistoryItem.setDescription( cursor.getString(cursor.getColumnIndex("description")));
+                bookingHistoryItem.setTable_no( cursor.getInt(cursor.getColumnIndex("table_no")));
+                bookingHistoryItem.setBill_no(cursor.getInt(cursor.getColumnIndex("bill_no")));
+                bookingHistoryItem.setBill_ammount(cursor.getDouble(cursor.getColumnIndex("bill_ammount")));
+                bookingHistoryItem.setStatus(cursor.getString(cursor.getColumnIndex("status")));
+
+                allElementsDictionarys.add(bookingHistoryItem);
+                if (LogDebug) {
+                    Log.d(TAG, "id : " + cursor.getString(0) +
+                            "\n table_no :" + cursor.getString(1) +
+                            "\n rest_name :" + cursor.getString(2) +
+                            "\n time_stamp :" + cursor.getString(3)+
+                            "\n status :" + cursor.getString(4)+
+                            "\n description :" + cursor.getString(5) +
+                            "\n totalPrice :" + cursor.getString(6)+
+                            "\n quantity :" + cursor.getString(7)
+                    );
+                }
+            }
+
+        }
+
+
+        cursor.close();//It is important close the cursor when you finish your process.
+
+
+        return allElementsDictionarys;
+    }
+
 }

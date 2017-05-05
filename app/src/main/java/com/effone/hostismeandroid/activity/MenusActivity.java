@@ -30,6 +30,7 @@ import com.android.volley.toolbox.Volley;
 
 import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.asyncs.SocketServerTask;
+import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.common.OnDataChangeListener;
 import com.effone.hostismeandroid.db.SqlOperations;
 import com.effone.hostismeandroid.json.JsonDataToSend;
@@ -75,12 +76,13 @@ public class MenusActivity extends AppCompatActivity implements SocketServerTask
     private String qrComplement;
     Toast mCurrentToast;
     private TextView mTvConfirm,mTvSumaryDetails;
-
+    private AppPreferences appPreferences;
     private ProgressDialog pDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        appPreferences=new AppPreferences(this);
         Intent intent = getIntent();
         qrResult = intent.getStringExtra("qrResult");
         qrComplement = intent.getStringExtra("qrComplement");
@@ -131,7 +133,7 @@ public class MenusActivity extends AppCompatActivity implements SocketServerTask
         TextView cust_ttile=(TextView)getSupportActionBar().getCustomView().findViewById(R.id.tv_custom_titile);
         cust_ttile.setText(getString(R.string.title_menu));
         TextView cust_sub_ttile=(TextView)getSupportActionBar().getCustomView().findViewById(R.id.tv_custom_sub_titile);
-        cust_sub_ttile.setText("Restaurant Name One");
+        cust_sub_ttile.setText(appPreferences.getRESTAURANT_NAME());
         ImageView iv_back=(ImageView) getSupportActionBar().getCustomView().findViewById(R.id.iv_back);
         iv_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,7 +155,10 @@ public class MenusActivity extends AppCompatActivity implements SocketServerTask
 
         switch (v.getId()) {
             case R.id.tv_confirm:
-                showDialogOrder(1);
+              //  showDialogOrder(1);
+                Intent intent=new Intent(MenusActivity.this,ViewCartActivity.class);
+
+                startActivity(intent );
             default:
                 break;
         }
@@ -219,13 +224,10 @@ public class MenusActivity extends AppCompatActivity implements SocketServerTask
         jsonData = jsonDataToSend.getOurJson();// pass the json object to this variable.
         String jsonStr = jsonData.toString();
         Log.d("JSON", jsonStr);
-        if (value == 1) {
-            messageOrder += "\n Total = " + totalbyOrder + "$\n Are you sure the ordered them" + totalNumberOfItems;
-            CreateAlertAsOfNow(messageOrder);
-        }else{
+
 
             mTvSumaryDetails.setText(Math.round(totalNumberOfItems)+" Items in Cart \n"+" Total = " + totalbyOrder +"\n Plus Chargers");
-        }
+
     }
 
     private void CreateAlertAsOfNow(String messageOrder) {
