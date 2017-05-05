@@ -111,7 +111,7 @@ public class MenuExpandableListAdapter extends BaseExpandableListAdapter  {
 
             ///to separte every || , the index 0 is the food and the index 1 is the price
             child_text.setText(details[0]);
-            tvPrice.setText(details[1]);
+            tvPrice.setText("$ "+details[1]+".00");
             tv_add_items.setVisibility(View.GONE);
 
         }
@@ -139,10 +139,10 @@ public class MenuExpandableListAdapter extends BaseExpandableListAdapter  {
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.menu_group_item,
+            convertView = infalInflater.inflate(R.layout.header_menu_item,
                     null);
         }
-        TextView item = (TextView) convertView.findViewById(R.id.group_food);
+        TextView item = (TextView) convertView.findViewById(R.id.tv_menu_header);
         item.setTypeface(null, Typeface.BOLD);
         item.setText(foodName);
         ExpandableListView eLV = (ExpandableListView) parent;
