@@ -54,14 +54,11 @@
             android:text="@string/stripe"
             android:buttonTint="@android:color/holo_green_light"
             android:textSize="18sp" />
-
     </RadioGroup>
-
     <TextView
         android:id="@+id/tv_submit"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/radioGroup"

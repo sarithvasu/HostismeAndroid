@@ -5,7 +5,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -133,7 +133,6 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         mHashMap.put(header.get(2), child3);
         mMenuExpandableListViewAdapter = new MenuExpandableListViewAdapter(this, header, mHashMap);
         mExpandableMenu.setAdapter(mMenuExpandableListViewAdapter);
-
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

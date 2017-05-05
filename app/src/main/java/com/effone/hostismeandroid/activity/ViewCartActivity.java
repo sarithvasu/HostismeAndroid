@@ -2,11 +2,10 @@ package com.effone.hostismeandroid.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -21,29 +20,48 @@ import android.widget.Toast;
 import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.adapter.MenuItemSummeryListAdapter;
 import com.effone.hostismeandroid.common.AppPreferences;
+import com.effone.hostismeandroid.common.OnDataChangeListener;
+import com.effone.hostismeandroid.db.SqlOperations;
+import com.effone.hostismeandroid.model.CartItem;
 import com.effone.hostismeandroid.model.OrderedItemSummary;
 
-import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class ViewCartActivity extends AppCompatActivity implements View.OnClickListener {
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
+public class ViewCartActivity extends AppCompatActivity implements View.OnClickListener,OnDataChangeListener {
     private ListView mItemSummeryList;
     private ArrayList<OrderedItemSummary> orderedItemSummaries;
     private MenuItemSummeryListAdapter mMenuItemSummeryListAdapter;
     private TextView mTvPlaceOrder;
     private EditText mEtTableNo;
-
+    private   JSONObject jObj;
+    private TextView mTvItemPrice,mTvItemCount,mTvChargers,mTvEstimatedTotal;
+    private  CartItem cartItem;
+    private AppPreferences appPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_cart);
+        Intent intent=getIntent();
+
+        appPreferences=new AppPreferences(this);
+        cartItem=new CartItem();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         setCustomTitile();
         mItemSummeryList=(ListView)findViewById(R.id.item_summery_list);
-        setValue();
         init();
+        setValue();
+
     }
     private void setCustomTitile() {
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -68,18 +86,95 @@ public class ViewCartActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void init() {
+        mTvItemCount=(TextView)findViewById(R.id.tv_items);
+        mTvItemPrice=(TextView)findViewById(R.id.tv_items_price);
+        mTvChargers=(TextView)findViewById(R.id.tv_charger_price);
+        mTvEstimatedTotal=(TextView)findViewById(R.id.tv_estimated_price);
+
         mTvPlaceOrder=(TextView)findViewById(R.id.tv_place_order);
         mEtTableNo=(EditText)findViewById(R.id.et_table_no) ;
         mTvPlaceOrder.setOnClickListener(this);
+        setValuesInto();
     }
-    private void setValue() {
+
+    private void setValuesInto() {
+        getDataFromDatabase();
+        try {
+            mTvItemPrice.setText(""+totalbyOrder);
+            mTvItemCount.setText("Items ("+ Math.round(totalNumberOfItems)+")");
+            mTvChargers.setText(""+taxAmountCalculation()*Math.round(totalNumberOfItems));
+            double sum=totalbyOrder+taxAmountCalculation()*Math.round(totalNumberOfItems);
+            mTvEstimatedTotal.setText(""+sum);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    private SqlOperations sqliteoperation;
+    float totalbyOrder = 0;
+    float totalNumberOfItems = 0;
+    String item_cata;
+    public static double serviceTax=06.00;
+    public static double vatTax=12.00;  public static double ser=05.00;
+
+    public double taxAmountCalculation()
+    {
+        return serviceTax+vatTax+ser;
+    }
+    private void getDataFromDatabase() {
         orderedItemSummaries= new ArrayList<OrderedItemSummary>();
-        OrderedItemSummary orderedItemSummary=new OrderedItemSummary("Olive Warm Marinated",10,100.00f,2.0f,1.0f,4.0f);
-        OrderedItemSummary orderedItemSummary1=new OrderedItemSummary("Bread Fresh Baked",10,120.00f,2.7f,1.6f,4.5f);
-        OrderedItemSummary orderedItemSummary2=new OrderedItemSummary("Bread Fresh Baked Marinated",10,120.00f,2.7f,1.6f,4.5f);
-        orderedItemSummaries.add(orderedItemSummary);
-        orderedItemSummaries.add(orderedItemSummary1);
-        orderedItemSummaries.add(orderedItemSummary2);
+        sqliteoperation = new SqlOperations(getApplicationContext());
+        sqliteoperation.open();
+        List<HashMap<String, String>> dictionary = sqliteoperation.getOrder("SUMANTH");
+        sqliteoperation.close();
+        int item_cat;
+        int item_food;
+        String totalbyFood;
+        String quantity;
+        String foodName;
+        String messageOrder;
+        String price;
+        messageOrder = "\nOrder\nYour ordered";
+
+
+        int j;
+
+        JSONArray jsonArray = new JSONArray();
+
+        for (int i = 0; i < dictionary.size(); i++) {
+
+            j = i + 1;
+            /*I start at index 0 and finish at the penultimate index */
+            HashMap<String, String> map = dictionary.get(i); //Get the corresponding map from the index
+            item_cat= Integer.parseInt(map.get("index_category"));
+            item_food= Integer.parseInt(map.get("index_food"));
+            totalbyFood = map.get("totalByFood");
+            price = map.get("price");
+            quantity = map.get("quantity");
+            foodName = map.get("food_name");
+            messageOrder += "\n " + j + " - " + foodName + " (" + price + " $  x  " + quantity + ")  " + totalbyFood + "$";
+            totalbyOrder += Float.parseFloat(totalbyFood);
+            totalNumberOfItems += Float.parseFloat(quantity);
+            item_cata=map.get("index_food");
+            OrderedItemSummary orderedItemSummary=new OrderedItemSummary(item_cat,item_food,foodName,Float.parseFloat(totalbyFood),Math.round(Float.parseFloat(quantity)),Float.parseFloat(price),serviceTax,vatTax,ser);
+            orderedItemSummaries.add(orderedItemSummary);
+            JSONObject food = new JSONObject();
+            try {
+                food.put("totalByFood", totalbyFood);
+                food.put("price", price);
+                food.put("quantity", quantity);
+                food.put("food_name", foodName);
+            } catch (JSONException e) {
+                Log.d("ViewCartActivity", e.toString());
+                throw new RuntimeException(e);
+            }
+            jsonArray.put(food);
+
+        }
+
+    }
+
+    private void setValue() {
         mMenuItemSummeryListAdapter=new MenuItemSummeryListAdapter(this,R.layout.summery_list_item,orderedItemSummaries);
         mItemSummeryList.setAdapter(mMenuItemSummeryListAdapter);
     }
@@ -97,11 +192,42 @@ public class ViewCartActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
         if(view.getId() == R.id.tv_place_order) {
             if(mEtTableNo.getText().toString().trim().length()> 3) {
+                Long tsLong = System.currentTimeMillis()/1000;
+                String ts = tsLong.toString();
+                String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+                sqliteoperation = new SqlOperations(getApplicationContext());
+                sqliteoperation.open();
+
+                   if(sqliteoperation.updateOrderId(ts) != 0) {
+                       int table_no = Integer.parseInt(mEtTableNo.getText().toString().trim());
+                       sqliteoperation.placeOrder(ts, table_no, appPreferences.getREST_NAME(), currentDateTimeString, "BOOKED", item_cata, totalbyOrder, Math.round(totalNumberOfItems));
+                   }
+                sqliteoperation.close();
+
                 Intent intent = new Intent(this, ConfirmationActivity.class);
+                intent.putExtra("Order_id",ts);
                 startActivity(intent);
             }else{
                 Toast.makeText(this,"enter the Table.no",Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    public void onDataChanged(int size) {
+     totalbyOrder = 0;
+        totalNumberOfItems = 0;
+        setValuesInto();
+        setValue();
+        /*try {
+            mTvItemPrice.setText(""+totalbyOrder);
+            mTvItemCount.setText("Items ("+ Math.round(totalNumberOfItems)+")");
+            mTvChargers.setText(""+taxAmountCalculation()*Math.round(totalNumberOfItems));
+            double sum=totalbyOrder+taxAmountCalculation()*Math.round(totalNumberOfItems);
+            mTvEstimatedTotal.setText(""+sum);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+*/
     }
 }

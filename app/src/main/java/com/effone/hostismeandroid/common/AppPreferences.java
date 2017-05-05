@@ -15,6 +15,7 @@ public class AppPreferences {
 
 
 
+
     private String FIRST_TIME_LAUNCH="first_time_launch";
     private String SERVER_DATE="server_date";
     private String USER_ID="user_id";
@@ -22,12 +23,19 @@ public class AppPreferences {
     private String USER_NAME="user_name";
     private String REST_NAME="rest_name";
 
-    public String getREST_NAME() {
-        return REST_NAME;
+
+    public AppPreferences(Context context) {
+        this.sharedPrefs = context.getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
+        this.prefsEditor = sharedPrefs.edit();
     }
 
-    public void setREST_NAME(String REST_NAME) {
-        this.REST_NAME = REST_NAME;
+
+    public String getREST_NAME() {
+        return sharedPrefs.getString(REST_NAME, "");
+    }
+    public void setREST_NAME(String rest_name) {
+        prefsEditor.putString(REST_NAME, rest_name);
+        prefsEditor.commit();
     }
 
     private String LOGIN_EMAIL="login_email";
@@ -44,10 +52,6 @@ public class AppPreferences {
 
 
 
-    public AppPreferences(Context context) {
-        this.sharedPrefs = context.getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
-        this.prefsEditor = sharedPrefs.edit();
-    }
 
     public String getSERVER_DATE() {
         return sharedPrefs.getString(SERVER_DATE, "");

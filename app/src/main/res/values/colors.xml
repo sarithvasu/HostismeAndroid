@@ -14,4 +14,5 @@
     <color name="confirm">#1795BD</color>
     <color name="dinner">#20BCD8</color>
     <color name="white">#fff</color>
+    <color name="background">#fff</color>
 </resources>

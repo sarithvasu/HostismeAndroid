@@ -62,7 +62,7 @@
             android:textSize="12sp"
             android:textColor="@color/white"
             android:background="@color/payment_btn_color"
-            android:text="10" />
+            android:text="0" />
         <TextView
             android:id="@+id/tv_plus"
             android:layout_width="0dp"

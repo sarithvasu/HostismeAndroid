@@ -17,7 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.effone.hostismeandroid.R;
+import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.common.Common;
+
 
 /**
  * Created by sumanth.peddinti on 4/12/2017.
@@ -26,16 +28,21 @@ import com.effone.hostismeandroid.common.Common;
 public class Book_a_tableActivity extends AppCompatActivity implements View.OnClickListener {
         EditText mEtTableNo;
     Button mBtViewMenu;
+    private AppPreferences mAppPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_a_table);
+        mAppPreferences=new AppPreferences(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        Common.setCustomTitile(this,getString(R.string.book_a_table),"Restaurant Name One");
-        init();
+        if(mAppPreferences.getREST_NAME()!= "") {
+            Common.setCustomTitile(this, getString(R.string.book_a_table), mAppPreferences.getREST_NAME());
+        }
+            init();
+
     }
 
 

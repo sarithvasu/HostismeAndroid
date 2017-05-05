@@ -7,7 +7,7 @@ package com.effone.hostismeandroid.model;
 public class Order_Items {
 
     private String name;
-    private int price;
+    private double price;
     private int quantity;
 
     public String getName() {
@@ -18,11 +18,11 @@ public class Order_Items {
         this.name = name;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -34,7 +34,7 @@ public class Order_Items {
         this.quantity = quantity;
     }
 
-    public Order_Items(String name, int price, int quantity) {
+    public Order_Items(String name, double price, int quantity) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;

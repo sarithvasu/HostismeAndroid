@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Response;
 import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.model.Restaurant;
 
@@ -24,11 +25,11 @@ import java.util.List;
  */
 
 public class RestaurantListAdapter extends ArrayAdapter<Restaurant>{
-    private ArrayList<Restaurant> restaurants;
+    private Restaurant[] restaurants;
     private LayoutInflater inflater;
-    public RestaurantListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Restaurant> restaurants) {
-        super(context, resource,  restaurants);
-        this.restaurants =(ArrayList<Restaurant>) restaurants;
+    public RestaurantListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull Restaurant[] restaurants) {
+        super(context, resource, restaurants);
+        this.restaurants =restaurants;
         inflater = (LayoutInflater)context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -48,15 +49,14 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant>{
         else
             holder = (FilterViewHolder) vi.getTag();
 
-        if (restaurants.size() <= 0) {
+        if (restaurants.length < 0 ) {
             holder.tv_restaurant_name.setText("No Data");
 
         } else {
             /***** Get each Model object from Arraylist ********/
-            Restaurant value = (Restaurant) restaurants.get(position);
             /************  Set Model values in Holder elements ***********/
-            holder.tv_restaurant_name.setText(value.getRestName());
-            holder.tv_restaurant_adress.setText(value.getRestAdress()+", "+value.getCity()+", "+value.getCountry());
+            holder.tv_restaurant_name.setText(restaurants[position].getRestName());
+            holder.tv_restaurant_adress.setText(restaurants[position].getRestAdress()+", "+restaurants[position].getCity()+", "+restaurants[position].getCountry());
         }
 
         return vi;

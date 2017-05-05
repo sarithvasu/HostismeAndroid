@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -32,6 +33,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.NetworkImageView;
 import com.effone.hostismeandroid.activity.Book_a_tableActivity;
 import com.effone.hostismeandroid.activity.MenuActivity;
+import com.effone.hostismeandroid.activity.MenusActivity;
 import com.effone.hostismeandroid.activity.My_BookingActivity;
 import com.effone.hostismeandroid.activity.RestaurantListAcitivity;
 import com.effone.hostismeandroid.activity.Search_ItemActivity;
@@ -39,6 +41,7 @@ import com.effone.hostismeandroid.activity.Service_RequestActivity;
 import com.effone.hostismeandroid.activity.View_Pay_BillActivity;
 import com.effone.hostismeandroid.adapter.ScreenSlidePagerAdapter;
 import com.effone.hostismeandroid.app.AppController;
+import com.effone.hostismeandroid.db.SqlOperations;
 import com.effone.hostismeandroid.model.HomePageDish;
 
 import org.json.JSONArray;
@@ -242,7 +245,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             case R.id.btn_res_menu:
-                intent = new Intent(this, MenuActivity.class);
+                intent = new Intent(this, MenusActivity.class);
                 startActivity(intent);
                 break;
             case R.id.btn_book_table:
@@ -250,8 +253,14 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             case R.id.btn_view_pay:
-                intent = new Intent(this, View_Pay_BillActivity.class);
-                startActivity(intent);
+                SqlOperations    sqliteoperation = new SqlOperations(getApplicationContext());
+                sqliteoperation.open();
+                if(sqliteoperation.getPayItems().size()>0) {
+                    intent = new Intent(this, View_Pay_BillActivity.class);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(this,"Please Place a order",Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.btn_my_booking:
                 intent = new Intent(this, My_BookingActivity.class);

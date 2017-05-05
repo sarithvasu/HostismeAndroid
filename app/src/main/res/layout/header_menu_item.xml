@@ -8,7 +8,7 @@
         android:background="@color/payment_btn_color"
         android:gravity="center_vertical"
        android:layout_gravity="center_vertical"
-        android:textSize="26sp"
+        android:textSize="22sp"
         android:paddingLeft="5dp"
         android:textColor="@android:color/white"
         android:id="@+id/tv_menu_header"/>

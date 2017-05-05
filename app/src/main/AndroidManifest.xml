@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.effone.hostismeandroid">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <!-- Required to register a SyncStatusObserver to display a "syncing..." progress indicator. -->
-    <uses-permission android:name="android.permission.READ_SYNC_STATS"/>
+    <uses-permission android:name="android.permission.READ_SYNC_STATS" />
     <!-- Required to enable our SyncAdapter after it's created. -->
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <!-- Required because we're manually creating a new account. -->
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+
     <application
+        android:name=".app.AppController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:name=".app.AppController"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -51,8 +53,7 @@
             android:name=".activity.View_Pay_BillActivity"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateUnchanged"
-            />
+            android:windowSoftInputMode="stateUnchanged" />
         <activity
             android:name=".activity.My_BookingActivity"
             android:screenOrientation="sensorPortrait"
@@ -65,7 +66,7 @@
             android:name=".activity.Service_RequestActivity"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan|adjustResize|stateUnchanged"/>
+            android:windowSoftInputMode="adjustPan|adjustResize|stateUnchanged" />
         <activity
             android:name=".activity.ConfirmationActivity"
             android:screenOrientation="sensorPortrait"
@@ -74,38 +75,49 @@
             android:name=".activity.ViewCartActivity"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustNothing"/>
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".activity.Book_a_tableActivity"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.PaymentConfirmationActivity"
+        <activity
+            android:name=".activity.PaymentConfirmationActivity"
             android:screenOrientation="sensorPortrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <service
-            android:name="com.effone.hostismeandroid.authenticator.AuthenticatorService">
+            android:theme="@style/AppTheme.NoActionBar" />
+
+
+        <service android:name=".authenticator.AuthenticatorService">
             <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator"/>
+                <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
+
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
         </service>
+
         <provider
             android:name=".sync.SyncProvider"
             android:authorities="com.effone.android.datasync.provider"
             android:exported="false"
-            android:syncable="true"/>
+            android:syncable="true" />
+
         <service
             android:name=".sync.SyncService"
             android:exported="true"
             android:process=":sync">
             <intent-filter>
-                <action android:name="android.content.SyncAdapter"/>
+                <action android:name="android.content.SyncAdapter" />
             </intent-filter>
-            <meta-data android:name="android.content.SyncAdapter"
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
+
+        <activity android:name=".activity.MenusActivity"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
