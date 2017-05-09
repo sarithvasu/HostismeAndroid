@@ -10,7 +10,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,12 +30,16 @@ public class MenuExpandableListAdapter extends BaseExpandableListAdapter  {
     private Activity context;
     private Map<String, List<String>> menuCollections;
     private List<String> foods;
-   private OnDataChangeListener mOnDataChangeListener;
+
+    OnDataChangeListener mOnDataChangeListener;
+    public void setOnDataChangeListener(OnDataChangeListener onDataChangeListener){
+        mOnDataChangeListener = onDataChangeListener;
+    }
+
     public MenuExpandableListAdapter(Activity context, List<String> foods, Map<String, List<String>> menuCollections) {
         this.context = context;
         this.menuCollections = menuCollections;
         this.foods = foods;
-        this.mOnDataChangeListener= (OnDataChangeListener) context;
 
     }
 
@@ -84,7 +87,9 @@ public class MenuExpandableListAdapter extends BaseExpandableListAdapter  {
                     sqliteoperation = new SqlOperations(context);
                     sqliteoperation.open();
                     sqliteoperation.AddOrSubstractProduct(groupPosition, childPosition, details[0], Float.parseFloat(details[1]), 1);
-                    mOnDataChangeListener.onDataChanged(1);
+                    if(mOnDataChangeListener != null){
+                        mOnDataChangeListener.onDataChanged(1);
+                    }
                     sqliteoperation.close();
                    // tvQuatity.setText( sqliteoperation.getCount(groupPosition, childPosition, details[0], Float.parseFloat(details[1]), 1));
                 }
@@ -102,6 +107,9 @@ public class MenuExpandableListAdapter extends BaseExpandableListAdapter  {
                     Toast.makeText(context, "click remove", Toast.LENGTH_LONG).show();
                     sqliteoperation = new SqlOperations(context);
                     sqliteoperation.open();
+                    if(mOnDataChangeListener != null){
+                        mOnDataChangeListener.onDataChanged(1);
+                    }
                     sqliteoperation.AddOrSubstractProduct(groupPosition, childPosition, details[0], Float.parseFloat(details[1]), 2);
                     sqliteoperation.close();
                    // tvQuatity.setText( sqliteoperation.getCount(groupPosition, childPosition, details[0], Float.parseFloat(details[1]), 2));
@@ -157,6 +165,9 @@ public class MenuExpandableListAdapter extends BaseExpandableListAdapter  {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
+
+
+
     public static class ViewHolder {
 
         public TextView child_text;

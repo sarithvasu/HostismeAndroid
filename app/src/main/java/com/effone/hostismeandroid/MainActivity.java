@@ -13,14 +13,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,7 +34,6 @@ import com.effone.hostismeandroid.activity.MenuActivity;
 import com.effone.hostismeandroid.activity.MenusActivity;
 import com.effone.hostismeandroid.activity.My_BookingActivity;
 import com.effone.hostismeandroid.activity.RestaurantListAcitivity;
-import com.effone.hostismeandroid.activity.Search_ItemActivity;
 import com.effone.hostismeandroid.activity.Service_RequestActivity;
 import com.effone.hostismeandroid.activity.View_Pay_BillActivity;
 import com.effone.hostismeandroid.adapter.ScreenSlidePagerAdapter;
@@ -50,7 +47,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager;
 
@@ -59,7 +55,7 @@ public class MainActivity extends AppCompatActivity
     private AutoScrollViewPager mPager;
     private ScreenSlidePagerAdapter mPagerAdapter;
     private static final int NUM_PAGES = 5;
-    ArrayList<HomePageDish>  ids;
+    ArrayList<HomePageDish> ids;
     private static final String url = "http://api.androidhive.info/json/movies.json";
     private static final String TAG = MainActivity.class.getSimpleName();
     private TextView mTvRestaurantList, mTvMenu, mTvBook_a_table, mTvService_Request, mTvViewPay, mTvBooking_History;
@@ -76,7 +72,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
      /*   getSupportActionBar().setTitle(R.string.home);*/
-     setToolbar();
+        setToolbar();
        /* int titleId = getResources().getIdentifier("action_bar_title", "id", "android");
         TextView abTitle = (TextView) findViewById(titleId);
         abTitle.setTextColor(getResources().getColor(R.color.white));
@@ -95,7 +91,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 */
-       appPreferences=new AppPreferences(this);
+        appPreferences = new AppPreferences(this);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -116,9 +112,9 @@ public class MainActivity extends AppCompatActivity
                 ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT,
                 ActionBar.LayoutParams.MATCH_PARENT, Gravity.CENTER);
         getSupportActionBar().setCustomView(customView, params);
-        TextView cust_ttile=(TextView)getSupportActionBar().getCustomView().findViewById(R.id.tv_custom_titile);
+        TextView cust_ttile = (TextView) getSupportActionBar().getCustomView().findViewById(R.id.tv_custom_titile);
         cust_ttile.setText(getString(R.string.home));
-        TextView cust_sub_ttile=(TextView)getSupportActionBar().getCustomView().findViewById(R.id.tv_custom_sub_titile);
+        TextView cust_sub_ttile = (TextView) getSupportActionBar().getCustomView().findViewById(R.id.tv_custom_sub_titile);
         cust_sub_ttile.setText("Syndey");
 
     }
@@ -158,7 +154,7 @@ public class MainActivity extends AppCompatActivity
                         hidePDialog();
 
                         // Parsing json
-                        ids=new ArrayList<HomePageDish>();
+                        ids = new ArrayList<HomePageDish>();
                         for (int i = 0; i < response.length(); i++) {
                             try {
 
@@ -189,7 +185,7 @@ public class MainActivity extends AppCompatActivity
 
                         // notifying list adapter about data changes
                         // so that it renders the list view with updated data
-                        mCustomPagerAdapter=new CustomPagerAdapter(MainActivity.this);
+                        mCustomPagerAdapter = new CustomPagerAdapter(MainActivity.this);
                         mPager.setAdapter(mCustomPagerAdapter);
                     }
                 }, new Response.ErrorListener() {
@@ -204,12 +200,14 @@ public class MainActivity extends AppCompatActivity
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(movieReq);
     }
+
     private void hidePDialog() {
         if (pDialog != null) {
             pDialog.dismiss();
             pDialog = null;
         }
     }
+
     private void declerations() {
         mTvRestaurantList = (TextView) findViewById(R.id.btn_res_list);
         mTvBook_a_table = (TextView) findViewById(R.id.btn_book_table);
@@ -241,49 +239,49 @@ public class MainActivity extends AppCompatActivity
         Intent intent;
         switch (view.getId()) {
             case R.id.btn_appointments:
-                if(appPreferences.getRESTAURANT_NAME()!= "") {
+                if (appPreferences.getRESTAURANT_NAME() != "") {
                     intent = new Intent(this, Service_RequestActivity.class);
                     startActivity(intent);
-                }else {
+                } else {
                     sendalert("Please Select the location");
                 }
                 break;
             case R.id.btn_res_list:
 
-                    intent = new Intent(this, RestaurantListAcitivity.class);
-                    startActivity(intent);
+                intent = new Intent(this, RestaurantListAcitivity.class);
+                startActivity(intent);
 
                 break;
             case R.id.btn_res_menu:
-        if(appPreferences.getRESTAURANT_NAME()!= "") {
-            intent = new Intent(this, MenusActivity.class);
-            startActivity(intent);
-        } else {
-                sendalert("Please Select the location");
-            }
+             if (appPreferences.getRESTAURANT_NAME() != "") {
+                    intent = new Intent(this, MenuActivity.class);
+                    startActivity(intent);
+                } else {
+                    sendalert("Please Select the location");
+                }
                 break;
             case R.id.btn_book_table:
-                if(appPreferences.getRESTAURANT_NAME()!= "") {
-                intent = new Intent(this, Book_a_tableActivity.class);
-                startActivity(intent);
+                if (appPreferences.getRESTAURANT_NAME() != "") {
+                    intent = new Intent(this, Book_a_tableActivity.class);
+                    startActivity(intent);
                 } else {
                     sendalert("Please Select the location");
                 }
                 break;
             case R.id.btn_view_pay:
-                if(appPreferences.getRESTAURANT_NAME()!= "") {
-                SqlOperations    sqliteoperation = new SqlOperations(getApplicationContext());
-                sqliteoperation.open();
+                if (appPreferences.getRESTAURANT_NAME() != "") {
+                    SqlOperations sqliteoperation = new SqlOperations(getApplicationContext());
+                    sqliteoperation.open();
 
-                if(sqliteoperation.getPayItems().size()>0) {
-                    intent = new Intent(this, View_Pay_BillActivity.class);
-                    startActivity(intent);
-                }else {
-                    Toast.makeText(this,"Please Place a order",Toast.LENGTH_SHORT).show();
+                    if (sqliteoperation.getPayItems().size() > 0) {
+                        intent = new Intent(this, View_Pay_BillActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(this, "Please Place a order", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    sendalert("Please Select the location");
                 }
-        } else {
-            sendalert("Please Select the location");
-        }
                 break;
             case R.id.btn_my_booking:
                 intent = new Intent(this, My_BookingActivity.class);
@@ -293,7 +291,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void sendalert(String s) {
-        Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
     }
 
     private class CustomPagerAdapter extends PagerAdapter {

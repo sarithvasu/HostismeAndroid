@@ -81,7 +81,7 @@ public class MenusActivity extends AppCompatActivity implements SocketServerTask
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        setContentView(R.layout.content_menu);
         appPreferences=new AppPreferences(this);
         Intent intent = getIntent();
         qrResult = intent.getStringExtra("qrResult");
@@ -157,8 +157,8 @@ public class MenusActivity extends AppCompatActivity implements SocketServerTask
             case R.id.tv_confirm:
               //  showDialogOrder(1);
                 Intent intent=new Intent(MenusActivity.this,ViewCartActivity.class);
-
                 startActivity(intent );
+                break;
             default:
                 break;
         }
@@ -321,8 +321,8 @@ public class MenusActivity extends AppCompatActivity implements SocketServerTask
                             pDialog.dismiss();
                             Log.d(EXCEPT, "" + e.toString());
                         }
-                        expListAdapter = new MenuExpandableListAdapter(MenusActivity.this, groupList, menuCollection);
-                        expListView.setAdapter(expListAdapter);
+                     //   expListAdapter = new MenuExpandableListAdapter(MenusActivity.this, groupList, menuCollection);
+                       // expListView.setAdapter(expListAdapter);
                     }
                 },
                 new Response.ErrorListener() {
@@ -445,7 +445,7 @@ public class MenusActivity extends AppCompatActivity implements SocketServerTask
             pDialog.dismiss();
 
 
-            final MenuExpandableListAdapter expListAdapter = new MenuExpandableListAdapter(MenusActivity.this, groupList, menuCollection);
+         //   final MenuExpandableListAdapter expListAdapter = new MenuExpandableListAdapter(MenusActivity.this, groupList, menuCollection);
             expListView.setAdapter(expListAdapter);
             expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
 

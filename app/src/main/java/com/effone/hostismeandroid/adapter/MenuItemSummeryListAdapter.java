@@ -5,20 +5,17 @@ import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.activity.MenusActivity;
 import com.effone.hostismeandroid.common.OnDataChangeListener;
 import com.effone.hostismeandroid.db.SqlOperations;
 import com.effone.hostismeandroid.model.OrderedItemSummary;
-import com.effone.hostismeandroid.model.Restaurant;
 
 import java.util.ArrayList;
 import java.util.List;

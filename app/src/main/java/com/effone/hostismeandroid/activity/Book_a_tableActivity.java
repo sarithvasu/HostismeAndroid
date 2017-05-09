@@ -72,7 +72,7 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
                 if(tableNo.length() >= 2){
                     mAppPreferences.setTABLE_NAME(Integer.parseInt(tableNo));
                //     Toast.makeText(this,"done",Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(this,MenusActivity.class);
+                    Intent intent=new Intent(this,MenuActivity.class);
                     startActivity(intent);
                 }else{
                     Toast.makeText(this,"Enter the table no",Toast.LENGTH_SHORT).show();
