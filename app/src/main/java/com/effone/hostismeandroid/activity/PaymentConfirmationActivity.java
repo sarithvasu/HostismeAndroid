@@ -76,10 +76,10 @@ public class PaymentConfirmationActivity extends AppCompatActivity {
     }
 
     private void settingValues() {
-        mTvDateTime.setText(mBookingHistoryItem.get(0).getDate());
-        mTvRestName.setText(mBookingHistoryItem.get(0).getRest_name());
-        mTvBookingId.setText(mBookingHistoryItem.get(0).getOrder_id());
-        mTvDescription.setText(mBookingHistoryItem.get(0).getDescription());
+        mTvDateTime.setText(": "+mBookingHistoryItem.get(0).getDate());
+        mTvRestName.setText(": "+mBookingHistoryItem.get(0).getRest_name());
+        mTvBookingId.setText(": "+mBookingHistoryItem.get(0).getOrder_id());
+        mTvDescription.setText(": "+mBookingHistoryItem.get(0).getDescription());
         mTvTableNo.setText(": " + mBookingHistoryItem.get(0).getTable_no());
         //mTvQuantits.setText(": $ " + mBookingHistoryItem.get(0).getBill_ammount());
         mTvOrderTotal.setText(": " + mBookingHistoryItem.get(0).getBill_ammount());
