@@ -49,13 +49,14 @@ import java.util.ArrayList;
 
 import cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager;
 
+import static com.effone.hostismeandroid.common.URL.dish_images_url;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     private AutoScrollViewPager mPager;
     private ScreenSlidePagerAdapter mPagerAdapter;
     private static final int NUM_PAGES = 5;
     ArrayList<HomePageDish> ids;
-    private static final String url = "http://192.168.2.44/android_web_api/images.json";
     private static final String TAG = MainActivity.class.getSimpleName();
     private TextView mTvRestaurantList, mTvMenu, mTvBook_a_table, mTvService_Request, mTvViewPay, mTvBooking_History;
     private ImageLoader imageLoader = AppController.getInstance().getImageLoader();
@@ -160,7 +161,7 @@ public class MainActivity extends AppCompatActivity
         // Showing progress dialog before making http request
         pDialog.setMessage("Loading...");
         pDialog.show();
-        JsonArrayRequest movieReq = new JsonArrayRequest(url,
+        JsonArrayRequest movieReq = new JsonArrayRequest(dish_images_url,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
