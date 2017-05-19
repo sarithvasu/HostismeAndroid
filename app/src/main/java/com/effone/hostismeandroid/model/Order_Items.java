@@ -10,6 +10,9 @@ public class Order_Items {
     private double price;
     private int quantity;
 
+    public Order_Items() {
+    }
+
     public String getName() {
         return name;
     }

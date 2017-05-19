@@ -1,202 +1,206 @@
 package com.effone.hostismeandroid.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.adapter.OrderItemDetailsAdapter;
 import com.effone.hostismeandroid.adapter.TaxDetailsAdapter;
+import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.common.Common;
-import com.effone.hostismeandroid.db.SqlOperations;
+import com.effone.hostismeandroid.db.SqlOperation;
 import com.effone.hostismeandroid.model.OrderSummary;
 import com.effone.hostismeandroid.model.Order_Items;
-import com.effone.hostismeandroid.model.OrderedItemSummary;
 import com.effone.hostismeandroid.model.TaxItems;
+import com.google.gson.Gson;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
-import static com.effone.hostismeandroid.activity.ViewCartActivity.ser;
-import static com.effone.hostismeandroid.activity.ViewCartActivity.serviceTax;
-import static com.effone.hostismeandroid.activity.ViewCartActivity.vatTax;
+import static com.effone.hostismeandroid.common.URL.get_placed_order;
+import static com.effone.hostismeandroid.db.DBConstant.ser;
+import static com.effone.hostismeandroid.db.DBConstant.serviceTax;
+import static com.effone.hostismeandroid.db.DBConstant.vatTax;
 
 /**
- * Created by sumanth.peddinti on 4/17/2017.
+ * Created by sumanth.peddinti on 5/15/2017.
  */
 
 public class ConfirmationActivity extends AppCompatActivity {
-    private  TextView mTvDateTime,mTvRestName,mTvBookingId,mTvDescription,mTvTableNo,mTvQuantits,mTvOrderTotal,mTvStatus,mTvTotalPrice;
-    private OrderSummary orderSummary;
-    private ListView mLvItemQuantity,mLvTaxQuality;
-    private TaxDetailsAdapter taxDetailsAdapter;
-    private OrderItemDetailsAdapter orderItemDetails;
-    ArrayList<TaxItems> taxItemses;
+
+    private TextView mTvDateTime, mTvRestName, mTvBookingId, mTvDescription, mTvTableNo, mTvQuantits, mTvOrderTotal, mTvStatus, mTvTotalPrice;
+    private TextView mTvConfirmationMessage;
+    private ListView mLvItemQuantity, mLvTaxQuality, mListView;
     private RelativeLayout mRelativeLayout;
-    ArrayList<Order_Items> order_itemses;
-    private AppBarLayout mAppBarToolBar;
-    private  SqlOperations sqliteoperation;
-    private ListView mListView;
-    private String order_id;
+    private SqlOperation sqliteoperation;
+    private String order_id, mStatus;
+    private Gson mGson;
+    private RequestQueue mQueue;
+    private String urls;
+    private OrderSummary[] mOrderToServers;
+    private AppPreferences mAppPrefernces;
+    SqlOperation sqlOperation;
+    private OrderItemDetailsAdapter orderItemDetails;
+    private ArrayList<TaxItems> taxItemses;
+    private TaxDetailsAdapter taxDetailsAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confiramtion);
-        Intent intent=getIntent();
-        order_id=intent.getStringExtra("Order_id");
-        sqliteoperation = new SqlOperations(getApplicationContext());
-        sqliteoperation.open();
-        List<HashMap<String, String>> dictionary = sqliteoperation.getPlaceOrder(order_id);
-        sqliteoperation.close();
-        HashMap<String, String> map=dictionary.get(0);
-        orderSummary= new OrderSummary(map.get("time_stamp"),map.get("rest_name"),map.get("_id"),
-                map.get("description"),Integer.parseInt(map.get("table_no")),Integer.parseInt(map.get("quantity")),Float.parseFloat(map.get("totalPrice")),map.get("status"));
-        mAppBarToolBar=(AppBarLayout)findViewById(R.id.titel_na);
-        mAppBarToolBar.setVisibility(View.GONE);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         Common.setCustomTitile(this,"Order Confirmation",null);
-        init();
-
-      // sqliteoperation.updatetheCart();
+        mAppPrefernces = new AppPreferences(this);
+        mGson = new Gson();
+        mQueue = Volley.newRequestQueue(this);
+        Intent intent = getIntent();
+        String jsondata = intent.getStringExtra("Order_id");
+        JSONObject myJson = null;
+        try {
+            myJson = new JSONObject(jsondata);
+            mStatus = myJson.getString("msg");
+            order_id = myJson.getString("order_id");
+            urls = get_placed_order + order_id;
+            mAppPrefernces.setORDER_ID(order_id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+// use myJson as needed, for example
+        sqliteoperation = new SqlOperation(getApplicationContext());
+        sqliteoperation.open();
+        //   List<HashMap<String, String>> dictionary = sqliteoperation.getPlaceOrder(order_id);
+        sqliteoperation.close();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            init();
+        }
+        // sqliteoperation.updatetheCart();
     }
 
-
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void init() {
-        mLvItemQuantity=(ListView)findViewById(R.id.lv_items_list);
-        mLvTaxQuality=(ListView)findViewById(R.id.lv_tax_menu);
-        mListView=(ListView)findViewById(R.id.historyView);
+        mTvConfirmationMessage = (TextView) findViewById(R.id.tv_confiramtion_msg);
+        mTvConfirmationMessage.setText(mStatus);
+        mLvItemQuantity = (ListView) findViewById(R.id.lv_items_list);
+        mLvTaxQuality = (ListView) findViewById(R.id.lv_tax_menu);
+        mListView = (ListView) findViewById(R.id.historyView);
         mListView.setVisibility(View.GONE);
-        mRelativeLayout=(RelativeLayout)findViewById(R.id.relativeLayout);
-        mRelativeLayout.setBackground(getDrawable(R.drawable.payment_background));
-        mTvDateTime=(TextView)findViewById(R.id.tv_data_time);
-        mTvRestName=(TextView)findViewById(R.id.tv_rest_name);
-        mTvBookingId=(TextView)findViewById(R.id.tv_booking_id);
-        mTvDescription=(TextView)findViewById(R.id.tv_descrption);
-        mTvTableNo=(TextView)findViewById(R.id.tv_table_no);
-        mTvQuantits=(TextView)findViewById(R.id.tv_quantitys);
-        mTvOrderTotal=(TextView)findViewById(R.id.tv_order_total);
-        mTvStatus=(TextView)findViewById(R.id.tv_order_status);
-        mTvTotalPrice=(TextView)findViewById(R.id.tv_total_price);
+        AppBarLayout titel_na=(AppBarLayout) findViewById(R.id.titel_na);
+        titel_na.setVisibility(View.GONE);
+        mRelativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mRelativeLayout.setBackground(getDrawable(R.drawable.payment_background));
+        }
+        mTvDateTime = (TextView) findViewById(R.id.tv_data_time);
+        mTvRestName = (TextView) findViewById(R.id.tv_rest_name);
+        mTvBookingId = (TextView) findViewById(R.id.tv_booking_id);
+        mTvDescription = (TextView) findViewById(R.id.tv_descrption);
+        mTvTableNo = (TextView) findViewById(R.id.tv_table_no);
+        mTvQuantits = (TextView) findViewById(R.id.tv_quantitys);
+        mTvOrderTotal = (TextView) findViewById(R.id.tv_order_total);
+        mTvStatus = (TextView) findViewById(R.id.tv_order_status);
+        mTvTotalPrice = (TextView) findViewById(R.id.tv_total_price);
         settingValues();
     }
 
     private void settingValues() {
-        mTvDateTime.setText(": "+orderSummary.getData_time());
-        mTvRestName.setText(": "+orderSummary.getRest_name());
-        mTvBookingId.setText(": "+orderSummary.getOrder_id());
-        mTvDescription.setText(": "+orderSummary.getDescription());
-        mTvTableNo.setText(": "+orderSummary.getTable_no());
-        mTvQuantits.setText(": "+orderSummary.getQuantity());
-        mTvOrderTotal.setText(": $ "+orderSummary.getTotal());
-        mTvStatus.setText(orderSummary.getStatus());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, urls,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        mOrderToServers = mGson.fromJson(response, OrderSummary[].class);
+                        showingData();
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(ConfirmationActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+        mQueue.add(stringRequest);
+
+    }
+
+    private void showingData() {
+        mTvDateTime.setText(": " + mOrderToServers[0].getDatatime());
+        mTvRestName.setText(": " + mOrderToServers[0].getRestaurant_id());
+        mAppPrefernces.setORDER_ID(mOrderToServers[0].getOrder_id());
+        mTvBookingId.setText(": " + mOrderToServers[0].getOrder_id());
+        mTvOrderTotal.setText(": $ " + mOrderToServers[0].getTotal_price());
+        mTvStatus.setText(": " + mOrderToServers[0].getStatus());
+        showingDataIntoListView();
+    }
+
+    double totalPrice=0;
+    private void showingDataIntoListView() {
+
+        sqliteoperation.open();
+        String[] values = new String[mOrderToServers[0].getItems_values().length];
+        for (int i = 0; i < values.length; i++) {
+            values[i] = mOrderToServers[0].getItems_values()[i].getItem_id();
+        }
+        sqliteoperation.setOrderFlagsUpdate(Integer.parseInt(order_id));
+        ArrayList<Order_Items> order_itemses = sqliteoperation.getItemName(values, order_id);
+
+        sqliteoperation.close();
+        mTvDescription.setText(": " + mOrderToServers[0].getDatatime());
+        mTvTableNo.setText(": " + mOrderToServers[0].getTable_no());
+
+        int quantity = 0;
+
+        for (int i = 0; i < order_itemses.size(); i++) {
+            quantity += order_itemses.get(i).getQuantity();
+            totalPrice +=order_itemses.get(i).getPrice()* order_itemses.get(i).getQuantity();
+        }
+
+        mTvQuantits.setText(": " + quantity);
+        orderItemDetails = new OrderItemDetailsAdapter(this, R.layout.order_summary_items, order_itemses);
+        mLvItemQuantity.setAdapter(orderItemDetails);
+        populatingTaxMenuList();
+
+    }
+
+
+
+    private void populatingTaxMenuList() {
 
         taxItemses = new ArrayList<TaxItems>();
-       /* order_itemses=new ArrayList<Order_Items>();
-        //adding oreder_items:
-        Order_Items order_items=new Order_Items("Olives Warm Marinated",10,10);
-        Order_Items order_items1=new Order_Items("Bread Fresh Baked",10,9);
-        order_itemses.add(order_items);
-        order_itemses.add(order_items1);*/
-
-
-        order_itemses= getOrderHistory();
-
-        TaxItems res1 = new TaxItems("Total before Tax", totalbyOrder);
+        TaxItems res1 = new TaxItems("Total before Tax", totalPrice);
         TaxItems res2 = new TaxItems("Service Charges", serviceTax);
-        TaxItems res3 = new TaxItems("Service Tax",vatTax);
-        TaxItems res4 = new TaxItems("VAT Tax", ser);
+        TaxItems res3 = new TaxItems("Service Tax", ser);
+        TaxItems res4 = new TaxItems("VAT Tax", vatTax);
         taxItemses.add(res1);
         taxItemses.add(res2);
         taxItemses.add(res3);
         taxItemses.add(res4);
-
-        orderItemDetails=new OrderItemDetailsAdapter(this,R.layout.order_summary_items,order_itemses);
-        mLvItemQuantity.setAdapter(orderItemDetails);
-
-        taxDetailsAdapter=new TaxDetailsAdapter(this,R.layout.tax_items,taxItemses);
+        taxDetailsAdapter = new TaxDetailsAdapter(this, R.layout.tax_items, taxItemses);
         mLvTaxQuality.setAdapter(taxDetailsAdapter);
-        double sum=totalbyOrder+serviceTax+ser+vatTax;
-        mTvTotalPrice.setText("$ "+sum);
-
+        double sum = Double.parseDouble(mOrderToServers[0].getTotal_price()) + serviceTax + ser + vatTax;
+        mTvTotalPrice.setText("$ " + sum);
     }
-    private ArrayList<OrderedItemSummary> orderedItemSummaries;
-    float totalbyOrder = 0;
-    float totalNumberOfItems = 0;
-    String item_cata;
-    private ArrayList<Order_Items> getOrderHistory() {
-        order_itemses=new ArrayList<Order_Items>();
-            orderedItemSummaries= new ArrayList<OrderedItemSummary>();
-            sqliteoperation = new SqlOperations(getApplicationContext());
-            sqliteoperation.open();
-            List<HashMap<String, String>> dictionary = sqliteoperation.getOrder(order_id);
-            sqliteoperation.close();
-            int item_cat;
-            int item_food;
-            String totalbyFood;
-            String quantity;
-            String foodName;
-            String messageOrder;
-            String price;
-            messageOrder = "\nOrder\nYour ordered";
-
-
-            int j;
-
-            JSONArray jsonArray = new JSONArray();
-
-                for (int i = 0; i < dictionary.size(); i++) {
-
-                    j = i + 1;
-            /*I start at index 0 and finish at the penultimate index */
-                    HashMap<String, String> map = dictionary.get(i); //Get the corresponding map from the index
-                    item_cat = Integer.parseInt(map.get("index_category"));
-                    item_food = Integer.parseInt(map.get("index_food"));
-                    totalbyFood = map.get("totalByFood");
-                    price = map.get("price");
-                    quantity = map.get("quantity");
-                    foodName = map.get("food_name");
-                    messageOrder += "\n " + j + " - " + foodName + " (" + price + " $  x  " + quantity + ")  " + totalbyFood + "$";
-                    totalbyOrder += Float.parseFloat(totalbyFood);
-                    totalNumberOfItems += Float.parseFloat(quantity);
-                    item_cata = map.get("index_food");
-                    Order_Items order_items = new Order_Items(foodName, Float.parseFloat(price), Integer.parseInt(quantity));
-                    order_itemses.add(order_items);
-                    // OrderedItemSummary orderedItemSummary=new OrderedItemSummary(item_cat,item_food,foodName,Float.parseFloat(totalbyFood),Math.round(Float.parseFloat(quantity)),Float.parseFloat(price),serviceTax,vatTax,ser);
-                    //orderedItemSummaries.add(orderedItemSummary);
-                    JSONObject food = new JSONObject();
-                    try {
-                        food.put("totalByFood", totalbyFood);
-                        food.put("price", price);
-                        food.put("quantity", quantity);
-                        food.put("food_name", foodName);
-                    } catch (JSONException e) {
-                        Log.d("ViewCartActivity", e.toString());
-                        throw new RuntimeException(e);
-                    }
-                    jsonArray.put(food);
-
-                }
-
-        return order_itemses;
-
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
@@ -206,4 +210,5 @@ public class ConfirmationActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }

@@ -1,5 +1,6 @@
 package com.effone.hostismeandroid.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,15 +16,23 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.adapter.OrderItemDetailsAdapter;
+import com.effone.hostismeandroid.adapter.RestaurantListAdapter;
 import com.effone.hostismeandroid.adapter.TaxDetailsAdapter;
+import com.effone.hostismeandroid.app.AppController;
 import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.common.Common;
 import com.effone.hostismeandroid.db.SqlOperations;
+import com.effone.hostismeandroid.model.Bill;
 import com.effone.hostismeandroid.model.Order_Items;
 import com.effone.hostismeandroid.model.OrderedItemSummary;
+import com.effone.hostismeandroid.model.Restaurant;
 import com.effone.hostismeandroid.model.TaxItems;
+import com.google.gson.Gson;
 
 
 import org.json.JSONArray;
@@ -40,6 +49,7 @@ import java.util.Set;
 import static com.effone.hostismeandroid.activity.ViewCartActivity.ser;
 import static com.effone.hostismeandroid.activity.ViewCartActivity.serviceTax;
 import static com.effone.hostismeandroid.activity.ViewCartActivity.vatTax;
+import static com.effone.hostismeandroid.common.URL.bill_url;
 
 /**
  * Created by sumanth.peddinti on 4/13/2017.
@@ -59,8 +69,10 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
     private Button mBtApply;
     private TextView mTvBillSummary,mTvRestAddress,mTvBillDate,mTvBillNo,mTvOrderId,mTvOrderTotal;
     ArrayList<Order_Items> order_itemses;
+    private Bill mBill;
     private  TextView mTvRestName;
     private  SqlOperations sqliteoperation;
+    private ProgressDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,36 +114,65 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
 
         taxItemses = new ArrayList<TaxItems>();
         order_itemses=new ArrayList<Order_Items>();
-        order_itemses= getOrderHistory();
-        mTvOrderId.setText(": "+order_id);
-            tsLong= System.currentTimeMillis()/1000;
-        String ts = tsLong.toString();
-        currentDateTimeString  = DateFormat.getDateTimeInstance().format(new Date());
-        mTvBillDate.setText(": "+currentDateTimeString);
-        mTvBillNo.setText(": "+tsLong);
-        //adding oreder_items:
-       /* Order_Items order_items=new Order_Items("Olives Warm Marinated",10,10);
-        Order_Items order_items1=new Order_Items("Bread Fresh Baked",10,9);
-        order_itemses.add(order_items);
-        order_itemses.add(order_items1);
-*/
+        pDialog = new ProgressDialog(this);
+        // Showing progress dialog before making http request
+        pDialog.setMessage("Loading...");
+        pDialog.show();
+        StringRequest stringRequest = new StringRequest(bill_url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        hidePDialog();
+                        Gson gson=new Gson();
+                        mBill = gson.fromJson(response, Bill.class);
+                        setVaues();
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(View_Pay_BillActivity.this,error.getMessage(),Toast.LENGTH_LONG).show();
+                    }
+                });
+        AppController.getInstance().addToRequestQueue(stringRequest);
+
+
+       /* Restaurant restaurant=new Restaurant(1,"Restaurant name One", "39,Lime St", "Sydney NSW 2000", "Australia");
+        Bill bill=new Bill(restaurant,order_itemses,taxItemses);
+        Gson gson=new Gson();
+        String json=gson.toJson(bill);*/
+    }
+
+    private void setVaues() {
+        order_itemses= mBill.getOrderItems();
+        mTvOrderId.setText(": "+mBill.getOrder_id());
+        mTvBillDate.setText(": "+mBill.getBill_date());
+        mTvBillNo.setText(": "+mBill.getBill_no());
+        mTvRestName.setText(mBill.getAddress().getRestName());
+        mTvRestAddress.setText(mBill.getAddress().getRestAdress()+", "+mBill.getAddress().getCity()+", "+mBill.getAddress().getCountry());
+
+
 
         orderItemDetails=new OrderItemDetailsAdapter(this,R.layout.order_summary_items,order_itemses);
         mLvItemQuantity.setAdapter(orderItemDetails);
 
 
-        TaxItems res1 = new TaxItems("Total before Tax", totalbyOrder);
-        TaxItems res2 = new TaxItems("Service Charges", serviceTax);
-        TaxItems res3 = new TaxItems("Service Tax",vatTax);
-        TaxItems res4 = new TaxItems("VAT Tax", ser);
-        taxItemses.add(res1);
-        taxItemses.add(res2);
-        taxItemses.add(res3);
-        taxItemses.add(res4);
-        double sum=totalbyOrder+serviceTax+vatTax+ser;
+        taxItemses=mBill.getTaxItems();
+        double sum=0;
+        for (int i = 0; i < taxItemses.size(); i++) {
+            sum+=taxItemses.get(i).getValue();
+        }
         mTvOrderTotal.setText("$ "+sum);
         taxDetailsAdapter=new TaxDetailsAdapter(this,R.layout.tax_items,taxItemses);
         mLvTaxQuality.setAdapter(taxDetailsAdapter);
+    }
+
+    private void hidePDialog() {
+        if (pDialog != null) {
+            pDialog.dismiss();
+            pDialog = null;
+        }
     }
 
     private ArrayList<OrderedItemSummary> orderedItemSummaries;

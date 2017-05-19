@@ -11,6 +11,8 @@ public class Restaurant {
     private String address;
     private String city;
     private String country;
+    private String location_id;
+    private int zip_code;
 
 
     public Restaurant(int id, String name, String address, String city, String country) {
@@ -23,6 +25,21 @@ public class Restaurant {
 
 
 
+    public String getLocation_id() {
+        return location_id;
+    }
+
+    public void setLocation_id(String location_id) {
+        this.location_id = location_id;
+    }
+
+    public int getZip_code() {
+        return zip_code;
+    }
+
+    public void setZip_code(int zip_code) {
+        this.zip_code = zip_code;
+    }
     public int getid() {
         return id;
     }

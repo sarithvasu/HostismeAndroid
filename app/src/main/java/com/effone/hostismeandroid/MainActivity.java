@@ -31,7 +31,6 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.NetworkImageView;
 import com.effone.hostismeandroid.activity.Book_a_tableActivity;
 import com.effone.hostismeandroid.activity.MenuActivity;
-import com.effone.hostismeandroid.activity.MenusActivity;
 import com.effone.hostismeandroid.activity.My_BookingActivity;
 import com.effone.hostismeandroid.activity.RestaurantListAcitivity;
 import com.effone.hostismeandroid.activity.Service_RequestActivity;
@@ -56,7 +55,7 @@ public class MainActivity extends AppCompatActivity
     private ScreenSlidePagerAdapter mPagerAdapter;
     private static final int NUM_PAGES = 5;
     ArrayList<HomePageDish> ids;
-    private static final String url = "http://api.androidhive.info/json/movies.json";
+    private static final String url = "http://192.168.2.44/android_web_api/images.json";
     private static final String TAG = MainActivity.class.getSimpleName();
     private TextView mTvRestaurantList, mTvMenu, mTvBook_a_table, mTvService_Request, mTvViewPay, mTvBooking_History;
     private ImageLoader imageLoader = AppController.getInstance().getImageLoader();
@@ -73,6 +72,15 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
      /*   getSupportActionBar().setTitle(R.string.home);*/
         setToolbar();
+       /* ArrayList<Restaurant> restaurants=new ArrayList<Restaurant>();
+        Restaurant restaurant1=new Restaurant(101,1001,"Restaurant name One", "39,Lime St", "Sydney NSW 2000", "Australia","2055");
+        Restaurant restaurant2=new Restaurant(102,1001,"Restaurant name Two", "1 maquarie St", "Sydney NSW 2000", "Australia","2055");
+        Restaurant restaurant3=new Restaurant(103,1001,"Restaurant name Three", "corner Pitt + Hunder Street", "Sydney NSW 2000", "Australia","2055");
+        restaurants.add(restaurant1);
+        restaurants.add(restaurant2);
+        restaurants.add(restaurant3);
+        Gson gson=new Gson();
+        String jspn= gson.toJson(restaurants);*/
        /* int titleId = getResources().getIdentifier("action_bar_title", "id", "android");
         TextView abTitle = (TextView) findViewById(titleId);
         abTitle.setTextColor(getResources().getColor(R.color.white));
@@ -137,8 +145,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
+        if(mTvBook_a_table!=null&&appPreferences!=null&&appPreferences.getTABLE_NAME()==0){
+            mTvBook_a_table.setText(getString(R.string.book_a_table));
+        }
+        else{
+            mTvBook_a_table.setText(getString(R.string.move_a_table));
+        }
         super.onResume();
-        //dummyUrlCode();
+
     }
 
     private void dummyUrlCode() {
@@ -160,9 +174,9 @@ public class MainActivity extends AppCompatActivity
 
                                 JSONObject obj = response.getJSONObject(i);
                                 HomePageDish movie = new HomePageDish();
-                                movie.setTitle(obj.getString("title"));
-                                movie.setThumbnailUrl(obj.getString("image"));
-                                movie.setRating(((Number) obj.get("rating"))
+                                movie.setTitle(obj.getString("dish_name"));
+                                movie.setThumbnailUrl(obj.getString("dish_image_url"));
+                               /* movie.setRating(((Number) obj.get("rating"))
                                         .doubleValue());
                                 movie.setYear(obj.getInt("releaseYear"));
 
@@ -172,7 +186,7 @@ public class MainActivity extends AppCompatActivity
                                 for (int j = 0; j < genreArry.length(); j++) {
                                     genre.add((String) genreArry.get(j));
                                 }
-                                movie.setGenre(genre);
+                                movie.setGenre(genre);*/
 
                                 // adding movie to movies array
                                 ids.add(movie);
@@ -211,6 +225,12 @@ public class MainActivity extends AppCompatActivity
     private void declerations() {
         mTvRestaurantList = (TextView) findViewById(R.id.btn_res_list);
         mTvBook_a_table = (TextView) findViewById(R.id.btn_book_table);
+        if(appPreferences.getTABLE_NAME()==0){
+           mTvBook_a_table.setText(getString(R.string.book_a_table));
+        }
+        else{
+            mTvBook_a_table.setText(getString(R.string.move_a_table));
+        }
         mTvMenu = (TextView) findViewById(R.id.btn_res_menu);
         mTvService_Request = (TextView) findViewById(R.id.btn_appointments);
         mTvViewPay = (TextView) findViewById(R.id.btn_view_pay);
@@ -270,15 +290,16 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.btn_view_pay:
                 if (appPreferences.getRESTAURANT_NAME() != "") {
-                    SqlOperations sqliteoperation = new SqlOperations(getApplicationContext());
+                    intent = new Intent(this, View_Pay_BillActivity.class);
+                    startActivity(intent);
+                    /*SqlOperations sqliteoperation = new SqlOperations(getApplicationContext());
                     sqliteoperation.open();
 
                     if (sqliteoperation.getPayItems().size() > 0) {
-                        intent = new Intent(this, View_Pay_BillActivity.class);
-                        startActivity(intent);
+
                     } else {
                         Toast.makeText(this, "Please Place a order", Toast.LENGTH_SHORT).show();
-                    }
+                    }*/
                 } else {
                     sendalert("Please Select the location");
                 }

@@ -104,13 +104,17 @@ public class MenuExpandableListAdapter extends BaseExpandableListAdapter  {
                         qty[0]--;
                         tvQuatity.setText("" + qty[0]);
                     }
-                    Toast.makeText(context, "click remove", Toast.LENGTH_LONG).show();
+
                     sqliteoperation = new SqlOperations(context);
                     sqliteoperation.open();
+
+
+                        sqliteoperation.AddOrSubstractProduct(groupPosition, childPosition, details[0], Float.parseFloat(details[1]), 2);
+                        //Toast.makeText(context, "click remove", Toast.LENGTH_LONG).show();
                     if(mOnDataChangeListener != null){
                         mOnDataChangeListener.onDataChanged(1);
                     }
-                    sqliteoperation.AddOrSubstractProduct(groupPosition, childPosition, details[0], Float.parseFloat(details[1]), 2);
+
                     sqliteoperation.close();
                    // tvQuatity.setText( sqliteoperation.getCount(groupPosition, childPosition, details[0], Float.parseFloat(details[1]), 2));
 

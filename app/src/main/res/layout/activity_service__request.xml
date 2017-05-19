@@ -32,93 +32,12 @@
             android:layout_height="match_parent"
             android:padding="5dp">
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/move_a_table"
-                android:textColor="@color/fontColor"
-                android:textSize="18sp"
-                android:layout_marginBottom="5dp"
-                android:textStyle="bold" />
 
-            <LinearLayout
-                android:id="@+id/linearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="54dp"
-                android:layout_below="@+id/textView2"
-                android:layout_marginLeft="0dp"
-                android:layout_marginRight="0dp"
-                android:background="@drawable/payment_background"
-                android:baselineAligned="false"
-                android:weightSum="1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView2"
-                app:layout_constraintVertical_bias="0.0">
-
-                <TextView
-                    android:id="@+id/tv_from"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.22"
-                    android:gravity="center"
-                    android:textSize="18sp"
-                    android:text="@string/from"
-                    android:textAlignment="center"
-                    android:textColor="@color/fontColor" />
-
-                <TextView
-                    android:id="@+id/tv_table_no_form"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.25"
-                    android:background="@drawable/payment_background"
-                    android:gravity="center"
-                    android:text="99"
-                    android:textSize="18sp"
-                    android:textAlignment="center"
-                    android:textColor="@color/fontColor" />
-
-                <TextView
-                    android:id="@+id/tv_to"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.25"
-                    android:gravity="center"
-                    android:textSize="18sp"
-                    android:text="@string/to"
-                    android:textColor="@color/fontColor" />
-
-                <EditText
-                    android:id="@+id/tv_table_no_to"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:inputType="number"
-                    android:maxLength="3"
-                    android:textCursorDrawable="@drawable/custom_edit_text_cursor"
-                    android:layout_weight="0.26"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/payment_background"
-                    android:gravity="center"
-                    android:textSize="18sp"
-                    android:textAlignment="center"
-                    android:textColor="@color/fontColor" >
-                <requestFocus /></EditText>
-
-            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_service_request"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/linearLayout"
                 android:layout_marginTop="5dp"
                 android:text="@string/service"
                 android:layout_marginBottom="5dp"

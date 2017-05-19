@@ -179,8 +179,8 @@ public class ViewCartActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void setValue() {
-        mMenuItemSummeryListAdapter=new MenuItemSummeryListAdapter(this,R.layout.summery_list_item,orderedItemSummaries);
-        mItemSummeryList.setAdapter(mMenuItemSummeryListAdapter);
+       // mMenuItemSummeryListAdapter=new MenuItemSummeryListAdapter(this,R.layout.summery_list_item,orderedItemSummaries);
+      //  mItemSummeryList.setAdapter(mMenuItemSummeryListAdapter);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -11,31 +11,39 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.effone.hostismeandroid.MainActivity;
 import com.effone.hostismeandroid.R;
-import com.effone.hostismeandroid.activity.MenusActivity;
 import com.effone.hostismeandroid.common.OnDataChangeListener;
-import com.effone.hostismeandroid.db.SqlOperations;
-import com.effone.hostismeandroid.model.OrderedItemSummary;
+import com.effone.hostismeandroid.db.SqlOperation;
+import com.effone.hostismeandroid.model.CartItems;
+import com.effone.hostismeandroid.model.TaxItems;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.effone.hostismeandroid.db.DBConstant.ser;
+import static com.effone.hostismeandroid.db.DBConstant.serviceTax;
+import static com.effone.hostismeandroid.db.DBConstant.vatTax;
+
 
 /**
  * Created by sarith.vasu on 17-04-2017.
  */
 
-public class MenuItemSummeryListAdapter extends ArrayAdapter<OrderedItemSummary> {
-    private ArrayList<OrderedItemSummary> orderedItemSummaries;
+public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
+    private ArrayList<CartItems> orderedItemSummaries;
     private LayoutInflater inflater;
     private  Context mContext;
-    private SqlOperations sqliteoperation;
+    private SqlOperation sqliteoperation;
+    private  ArrayList<TaxItems> taxItemses;
     private OnDataChangeListener mOnDataChangeListener;
-    public MenuItemSummeryListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<OrderedItemSummary> orderedItemSummaries) {
+    public MenuItemSummeryListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<CartItems> orderedItemSummaries, ArrayList<TaxItems> taxItemses) {
         super(context, resource,  orderedItemSummaries);
         this.mContext=context;
-        this.orderedItemSummaries =(ArrayList<OrderedItemSummary>) orderedItemSummaries;
+        this.orderedItemSummaries =(ArrayList<CartItems>) orderedItemSummaries;
         inflater = (LayoutInflater)context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.taxItemses=taxItemses;
         this.mOnDataChangeListener= (OnDataChangeListener) context;
     }
     @NonNull
@@ -67,15 +75,16 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<OrderedItemSummary>
 
         } else {
             /***** Get each Model object from Arraylist ********/
-            final OrderedItemSummary value = (OrderedItemSummary) orderedItemSummaries.get(position);
+            final CartItems value = (CartItems) orderedItemSummaries.get(position);
+//            final TaxItems taxItems=(TaxItems) taxItemses.get(position);
             /************  Set Model values in Holder elements ***********/
-            holder.tv_summery_item_name.setText(value.getItemName()+"("+value.getQuatity()+")");
-            holder.tv_item_total_price.setText("$ "+value.getTotalCost());
-            holder.tv_service_charges_value.setText("$ "+value.getServiceCharges());
-            holder.tv_vat_value.setText("$ "+value.getVat());
-            holder.tv_service_tax_value.setText("$ "+value.getServiceTax());
-            holder.tv_total.setText("$ "+totalAmmount(value.getTotalCost(),value.getServiceCharges(),value.getVat(),value.getServiceTax()));
-            holder.tv_quantity.setText(""+value.getQuatity());
+            holder.tv_summery_item_name.setText(value.getItemName()+" ( "+value.getItemQuantity()+" ) ");
+            holder.tv_item_total_price.setText("$ "+value.getItemPrice());
+            holder.tv_service_charges_value.setText("$ "+serviceTax);
+            holder.tv_vat_value.setText("$ "+vatTax);
+            holder.tv_service_tax_value.setText("$ "+ser);
+            holder.tv_total.setText("$ "+totalAmmount(value.getItemQuantity()*value.getItemPrice(),serviceTax,vatTax,ser));
+            holder.tv_quantity.setText(""+value.getItemQuantity());
 
         final int[] qty = new int[1];
         if(! holder.tv_quantity.getText().toString().equals(""))
@@ -83,13 +92,14 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<OrderedItemSummary>
         holder.tv_close.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                sqliteoperation = new SqlOperations(mContext);
+                sqliteoperation = new SqlOperation(mContext);
                 sqliteoperation.open();
-                if(sqliteoperation.getCartItem()!=1) {
-                    sqliteoperation.itemDelete(value.getItem_cat(), value.getItem_food());
+                if(sqliteoperation.getItemCountInCart()!=1) {
+                    //we are deleteing the item from the cart based on the item_id and ItemName
+                    sqliteoperation.cartItemDelete(value.getItemMenuCatId(), value.getItemName());
                 }else{
-                    sqliteoperation.itemDelete(value.getItem_cat(), value.getItem_food());
-                    Intent intent=new Intent(mContext, MenusActivity.class);
+                    sqliteoperation.cartItemDelete(value.getItemMenuCatId(), value.getItemName());
+                    Intent intent=new Intent(mContext, MainActivity.class);
                     intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     mContext.startActivity(intent);
                 }
@@ -107,10 +117,12 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<OrderedItemSummary>
                     holder.tv_quantity.setText("" + qty[0]);
                 }
 
-                sqliteoperation = new SqlOperations(mContext);
+                sqliteoperation = new SqlOperation(mContext);
                 sqliteoperation.open();
-                sqliteoperation.AddOrSubstractProduct(value.getItem_cat(), value.getItem_food(), value.getItemName(), value.getPrice(), 1);
-                //mOnDataChangeListener.onDataChanged(1);
+                sqliteoperation.AddOrSubstractProduct(value.getItemCatagerie(),value.getItemSubCat(),
+                        value.getItemMenuCatId(),value.getItemName()
+                        ,value.getItemIngred(),Float.parseFloat(String.valueOf(value.getItemPrice())),qty[0],1,1);
+
                 sqliteoperation.close();
                 mOnDataChangeListener.onDataChanged(1);
                 // tvQuatity.setText( sqliteoperation.getCount(groupPosition, childPosition, details[0], Float.parseFloat(details[1]), 1));
@@ -127,9 +139,11 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<OrderedItemSummary>
                     holder.tv_quantity.setText("" + qty[0]);
                 }
           //      Toast.makeText(context, "click remove", Toast.LENGTH_LONG).show();
-                sqliteoperation = new SqlOperations(mContext);
+                sqliteoperation = new SqlOperation(mContext);
                 sqliteoperation.open();
-                sqliteoperation.AddOrSubstractProduct(value.getItem_cat(), value.getItem_food(), value.getItemName(), value.getPrice(), 2);
+                sqliteoperation.AddOrSubstractProduct(value.getItemCatagerie(),value.getItemSubCat(),
+                        value.getItemMenuCatId(),value.getItemName()
+                        ,value.getItemIngred(),Float.parseFloat(String.valueOf(value.getItemPrice())),qty[0],1, 2);
                 sqliteoperation.close();
                 mOnDataChangeListener.onDataChanged(1);
                 // tvQuatity.setText( sqliteoperation.getCount(groupPosition, childPosition, details[0], Float.parseFloat(details[1]), 2));
@@ -141,7 +155,7 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<OrderedItemSummary>
 
     }
 
-    private double totalAmmount(float price, double serviceCharges, double vat, double serviceTax) {
+    private double totalAmmount(double price, double serviceCharges, double vat, double serviceTax) {
         double sum=price+serviceCharges+vat+serviceTax;
         return sum;
     }

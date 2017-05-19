@@ -18,7 +18,7 @@ import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.common.Common;
 
 public class Service_RequestActivity extends AppCompatActivity implements View.OnClickListener {
-    private EditText mEtTableToNo,mTvComplaintList;
+    private EditText mTvComplaintList;
     private TextView mTvSubmit;
     private RadioGroup mRadioGroup;
     @Override
@@ -35,7 +35,7 @@ public class Service_RequestActivity extends AppCompatActivity implements View.O
     }
 
     private void init() {
-        mEtTableToNo=(EditText)findViewById(R.id.tv_table_no_to);
+
         mTvComplaintList=(EditText)findViewById(R.id.et_complaints);
         mTvSubmit=(TextView)findViewById(R.id.tv_submit);
         mRadioGroup=(RadioGroup)findViewById(R.id.radioGroup);
@@ -45,16 +45,12 @@ public class Service_RequestActivity extends AppCompatActivity implements View.O
 
     @Override
     public void onClick(View v) {
-        String tableNo=mEtTableToNo.getText().toString().trim();
+       // String tableNo=mEtTableToNo.getText().toString().trim();
         String complaint=mTvComplaintList.getText().toString().trim();
         int selectedId = mRadioGroup.getCheckedRadioButtonId();
         if(selectedId != -1){
             if(complaint.length()>200){
-                if(tableNo.length()<2){
-                    Toast.makeText(this, "Request has Sent", Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(this, "enter table no", Toast.LENGTH_SHORT).show();
-                }
+                // send request
             }else{
                 Toast.makeText(this, "enter Complaint Type", Toast.LENGTH_SHORT).show();
             }

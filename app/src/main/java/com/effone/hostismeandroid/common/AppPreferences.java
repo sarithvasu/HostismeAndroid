@@ -23,6 +23,7 @@ public class AppPreferences {
     private String USER_NAME="user_name";
     private String RESTAURANT_NAME="rest_name";
     private  String TANLE_NAME="table_name";
+    private  String ORDER_ID="order_id";
 
     public AppPreferences(Context context) {
         this.sharedPrefs = context.getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
@@ -44,7 +45,15 @@ public class AppPreferences {
         prefsEditor.putString(RESTAURANT_NAME, rest_name);
         prefsEditor.commit();
     }
+    public String getORDER_ID() {
 
+        return sharedPrefs.getString(ORDER_ID, "");
+    }
+
+    public void setORDER_ID(String order_id) {
+        prefsEditor.putString(ORDER_ID, order_id);
+        prefsEditor.commit();
+    }
 
 
 

@@ -83,6 +83,11 @@
             android:name=".activity.MenuActivity"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.PlaceOrderActivity"
+            android:screenOrientation="sensorPortrait"
+            android:windowSoftInputMode="adjustNothing"
+            android:theme="@style/AppTheme.NoActionBar" />
 
 
         <service android:name=".authenticator.AuthenticatorService">
@@ -114,9 +119,6 @@
                 android:resource="@xml/syncadapter" />
         </service>
 
-        <activity android:name=".activity.MenusActivity"
-            android:screenOrientation="sensorPortrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

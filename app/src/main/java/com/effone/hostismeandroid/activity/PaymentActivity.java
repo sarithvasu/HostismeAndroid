@@ -24,7 +24,7 @@ public class PaymentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confiramtion);
-        orderSummary = new OrderSummary(": 12 Apr 2017 – 07:30 PM", ": Restaurant Name One", ": SY56002019924", ": Dinner", 99, 20, 246.0, ": BOOKED");
+       // orderSummary = new OrderSummary(": 12 Apr 2017 – 07:30 PM", ": Restaurant Name One", ": SY56002019924", ": Dinner", 99, 20, 246.0, ": BOOKED");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Payment Confirmation");
@@ -48,9 +48,9 @@ public class PaymentActivity extends AppCompatActivity {
         mTvOrderTotal = (TextView) findViewById(R.id.tv_order_total);
         mTvStatus = (TextView) findViewById(R.id.tv_order_status);
 
-        settingValues();
+      //  settingValues();
     }
-
+/*
     private void settingValues() {
         mTvDateTime.setText(orderSummary.getData_time());
         mTvRestName.setText(orderSummary.getRest_name());
@@ -61,7 +61,7 @@ public class PaymentActivity extends AppCompatActivity {
         mTvOrderTotal.setText(": " + orderSummary.getTotal());
         mTvStatus.setText(orderSummary.getStatus());
 
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -1,56 +1,28 @@
 package com.effone.hostismeandroid.adapter;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
-import com.effone.hostismeandroid.R;
-import com.effone.hostismeandroid.app.AppController;
-
-import com.effone.hostismeandroid.common.UpdateableFragment;
 import com.effone.hostismeandroid.fragment.MenuViewFragment;
-import com.effone.hostismeandroid.model.HISMenuItem;
-import com.effone.hostismeandroid.model.HomePageDish;
+import com.effone.hostismeandroid.model.Items;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-public class HISMenuPageAdapter extends FragmentPagerAdapter {
-
-
-    private HashMap<String ,HashMap<String ,List<HISMenuItem>>> mMenuHashMap;
+public class HISMenuPageAdapter extends FragmentPagerAdapter  {
 
 
+    private HashMap<String ,Items[]> mFullmenu;
+    private ViewPager mViewPager;
 
-    public HISMenuPageAdapter(FragmentManager fm, HashMap<String, HashMap<String, List<HISMenuItem>>> mFullMenu) {
+
+    public HISMenuPageAdapter(FragmentManager fm, HashMap<String ,Items[]> mFullmenu) {
         super(fm);
 
-        this.mMenuHashMap = mFullMenu;
+        this.mFullmenu = mFullmenu;
     }
 
 
@@ -61,31 +33,55 @@ public class HISMenuPageAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
-        return mMenuHashMap.size();
+        return mFullmenu.size();
+    }
+
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        mViewPager=(ViewPager)container;
+        return super.instantiateItem(container, position);
     }
 
     @Override
     public Fragment getItem(int position) {
-        String heading = (String) (mMenuHashMap.keySet().toArray())[ position ];
-        final HashMap<String,List<HISMenuItem>> hisMenuItems = mMenuHashMap.get( heading );
+        String heading = (String) (mFullmenu.keySet().toArray())[ position ];
+        String preheading="";;
+        String postheading="";
+        if(position!=0&&position<(mFullmenu.size()-1)){
+             preheading=(String) (mFullmenu.keySet().toArray())[ position-1 ];
+             postheading=(String) (mFullmenu.keySet().toArray())[ position+1 ];
+        }
+        if(position==0){
+            postheading=(String) (mFullmenu.keySet().toArray())[ position+1 ];
+        }
+        if(position==(mFullmenu.size()-1)){
+            preheading=(String) (mFullmenu.keySet().toArray())[ position-1 ];
+        }
+        Items[] hisMenuItems = mFullmenu.get( heading );
         MenuViewFragment menuViewFragment = new MenuViewFragment();
-        menuViewFragment.setHeading(heading);
+        menuViewFragment.setParentView(mViewPager);
+        menuViewFragment.setHeading(preheading,postheading,heading,position);
         menuViewFragment.setValues(hisMenuItems);
 
         return menuViewFragment;
 
     }
+
+    private void arrowShowingMethods(int position) {
+
+    }
+
     public void update() {
 
         notifyDataSetChanged();
     }
 
+
     @Override
     public int getItemPosition(Object object) {
-        if (object instanceof UpdateableFragment) {
-            ((UpdateableFragment) object).update();
-        }
+
         return super.getItemPosition(object);
     }
+
 }
 

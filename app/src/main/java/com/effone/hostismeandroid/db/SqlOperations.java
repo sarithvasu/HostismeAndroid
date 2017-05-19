@@ -246,8 +246,9 @@ public class SqlOperations {
                         if (oldQty > 0) {
                             row.put(KEY_QTY, oldQty - 1);//substract -1 if the qty is greater than 0,
                             values = oldQty - 1;
+                            database.update(SqliteConnection.TABLE_NAME, row, "_id=" + idSum, null);
                         }
-                        database.update(SqliteConnection.TABLE_NAME, row, "_id=" + idSum, null); //update qty DB the request
+                       //update qty DB the request
                         break;
                     default:
                         break;

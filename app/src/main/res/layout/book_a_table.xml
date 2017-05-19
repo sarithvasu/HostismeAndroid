@@ -26,6 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
+        android:id="@+id/book_table_lay"
         android:layout_margin="10dp"
         android:layout_below="@+id/appbAR"
         android:background="@drawable/payment_background">
@@ -44,7 +45,7 @@
             android:layout_toStartOf="@+id/et_table_no" />
 
 
-        <EditText
+        <Spinner
             android:id="@+id/et_table_no"
             android:layout_width="100dp"
             android:layout_height="40dp"
@@ -61,11 +62,99 @@
             android:gravity="center"
             >
             <requestFocus/>
-        </EditText>
+        </Spinner>
 
 
     </RelativeLayout>
+    <TextView
+        android:id="@+id/move_table_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/move_a_table"
+        android:textColor="@color/fontColor"
+        android:textSize="18sp"
 
+        android:padding="5dp"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        android:layout_below="@+id/appbAR"
+        android:layout_marginBottom="5dp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/move_table_lay"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_below="@+id/move_table_title"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:visibility="gone"
+        android:layout_margin="5dp"
+        android:background="@drawable/payment_background"
+        android:baselineAligned="false"
+        android:weightSum="1"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/move_table_title"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/tv_from"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_weight="0.22"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:text="@string/from"
+            android:textAlignment="center"
+            android:textColor="@color/fontColor" />
+
+        <TextView
+            android:id="@+id/tv_table_no_form"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_weight="0.25"
+            android:background="@drawable/payment_background"
+            android:gravity="center"
+            android:text="99"
+            android:textSize="18sp"
+            android:textAlignment="center"
+            android:textColor="@color/fontColor" />
+
+        <TextView
+            android:id="@+id/tv_to"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_weight="0.25"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:text="@string/to"
+            android:textColor="@color/fontColor" />
+
+        <Spinner
+            android:id="@+id/tv_table_no_to"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:inputType="number"
+            android:maxLength="3"
+            android:textCursorDrawable="@drawable/custom_edit_text_cursor"
+            android:layout_weight="0.26"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/payment_background"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:textAlignment="center"
+            android:textColor="@color/fontColor" >
+            <requestFocus /></Spinner>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/bt_subit"
