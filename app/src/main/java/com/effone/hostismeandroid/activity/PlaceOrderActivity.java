@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import com.effone.hostismeandroid.MainActivity;
 import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.adapter.MenuItemSummeryListAdapter;
 import com.effone.hostismeandroid.common.AppPreferences;
@@ -42,11 +46,12 @@ import static com.effone.hostismeandroid.db.DBConstant.vatTax;
 
 
 public class PlaceOrderActivity extends AppCompatActivity implements View.OnClickListener, OnDataChangeListener {
-    private TextView mTvItemPrice, mTvItemCount, mTvChargers, mTvEstimatedTotal;
+    private TextView mTvItemPrice, mTvItemCount, mTvChargers, mTvEstimatedTotal,mTableNo;
     private TextView mTvPlaceOrder;
     private EditText mEtTableNo;
     private ListView mLvItemSummary;
     private AppPreferences appPrefernces;
+    private CheckBox mCbTakeAway;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,13 +69,28 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         mTvItemCount = (TextView) findViewById(R.id.tv_items);
         mTvItemPrice = (TextView) findViewById(R.id.tv_items_price);
         mTvChargers = (TextView) findViewById(R.id.tv_charger_price);
+        mCbTakeAway=(CheckBox)findViewById(R.id.cb_take_away);
         mTvEstimatedTotal = (TextView) findViewById(R.id.tv_estimated_price);
         mTvPlaceOrder = (TextView) findViewById(R.id.tv_place_order);
+        mTableNo= (TextView) findViewById(R.id.tableNo);
         mEtTableNo = (EditText) findViewById(R.id.et_table_no);
         if(appPrefernces.getTABLE_NAME() !=  0){
             mEtTableNo.setText(""+appPrefernces.getTABLE_NAME());
             mEtTableNo.setFocusable(false);
         }
+        mCbTakeAway.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    mTableNo.setVisibility(View.INVISIBLE);
+                    mEtTableNo.setVisibility(View.INVISIBLE);
+                }
+                else{
+                    mTableNo.setVisibility(View.VISIBLE);
+                    mEtTableNo.setVisibility(View.VISIBLE);
+                }
+            }
+        });
         mLvItemSummary = (ListView) findViewById(R.id.item_summery_list);
         mTvPlaceOrder.setOnClickListener(this);
         setValuesInto();
@@ -136,7 +156,11 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.tv_place_order) {
-            String mTableName = mEtTableNo.getText().toString().trim();
+            String mTableName="";
+            if(mCbTakeAway.isChecked())
+                mTableName="9999";
+            else
+             mTableName = mEtTableNo.getText().toString().trim();
             if (mTableName.length() > 2) {
                 sqlOperation = new SqlOperation(this);
                 sqlOperation.open();
@@ -216,12 +240,24 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         setValuesInto();
     }
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
             finish(); // close this activity and return to preview activity (if there is any)
         }
+        if (item.getItemId() == R.id.home_btn) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
 
         return super.onOptionsItemSelected(item);
     }
+
 }

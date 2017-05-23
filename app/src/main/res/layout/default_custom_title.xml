@@ -27,7 +27,7 @@
         android:id="@+id/tv_custom_titile"
         android:layout_gravity="center"
         android:textColor="@color/white"
-        android:layout_marginLeft="-20dp"
+
         android:textStyle="bold"
         />
     <TextView
@@ -39,7 +39,6 @@
         android:layout_gravity="center"
         android:id="@+id/tv_custom_sub_titile"
         android:layout_marginTop="-5dp"
-        android:layout_marginLeft="-20dp"
         android:textColor="@color/white"
         />
        </LinearLayout>

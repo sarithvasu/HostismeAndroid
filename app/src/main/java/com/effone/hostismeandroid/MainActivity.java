@@ -177,6 +177,8 @@ public class MainActivity extends AppCompatActivity
                                 HomePageDish movie = new HomePageDish();
                                 movie.setTitle(obj.getString("dish_name"));
                                 movie.setThumbnailUrl(obj.getString("dish_image_url"));
+                                String s="sdsd";
+                                Toast.makeText(MainActivity.this,""+s,Toast.LENGTH_SHORT).show();
                                /* movie.setRating(((Number) obj.get("rating"))
                                         .doubleValue());
                                 movie.setYear(obj.getInt("releaseYear"));

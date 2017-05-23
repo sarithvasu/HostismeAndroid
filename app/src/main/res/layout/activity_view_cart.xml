@@ -87,6 +87,14 @@
                 android:layout_below="@+id/tv_chargrss"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
+            <CheckBox
+                android:id="@+id/cb_take_away"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@android:color/holo_green_light"
+                android:layout_below="@+id/tv_estimated"
+                android:layout_marginLeft="10dp"
+                android:text="Take Away" />
 
             <TextView
                 android:id="@+id/tableNo"
@@ -95,11 +103,12 @@
                 android:layout_alignBottom="@+id/et_table_no"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/tv_estimated"
+                android:layout_below="@+id/cb_take_away"
                 android:gravity="left|center"
                 android:text="Enter Table No  "
                 android:textSize="15sp"
                 android:textStyle="bold" />
+
 
             <TextView
                 android:id="@+id/tv_items_price"
@@ -153,7 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/tv_estimated"
+                android:layout_below="@+id/cb_take_away"
                 android:background="@drawable/payment_background"
                 android:inputType="number"
                 android:gravity="center"
@@ -188,4 +197,6 @@
             android:background="@drawable/payment_background"
             android:padding="5dp" />
     </RelativeLayout>
+
+
 </RelativeLayout>

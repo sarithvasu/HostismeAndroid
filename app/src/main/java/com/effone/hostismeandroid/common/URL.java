@@ -6,5 +6,6 @@ public class URL {
     public static final String get_placed_order="http://192.168.2.44/android_web_api/include/getPlacedOrder.php?order_id=";
     public static final String bill_url="http://192.168.2.44/android_web_api/bill.json";
     public static final String tables_url="http://192.168.2.44/android_web_api/table_nos.json";
+    public static final String dish_images_url = "http://192.168.2.44/android_web_api/images.json";
 
 }
