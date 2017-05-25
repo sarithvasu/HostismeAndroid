@@ -87,14 +87,19 @@
                 android:layout_below="@+id/tv_chargrss"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
-            <CheckBox
+
+            <Switch
                 android:id="@+id/cb_take_away"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:buttonTint="@android:color/holo_green_light"
+                android:layout_marginBottom="5dp"
+                android:thumbTint="@android:color/holo_green_light"
+                android:trackTint="@android:color/holo_green_light"
+                android:text="Take Away"
+                android:textSize="15sp"
+                android:textColor="@color/fontColor"
                 android:layout_below="@+id/tv_estimated"
-                android:layout_marginLeft="10dp"
-                android:text="Take Away" />
+                android:layout_alignParentEnd="true" />
 
             <TextView
                 android:id="@+id/tableNo"

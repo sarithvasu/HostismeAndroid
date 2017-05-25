@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +52,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
     private EditText mEtTableNo;
     private ListView mLvItemSummary;
     private AppPreferences appPrefernces;
-    private CheckBox mCbTakeAway;
+    private Switch mCbTakeAway;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,11 +70,14 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         mTvItemCount = (TextView) findViewById(R.id.tv_items);
         mTvItemPrice = (TextView) findViewById(R.id.tv_items_price);
         mTvChargers = (TextView) findViewById(R.id.tv_charger_price);
-        mCbTakeAway=(CheckBox)findViewById(R.id.cb_take_away);
+        mCbTakeAway=(Switch)findViewById(R.id.cb_take_away);
+        mCbTakeAway.setChecked(true);
         mTvEstimatedTotal = (TextView) findViewById(R.id.tv_estimated_price);
         mTvPlaceOrder = (TextView) findViewById(R.id.tv_place_order);
         mTableNo= (TextView) findViewById(R.id.tableNo);
         mEtTableNo = (EditText) findViewById(R.id.et_table_no);
+        mTableNo.setVisibility(View.INVISIBLE);
+        mEtTableNo.setVisibility(View.INVISIBLE);
         if(appPrefernces.getTABLE_NAME() !=  0){
             mEtTableNo.setText(""+appPrefernces.getTABLE_NAME());
             mEtTableNo.setFocusable(false);
