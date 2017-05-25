@@ -94,7 +94,9 @@ public class SqlOperation {
                         if (oldQty > 0) {
                             row.put(COLUMN_NAME_ITEM_QTY, oldQty - 1);//substract -1 if the qty is greater than 0,
                             database.update(TABLE_NAME_ORDERITEM, row, COLUMN_NAME_MENU_ITEM_ID+" = " + menu_item_id, null); //update qty DB the request
-
+                            if(oldQty == 1) {
+                                database.delete(TABLE_NAME_ORDERITEM, COLUMN_NAME_MENU_ITEM_ID + "= " + menu_item_id, null);//delete the complete row if the qunatity is 0
+                            }
                         }
                         break;
                     default:

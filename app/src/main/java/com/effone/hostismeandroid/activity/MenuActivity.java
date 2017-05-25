@@ -62,13 +62,14 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     private AppPreferences mAppPreferences;
 
     private TextView mTvConfirm,mTvSummary;
-
+    SqlOperation sqlOperation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_menu);
         mAppPreferences=new AppPreferences(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setToolbar();
@@ -154,17 +155,26 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv_confirm:
-                Intent intent=new Intent(this,PlaceOrderActivity.class);
-                startActivity(intent);
+                sqlOperation=new SqlOperation(this);
+                sqlOperation.open();
+                if(sqlOperation.getItemCountInCart()!=0) {
+                    //we are deleteing the item from the cart based on the item_id and ItemName
+                    Intent intent=new Intent(this,PlaceOrderActivity.class);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(MenuActivity.this,"Pick the items Count is .0",Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             default:
                 break;
         }
     }
-    SqlOperation sqlOperation;
+
     ArrayList<CartItems>  cartItemses;
     private void showOrderItems() {
         sqlOperation=new SqlOperation(this);
+
         sqlOperation.open();
         cartItemses = sqlOperation.getCartItems(1);
         int totalCount=0;
