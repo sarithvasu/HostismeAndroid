@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.effone.hostismeandroid.MainActivity;
 import com.effone.hostismeandroid.R;
+import com.effone.hostismeandroid.activity.MenuActivity;
 import com.effone.hostismeandroid.common.OnDataChangeListener;
 import com.effone.hostismeandroid.db.SqlOperation;
 import com.effone.hostismeandroid.model.CartItems;
@@ -138,14 +139,26 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
                     qty[0]--;
                     holder.tv_quantity.setText("" + qty[0]);
                 }
-          //      Toast.makeText(context, "click remove", Toast.LENGTH_LONG).show();
-                sqliteoperation = new SqlOperation(mContext);
-                sqliteoperation.open();
-                sqliteoperation.AddOrSubstractProduct(value.getItemCatagerie(),value.getItemSubCat(),
-                        value.getItemMenuCatId(),value.getItemName()
-                        ,value.getItemIngred(),Float.parseFloat(String.valueOf(value.getItemPrice())),qty[0],1, 2);
-                sqliteoperation.close();
-                mOnDataChangeListener.onDataChanged(1);
+          //
+                    sqliteoperation = new SqlOperation(mContext);
+                    sqliteoperation.open();
+                    sqliteoperation.AddOrSubstractProduct(value.getItemCatagerie(), value.getItemSubCat(),
+                            value.getItemMenuCatId(), value.getItemName()
+                            , value.getItemIngred(), Float.parseFloat(String.valueOf(value.getItemPrice())), qty[0], 1, 2);
+                        if(qty[0] == 0){
+                            if(sqliteoperation.getItemCountInCart()!=1) {
+                                //we are deleteing the item from the cart based on the item_id and ItemName
+                                sqliteoperation.cartItemDelete(value.getItemMenuCatId(), value.getItemName());
+                            }else{
+                                sqliteoperation.cartItemDelete(value.getItemMenuCatId(), value.getItemName());
+                                Intent intent=new Intent(mContext, MenuActivity.class);
+                                intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                mContext.startActivity(intent);
+                            }
+                        }
+
+                    sqliteoperation.close();
+                    mOnDataChangeListener.onDataChanged(1);
                 // tvQuatity.setText( sqliteoperation.getCount(groupPosition, childPosition, details[0], Float.parseFloat(details[1]), 2));
 
             }
