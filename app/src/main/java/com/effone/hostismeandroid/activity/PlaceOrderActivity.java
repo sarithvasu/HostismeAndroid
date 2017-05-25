@@ -106,14 +106,14 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
 
     SqlOperation sqlOperation;
     ArrayList<CartItems> cartItemses;
-    float totalCount = 0;
-    int totalPrice = 0;
+    float totalPrice = 0;
     private void showOrderItems() {
 
         sqlOperation = new SqlOperation(this);
         sqlOperation.open();
         cartItemses = sqlOperation.getCartItems(1);
-
+        float totalCount = 0;
+        float totalPrice = 0;
 
         sqlOperation.close();
         for (int i = 0; i < cartItemses.size(); i++) {
@@ -155,6 +155,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         taxItemses.add(res2);
         taxItemses.add(res3);
         taxItemses.add(res4);
+        totalPrice=totalByItems;
     }
 
     @Override
