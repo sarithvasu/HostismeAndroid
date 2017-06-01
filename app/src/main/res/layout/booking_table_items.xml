@@ -23,6 +23,7 @@
             android:layout_weight=".5"
             android:textColor="@color/fontColor"
             android:text="Date"
+            android:maxLines="1"
             android:textStyle="bold"/>
 
         <TextView
@@ -31,6 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_weight=".5"
             android:textColor="@color/fontColor"
+            android:maxLines="1"
             android:text="12 Apr 2017 -07:30 PM"
             android:textStyle="bold"/>
     </LinearLayout>
@@ -56,6 +58,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
+            android:maxLines="1"
             android:textColor="@color/fontColor"
             android:text="Restaurant Name One" />
 
@@ -82,6 +85,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
+            android:maxLines="1"
             android:textColor="@color/fontColor"
             android:text="Sy560002019798" />
 
@@ -109,6 +113,7 @@
             android:layout_alignBottom="@+id/table_no"
             android:layout_weight=".5"
             android:text=": Dinner"
+            android:maxLines="1"
             android:textColor="@color/fontColor" />
     </LinearLayout>
     <LinearLayout
@@ -133,6 +138,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/table_no"
             android:textColor="@color/fontColor"
+            android:maxLines="1"
             android:layout_weight=".5"
             android:text=": 99" />
     </LinearLayout>
@@ -161,6 +167,7 @@
             android:layout_alignBottom="@+id/table_no"
             android:textColor="@color/fontColor"
             android:layout_weight=".5"
+            android:maxLines="1"
             android:text=": 55596" />
 
     </LinearLayout>
@@ -187,6 +194,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/table_no"
             android:layout_weight=".5"
+            android:maxLines="1"
             android:text=": $ 2456.00"
             android:textColor="@color/fontColor" />
 
@@ -216,6 +224,7 @@
             android:layout_alignBottom="@+id/table_no"
             android:textColor="@color/fontColor"
             android:layout_weight=".5"
+            android:maxLines="1"
             android:text="Received" />
 
     </LinearLayout>

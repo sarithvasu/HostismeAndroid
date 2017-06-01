@@ -215,6 +215,7 @@ public class MainActivity extends AppCompatActivity
 
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(movieReq);
+
     }
 
     private void hidePDialog() {

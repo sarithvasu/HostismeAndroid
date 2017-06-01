@@ -7,23 +7,26 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.effone.hostismeandroid.MainActivity;
 import com.effone.hostismeandroid.R;
+import com.effone.hostismeandroid.app.AppController;
 import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.common.Common;
 import com.effone.hostismeandroid.db.SqlOperations;
-import com.effone.hostismeandroid.db.SqliteConnection;
-import com.effone.hostismeandroid.model.BookingHistoryItem;
-import com.effone.hostismeandroid.model.OrderSummary;
+import com.effone.hostismeandroid.model.PaymentConfirmation;
+import com.google.gson.Gson;
 
-import java.util.HashMap;
-import java.util.List;
+import static com.effone.hostismeandroid.common.URL.book_a_table_url;
+import static com.effone.hostismeandroid.common.URL.payment_confirmation_url;
 
 public class PaymentConfirmationActivity extends AppCompatActivity {
 
@@ -34,7 +37,7 @@ public class PaymentConfirmationActivity extends AppCompatActivity {
     private SqlOperations sqliteoperation;
     private AppPreferences appPreferences;
     Long bill_no;
-    List<BookingHistoryItem> mBookingHistoryItem;
+    PaymentConfirmation mPaymentConfirmation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +49,8 @@ public class PaymentConfirmationActivity extends AppCompatActivity {
         appPreferences=new AppPreferences(this);
         appPreferences.setRRESTAURANT_NAME(null);
         appPreferences.setTABLE_NAME(0);
-        mBookingHistoryItem = sqliteoperation.getBookedHistory(bill_no);
-        sqliteoperation.close();
+       /* mPaymentConfirmation = sqliteoperation.getBookedHistory(bill_no);
+        sqliteoperation.close();*/
        // orderSummary = new OrderSummary(, ": Restaurant Name One", ": SY56002019924", ": Dinner", 99, 20, 246.0, ": Received");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbars);
         setSupportActionBar(toolbar);
@@ -61,7 +64,7 @@ public class PaymentConfirmationActivity extends AppCompatActivity {
 
     private void init() {
         mTvHeadingText=(TextView)findViewById(R.id.tv_order_Summery);
-        mTvHeadingText.setText("Pyment Summary");
+        mTvHeadingText.setText("Payment Summary");
         LinearLayout mRelativLayout=(LinearLayout)findViewById(R.id.relativeLayout);
         mRelativLayout.setBackground(getDrawable(R.drawable.payment_background));
 
@@ -78,14 +81,31 @@ public class PaymentConfirmationActivity extends AppCompatActivity {
     }
 
     private void settingValues() {
-        mTvDateTime.setText(": "+mBookingHistoryItem.get(0).getDate());
-        mTvRestName.setText(": "+mBookingHistoryItem.get(0).getRest_name());
-        mTvBookingId.setText(": "+mBookingHistoryItem.get(0).getOrder_id());
-        mTvDescription.setText(": "+mBookingHistoryItem.get(0).getDescription());
-        mTvTableNo.setText(": " + mBookingHistoryItem.get(0).getTable_no());
-        //mTvQuantits.setText(": $ " + mBookingHistoryItem.get(0).getBill_ammount());
-        mTvOrderTotal.setText(": " + mBookingHistoryItem.get(0).getBill_ammount());
-        mTvStatus.setText(mBookingHistoryItem.get(0).getStatus());
+        final Gson gson=new Gson();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, payment_confirmation_url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        mPaymentConfirmation=gson.fromJson(response,PaymentConfirmation.class);
+                        mTvDateTime.setText(": "+ mPaymentConfirmation.getBill_date());
+                        mTvRestName.setText(": "+ mPaymentConfirmation.getRestName());
+                        mTvBookingId.setText(": "+ mPaymentConfirmation.getOrder_id());
+                        mTvDescription.setText(": "+ mPaymentConfirmation.getDescription());
+                        mTvTableNo.setText(": " + mPaymentConfirmation.getTable_no());
+                        //mTvQuantits.setText(": $ " + mPaymentConfirmation.get(0).getBill_ammount());
+                        mTvOrderTotal.setText(": " + mPaymentConfirmation.getBill_ammount());
+                        mTvStatus.setText(": " +mPaymentConfirmation.getStatus());
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+        AppController.getInstance().addToRequestQueue(stringRequest);
+
 
     }
 

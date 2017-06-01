@@ -38,6 +38,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.effone.hostismeandroid.common.URL.booking_hisory_url;
+
 /**
  * Created by sarith.vasu on 14-04-2017.
  */
@@ -52,7 +54,7 @@ public class My_BookingActivity extends AppCompatActivity {
     Long bill_no= Long.valueOf(000000);
     ArrayList<BookingHistoryItem> mBookingHistoryItem;
     private ProgressDialog pDialog;
-    private String url="http://192.168.2.44/android_web_api/booking_history.json";
+
     private Gson gson;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +64,7 @@ public class My_BookingActivity extends AppCompatActivity {
        // sqliteoperation = new SqlOperations(getApplicationContext());
         //sqliteoperation.open();
         gson=new Gson();
-        //mBookingHistoryItem = (ArrayList<BookingHistoryItem>) sqliteoperation.getBookedHistory(bill_no);
+        //mPaymentConfirmation = (ArrayList<BookingHistoryItem>) sqliteoperation.getBookedHistory(bill_no);
        // sqliteoperation.close();
         appPreferences=new AppPreferences(this);
         setSupportActionBar(toolbar);
@@ -85,7 +87,7 @@ public class My_BookingActivity extends AppCompatActivity {
         mLvBookingHistory=(ListView)findViewById(R.id.historyView);
         //virtualMethod();
        /* Gson gson= new Gson();
-        String json = gson.toJson(mBookingHistoryItem);*/
+        String json = gson.toJson(mPaymentConfirmation);*/
        dummyUrlCode();
 
     }
@@ -94,7 +96,7 @@ public class My_BookingActivity extends AppCompatActivity {
         // Showing progress dialog before making http request
         pDialog.setMessage("Loading...");
         pDialog.show();
-        StringRequest movieReq = new StringRequest(url,
+        StringRequest movieReq = new StringRequest(booking_hisory_url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

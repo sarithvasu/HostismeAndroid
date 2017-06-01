@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -30,6 +31,7 @@ import com.effone.hostismeandroid.app.AppController;
 import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.common.Common;
 import com.effone.hostismeandroid.model.Bill;
+import com.effone.hostismeandroid.model.OrderSummary;
 import com.effone.hostismeandroid.model.Tables;
 import com.effone.hostismeandroid.model.TaxItems;
 import com.google.gson.Gson;
@@ -37,6 +39,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 import static com.effone.hostismeandroid.common.URL.bill_url;
+import static com.effone.hostismeandroid.common.URL.book_a_table_url;
 import static com.effone.hostismeandroid.common.URL.tables_url;
 
 
@@ -178,9 +181,8 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
                 if(tableNo.length() >= 2){
                     if(mAppPreferences.getTABLE_NAME()==0) {
                         mAppPreferences.setTABLE_NAME(Integer.parseInt(tableNo));
-                        //     Toast.makeText(this,"done",Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(this, MenuActivity.class);
-                        startActivity(intent);
+                        requestForaTable();
+
                     }
                 }else{
                     Toast.makeText(this,"Enter the table no",Toast.LENGTH_SHORT).show();
@@ -188,6 +190,30 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
                 break;
         }
     }
+
+    private void requestForaTable() {
+        /* important see below*/
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, book_a_table_url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+        AppController.getInstance().addToRequestQueue(stringRequest);
+        /*place this in onRespons sucess*/
+        Intent intent = new Intent(this, MenuActivity.class);
+        startActivity(intent);
+    }
+
     private void hidePDialog() {
         if (pDialog != null) {
             pDialog.dismiss();

@@ -6,7 +6,7 @@
     android:id="@+id/relativeLayout"
     android:layout_alignParentLeft="true"
     android:layout_below="@+id/titel_na"
-    android:padding="5dp"
+    android:padding="10dp"
     android:layout_alignParentStart="true">
     <TextView
         android:id="@+id/Date"

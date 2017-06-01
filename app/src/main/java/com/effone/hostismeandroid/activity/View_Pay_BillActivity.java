@@ -73,7 +73,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
     ArrayList<Order_Items> order_itemses;
     private Bill mBill;
     private  TextView mTvRestName;
-    private  SqlOperations sqliteoperation;
+    /*private  SqlOperations sqliteoperation;*/
     private ProgressDialog pDialog;
 
     @Override
@@ -187,14 +187,14 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
     private ArrayList<Order_Items> getOrderHistory() {
         order_itemses=new ArrayList<Order_Items>();
         orderedItemSummaries= new ArrayList<OrderedItemSummary>();
-        sqliteoperation = new SqlOperations(getApplicationContext());
-        sqliteoperation.open();
-         order_ids=sqliteoperation.getPayItems();
+        //sqliteoperation = new SqlOperations(getApplicationContext());
+        //sqliteoperation.open();
+        // order_ids=sqliteoperation.getPayItems();
         List<List<HashMap<String, String>>> dictionary= new ArrayList<List<HashMap<String, String>>>();
-       for(int i=0;i<order_ids.size();i++) {
+       /*for(int i=0;i<order_ids.size();i++) {
            dictionary.add(sqliteoperation.getPlaceOrderItems(order_ids.get(i)));
        }
-        sqliteoperation.close();
+        sqliteoperation.close();*/
         int item_cat;
         int item_food;
         String totalbyFood;
@@ -284,12 +284,13 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
             totalbyOrder +=serviceTax+ser+vatTax;
             RadioButton radioButton = (RadioButton) mRadioGroup.findViewById(selectedId);
             Toast.makeText(this, radioButton.getText(), Toast.LENGTH_SHORT).show();
+            /*sqliteoperation=new SqlOperations(View_Pay_BillActivity.this);
             sqliteoperation.open();
             for(int i=0;i<order_ids.size();i++) {
                 sqliteoperation.updatePlaceOrderStatus(order_ids.get(i));
             }
             sqliteoperation.pymentStatment(appPreferences.getTABLE_NAME(),currentDateTimeString,appPreferences.getRESTAURANT_NAME(),order_id,appPreferences.getTABLE_NAME(),"Dinner",tsLong,totalbyOrder,"Received");
-            sqliteoperation.close();
+            sqliteoperation.close();*/
 
             Intent intent=new Intent(this,PaymentConfirmationActivity.class);
             intent.putExtra("bill_no",tsLong);

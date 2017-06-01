@@ -26,8 +26,10 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
+import static com.effone.hostismeandroid.common.URL.restaurant_list_url;
+
 public class RestaurantListAcitivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
-    private static final String JSON_URL = "http://192.168.2.44/android_web_api/include/restraunt.php";
+
     private ListView restList;
     private RestaurantListAdapter mRestaurantListAdapter;
     AppPreferences appPreferences;
@@ -55,7 +57,7 @@ public class RestaurantListAcitivity extends AppCompatActivity implements Adapte
     private void init() {
 
         restList = (ListView) findViewById(R.id.restaurantList);
-        StringRequest stringRequest = new StringRequest(JSON_URL,
+        StringRequest stringRequest = new StringRequest(restaurant_list_url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

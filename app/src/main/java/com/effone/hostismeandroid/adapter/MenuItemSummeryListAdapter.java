@@ -146,7 +146,7 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
                             value.getItemMenuCatId(), value.getItemName()
                             , value.getItemIngred(), Float.parseFloat(String.valueOf(value.getItemPrice())), qty[0], 1, 2);
                         if(qty[0] == 0){
-                            if(sqliteoperation.getItemCountInCart()!=1) {
+                            if(sqliteoperation.getItemCountInCart()!=0) {
                                 //we are deleteing the item from the cart based on the item_id and ItemName
                                 sqliteoperation.cartItemDelete(value.getItemMenuCatId(), value.getItemName());
                             }else{
