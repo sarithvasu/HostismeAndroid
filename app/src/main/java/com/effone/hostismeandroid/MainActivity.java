@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +47,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager;
 
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity
     private AutoScrollViewPager mPager;
     private ScreenSlidePagerAdapter mPagerAdapter;
     private static final int NUM_PAGES = 5;
-    ArrayList<HomePageDish> ids;
+    ArrayList<Integer> ids;
     private static final String TAG = MainActivity.class.getSimpleName();
     private TextView mTvRestaurantList, mTvMenu, mTvBook_a_table, mTvService_Request, mTvViewPay, mTvBooking_History;
     private ImageLoader imageLoader = AppController.getInstance().getImageLoader();
@@ -126,13 +128,13 @@ public class MainActivity extends AppCompatActivity
         TextView cust_sub_ttile = (TextView) getSupportActionBar().getCustomView().findViewById(R.id.tv_custom_sub_titile);
         cust_sub_ttile.setText("Syndey");
 
+
     }
 
     private void init(View N) {
-        //ids = new ArrayList<Integer>(Arrays.asList(R.drawable.a, R.drawable.b, R.drawable.c, R.drawable.d));
+        ids = new ArrayList<Integer>(Arrays.asList(R.drawable.a, R.drawable.b, R.drawable.c, R.drawable.d));
         mPager = (AutoScrollViewPager) findViewById(R.id.view_pager);
-
-        dummyUrlCode();
+        //dummyUrlCode();
         mPager.animate();
         mPager.setInterval(2000);
         mPager.startAutoScroll();
@@ -156,7 +158,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void dummyUrlCode() {
+ /*   private void dummyUrlCode() {
         pDialog = new ProgressDialog(this);
         // Showing progress dialog before making http request
         pDialog.setMessage("Loading...");
@@ -178,7 +180,7 @@ public class MainActivity extends AppCompatActivity
                                 movie.setTitle(obj.getString("dish_name"));
                                 movie.setThumbnailUrl(obj.getString("dish_image_url"));
 
-                               /* movie.setRating(((Number) obj.get("rating"))
+                               *//* movie.setRating(((Number) obj.get("rating"))
                                         .doubleValue());
                                 movie.setYear(obj.getInt("releaseYear"));
 
@@ -188,7 +190,7 @@ public class MainActivity extends AppCompatActivity
                                 for (int j = 0; j < genreArry.length(); j++) {
                                     genre.add((String) genreArry.get(j));
                                 }
-                                movie.setGenre(genre);*/
+                                movie.setGenre(genre);*//*
 
                                 // adding movie to movies array
                                 ids.add(movie);
@@ -216,7 +218,7 @@ public class MainActivity extends AppCompatActivity
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(movieReq);
 
-    }
+    }*/
 
     private void hidePDialog() {
         if (pDialog != null) {
@@ -245,6 +247,8 @@ public class MainActivity extends AppCompatActivity
         mTvBook_a_table.setOnClickListener(this);
         mTvMenu.setOnClickListener(this);
         mTvService_Request.setOnClickListener(this);
+        mCustomPagerAdapter = new CustomPagerAdapter(MainActivity.this);
+        mPager.setAdapter(mCustomPagerAdapter);
     }
 
     @Override
@@ -341,10 +345,10 @@ public class MainActivity extends AppCompatActivity
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             View itemView = mLayoutInflater.inflate(R.layout.fragment_hot_dish_home_page_image, container, false);
-            if (imageLoader == null)
-                imageLoader = AppController.getInstance().getImageLoader();
-            NetworkImageView imageView = (NetworkImageView) itemView.findViewById(R.id.iv_dish);
-            imageView.setImageUrl(ids.get(position).getThumbnailUrl(), imageLoader);
+           /* if (imageLoader == null)
+                imageLoader = AppController.getInstance().getImageLoader();*/
+            ImageView imageView = (ImageView) itemView.findViewById(R.id.iv_dish);
+            imageView.setImageResource(ids.get(position));
 
             container.addView(itemView);
 

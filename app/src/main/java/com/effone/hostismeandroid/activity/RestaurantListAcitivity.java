@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.effone.hostismeandroid.MainActivity;
@@ -24,8 +25,13 @@ import com.effone.hostismeandroid.common.Common;
 import com.effone.hostismeandroid.model.Restaurant;
 import com.google.gson.Gson;
 
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
+import static com.effone.hostismeandroid.common.URL.GET_RESTAURANT_LIST;
 import static com.effone.hostismeandroid.common.URL.restaurant_list_url;
 
 public class RestaurantListAcitivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -57,14 +63,24 @@ public class RestaurantListAcitivity extends AppCompatActivity implements Adapte
     private void init() {
 
         restList = (ListView) findViewById(R.id.restaurantList);
-        StringRequest stringRequest = new StringRequest(restaurant_list_url,
+        StringRequest stringRequest = new StringRequest(GET_RESTAURANT_LIST,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        mJson = response;
-                        restaurants = mGson.fromJson(mJson, Restaurant[].class);
-                        mRestaurantListAdapter = new RestaurantListAdapter(RestaurantListAcitivity.this, R.layout.restaurant_list_item, restaurants);
-                        restList.setAdapter(mRestaurantListAdapter);
+
+                        try {
+                            JSONObject jsonObjec = new JSONObject(response);
+                            boolean status =jsonObjec.getBoolean("status");
+                            if(status) {
+
+                                restaurants =mGson.fromJson(jsonObjec.getString("Restaurantlist"), Restaurant[].class);
+                                mRestaurantListAdapter = new RestaurantListAdapter(RestaurantListAcitivity.this, R.layout.restaurant_list_item, restaurants);
+                                restList.setAdapter(mRestaurantListAdapter);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -81,7 +97,7 @@ public class RestaurantListAcitivity extends AppCompatActivity implements Adapte
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Intent showLocationsIntent = new Intent(this, Book_a_tableActivity.class);
-        String restaurant = restaurants[i].getRestName();
+        String restaurant = restaurants[i].getRestaurant_name();
         appPreferences.setRRESTAURANT_NAME(restaurant);
         startActivity(showLocationsIntent);
     }

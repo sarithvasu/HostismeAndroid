@@ -44,6 +44,9 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant>{
             holder = new FilterViewHolder();
             holder.tv_restaurant_name=(TextView)vi.findViewById(R.id.tv_restaurant_name);
             holder.tv_restaurant_adress = (TextView) vi.findViewById(R.id.tv_restaurant_adress);
+            holder.tv_restaurant_email = (TextView) vi.findViewById(R.id.tv_restaurant_email);
+            holder.tv_restaurant_mob = (TextView) vi.findViewById(R.id.tv_restaurant_mob);
+            holder.tv_restaurant_land = (TextView) vi.findViewById(R.id.tv_restaurant_land);
             vi.setTag( holder );
         }
         else
@@ -55,8 +58,11 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant>{
         } else {
             /***** Get each Model object from Arraylist ********/
             /************  Set Model values in Holder elements ***********/
-            holder.tv_restaurant_name.setText(restaurants[position].getRestName());
-            holder.tv_restaurant_adress.setText(restaurants[position].getRestAdress()+", "+restaurants[position].getCity()+", "+restaurants[position].getCountry());
+            holder.tv_restaurant_name.setText(restaurants[position].getRestaurant_name());
+            holder.tv_restaurant_adress.setText(restaurants[position].getArea()+", "+restaurants[position].getStreet()+", "+restaurants[position].getState()+" "+restaurants[position].getPincode());
+            holder.tv_restaurant_email.setText(": "+restaurants[position].getEmail());
+            holder.tv_restaurant_mob.setText(": "+restaurants[position].getPhno_1());
+            holder.tv_restaurant_land.setText(": "+restaurants[position].getPhno_2());
         }
 
         return vi;
@@ -65,6 +71,11 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant>{
     public static  class FilterViewHolder {
         TextView tv_restaurant_name;
         TextView tv_restaurant_adress;
+        TextView tv_restaurant_email;
+        TextView tv_restaurant_mob;
+        TextView tv_restaurant_land;
+
+
 
 
 

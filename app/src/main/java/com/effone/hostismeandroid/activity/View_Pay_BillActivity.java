@@ -151,8 +151,8 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
         mTvOrderId.setText(": "+mBill.getOrder_id());
         mTvBillDate.setText(": "+mBill.getBill_date());
         mTvBillNo.setText(": "+mBill.getBill_no());
-        mTvRestName.setText(mBill.getAddress().getRestName());
-        mTvRestAddress.setText(mBill.getAddress().getRestAdress()+", "+mBill.getAddress().getCity()+", "+mBill.getAddress().getCountry());
+        mTvRestName.setText(mBill.getAddress().getRestaurant_name());
+        mTvRestAddress.setText(mBill.getAddress().getStreet()+", "+mBill.getAddress().getArea()+", "+mBill.getAddress().getState());
 
 
 

@@ -2,21 +2,94 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="5dp">
 
     <TextView
         android:id="@+id/tv_restaurant_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
         android:textColor="@color/text_color_grey"
-        android:textSize="@dimen/text_size" />
+        android:textSize="@dimen/text_size"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tv_restaurant_adress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autoLink="phone"
         android:textColor="@color/text_color_grey"
+        android:textColorLink="@color/text_color_grey"
         android:textSize="@dimen/text_size_small" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_restaurant_email_label"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="email"
+            android:textColor="@color/text_color_grey"
+            android:textColorLink="@color/text_color_grey"
+            android:textSize="@dimen/text_size_small" />
+
+        <TextView
+            android:id="@+id/tv_restaurant_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:autoLink="email"
+            android:textColor="@color/text_color_grey"
+            android:textColorLink="@color/text_color_grey"
+            android:textSize="@dimen/text_size_small" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_restaurant_mob_label"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="mob"
+            android:textColor="@color/text_color_grey"
+            android:textColorLink="@color/text_color_grey"
+            android:textSize="@dimen/text_size_small" />
+
+        <TextView
+            android:id="@+id/tv_restaurant_mob"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:autoLink="phone"
+            android:textColor="@color/text_color_grey"
+            android:textColorLink="@color/text_color_grey"
+            android:textSize="@dimen/text_size_small" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_restaurant_land_label"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="phone"
+            android:textColor="@color/text_color_grey"
+            android:textColorLink="@color/text_color_grey"
+            android:textSize="@dimen/text_size_small" />
+
+        <TextView
+            android:id="@+id/tv_restaurant_land"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoLink="phone"
+            android:textColor="@color/text_color_grey"
+            android:textColorLink="@color/text_color_grey"
+            android:textSize="@dimen/text_size_small" />
+    </LinearLayout>
 </LinearLayout>

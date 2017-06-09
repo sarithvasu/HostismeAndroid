@@ -4,85 +4,131 @@ package com.effone.hostismeandroid.model;
  * Created by sarith.vasu on 11-04-2017.
  */
 
-public class Restaurant {
+public class Restaurant
+{
+    private String pincode;
 
-    private int id;
-    private String name;
-    private String address;
-    private String city;
-    private String country;
-    private String location_id;
-    private int zip_code;
+    private String id;
 
+    private String area;
 
-    public Restaurant(int id, String name, String address, String city, String country) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.city = city;
-        this.country = country;
+    private String email;
+
+    private String street;
+
+    private String state;
+
+    private String phno_2;
+
+    private String no_of_tables;
+
+    private String restaurant_name;
+
+    private String phno_1;
+
+    public String getPincode ()
+    {
+        return pincode;
     }
 
-
-
-    public String getLocation_id() {
-        return location_id;
+    public void setPincode (String pincode)
+    {
+        this.pincode = pincode;
     }
 
-    public void setLocation_id(String location_id) {
-        this.location_id = location_id;
-    }
-
-    public int getZip_code() {
-        return zip_code;
-    }
-
-    public void setZip_code(int zip_code) {
-        this.zip_code = zip_code;
-    }
-    public int getid() {
+    public String getId ()
+    {
         return id;
     }
 
-    public void setid(int id) {
+    public void setId (String id)
+    {
         this.id = id;
     }
 
-    public String getRestName() {
-        return name;
+    public String getArea ()
+    {
+        return area;
     }
 
-    public void setRestName(String name) {
-        this.name = name;
+    public void setArea (String area)
+    {
+        this.area = area;
     }
 
-    public String getRestAdress() {
-        return address;
+    public String getEmail ()
+    {
+        return email;
     }
 
-    public void setRestAdress(String address) {
-        this.address = address;
+    public void setEmail (String email)
+    {
+        this.email = email;
     }
 
-    public String getCity() {
-        return city;
+    public String getStreet ()
+    {
+        return street;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setStreet (String street)
+    {
+        this.street = street;
     }
 
-    public String getCountry() {
-        return country;
+    public String getState ()
+    {
+        return state;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setState (String state)
+    {
+        this.state = state;
     }
+
+    public String getPhno_2 ()
+    {
+        return phno_2;
+    }
+
+    public void setPhno_2 (String phno_2)
+    {
+        this.phno_2 = phno_2;
+    }
+
+    public String getNo_of_tables ()
+    {
+        return no_of_tables;
+    }
+
+    public void setNo_of_tables (String no_of_tables)
+    {
+        this.no_of_tables = no_of_tables;
+    }
+
+    public String getRestaurant_name ()
+    {
+        return restaurant_name;
+    }
+
+    public void setRestaurant_name (String restaurant_name)
+    {
+        this.restaurant_name = restaurant_name;
+    }
+
+    public String getPhno_1 ()
+    {
+        return phno_1;
+    }
+
+    public void setPhno_1 (String phno_1)
+    {
+        this.phno_1 = phno_1;
+    }
+
     @Override
     public String toString()
     {
-        return "ClassPojo [id = "+id+", address = "+address+", name = "+name+", country = "+country+", city = "+city+"]";
+        return "ClassPojo [pincode = "+pincode+", id = "+id+", area = "+area+", email = "+email+", street = "+street+", state = "+state+", phno_2 = "+phno_2+", no_of_tables = "+no_of_tables+", restaurant_name = "+restaurant_name+", phno_1 = "+phno_1+"]";
     }
-
 }

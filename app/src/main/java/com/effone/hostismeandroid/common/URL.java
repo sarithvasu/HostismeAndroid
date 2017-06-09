@@ -1,6 +1,8 @@
 package com.effone.hostismeandroid.common;
 
 public class URL {
+    public static final String BASE_URL="http://192.168.11.65/hostisme/admin/api";
+    public static final String GET_RESTAURANT_LIST=BASE_URL+"/restaurant/get-restaurant?cityid=1";
     public static final String menu_url="http://192.168.2.44/android_web_api/Sample.json";
     public static final String place_order_url="http://192.168.2.44/android_web_api/include/PlaceOrder.php";
     public static final String get_placed_order="http://192.168.2.44/android_web_api/include/getPlacedOrder.php?order_id=";
