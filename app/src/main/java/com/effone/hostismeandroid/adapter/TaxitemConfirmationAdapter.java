@@ -7,27 +7,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.effone.hostismeandroid.R;
-import com.effone.hostismeandroid.activity.View_Pay_BillActivity;
-import com.effone.hostismeandroid.model.Order_Items;
 import com.effone.hostismeandroid.model.TaxItems;
-import com.effone.hostismeandroid.model_for_json.OrderItem;
+import com.effone.hostismeandroid.model_for_json.TaxItem;
 
 import java.util.ArrayList;
 
 /**
- * Created by sumanth.peddinti on 4/17/2017.
+ * Created by sarith.vasu on 13-06-2017.
  */
 
-public class OrderItemDetailsAdapter extends ArrayAdapter<OrderItem> {
-    private ArrayList<OrderItem> taxItemses;
+public class TaxitemConfirmationAdapter extends ArrayAdapter<TaxItems> {
+    private ArrayList<TaxItems> taxItemses;
     private LayoutInflater inflater;
-    public OrderItemDetailsAdapter(Context context, int tax_items, ArrayList<OrderItem> taxItemses) {
+    public TaxitemConfirmationAdapter(Context context, int tax_items, ArrayList<TaxItems> taxItemses) {
         super(context, tax_items,  taxItemses);
-        this.taxItemses =(ArrayList<OrderItem>) taxItemses;
+        this.taxItemses =(ArrayList<TaxItems>) taxItemses;
         inflater = (LayoutInflater)context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -35,31 +32,27 @@ public class OrderItemDetailsAdapter extends ArrayAdapter<OrderItem> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View vi = convertView;
-        final FilterViewHolder holder;
+        final TaxDetailsAdapter.FilterViewHolder holder;
 
         if(convertView==null){
-            vi = inflater.inflate(R.layout.order_summary_items, null);
-            holder = new FilterViewHolder();
-            holder.tv_tax_name=(TextView)vi.findViewById(R.id.tv_item_name);
-            holder.tv_tax_money = (TextView) vi.findViewById(R.id.tv_item_price);
-            holder.tv_tax_quantity = (TextView) vi.findViewById(R.id.tv_item_price_quantity);
-
+            vi = inflater.inflate(R.layout.tax_items, null);
+            holder = new TaxDetailsAdapter.FilterViewHolder();
+            holder.tv_tax_name=(TextView)vi.findViewById(R.id.tv_tax_name);
+            holder.tv_tax_money= (TextView) vi.findViewById(R.id.tv_tax_money);
             vi.setTag( holder );
         }
         else
-            holder = (FilterViewHolder) vi.getTag();
+            holder = (TaxDetailsAdapter.FilterViewHolder) vi.getTag();
 
         if (taxItemses.size() <= 0) {
             holder.tv_tax_name.setText("No Data");
 
         } else {
             /***** Get each Model object from Arraylist ********/
-            OrderItem value = (OrderItem) taxItemses.get(position);
+            TaxItems value = (TaxItems) taxItemses.get(position);
             /************  Set Model values in Holder elements ***********/
             holder.tv_tax_name.setText(value.getName());
-            holder.tv_tax_money.setText("$ "+value.getItem_total_price());
-            holder.tv_tax_quantity.setText(value.getUnit_price()+" * "+ value.getQuantity());
-
+            holder.tv_tax_money.setText("$ "+value.getValue());
         }
 
         return vi;
@@ -68,7 +61,7 @@ public class OrderItemDetailsAdapter extends ArrayAdapter<OrderItem> {
     public static  class FilterViewHolder {
         TextView tv_tax_name;
         TextView tv_tax_money;
-        TextView tv_tax_quantity;
+
 
 
     }

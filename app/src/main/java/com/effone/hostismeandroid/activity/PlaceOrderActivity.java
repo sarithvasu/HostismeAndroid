@@ -1,5 +1,6 @@
 package com.effone.hostismeandroid.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -34,12 +35,14 @@ import com.effone.hostismeandroid.model.CartItems;
 import com.effone.hostismeandroid.model.OrderToServer;
 import com.effone.hostismeandroid.model.OrderingMenu;
 import com.effone.hostismeandroid.model.TaxItems;
+import com.effone.hostismeandroid.util.Util;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.effone.hostismeandroid.common.URL.POST_ORDER;
 import static com.effone.hostismeandroid.common.URL.place_order_url;
 import static com.effone.hostismeandroid.db.DBConstant.ser;
 import static com.effone.hostismeandroid.db.DBConstant.serviceTax;
@@ -188,7 +191,10 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                 orderToServer.setItems(orderingMenus);
                 orderToServers.add(orderToServer);
                 Gson gson= new Gson();
-                String json=gson.toJson(orderToServers);
+                /*tis is for old code*/
+
+                /*String json=gson.toJson(orderToServers);*/
+                String json="{\"order\":{\"restaurant_id\":\"1\",\"phaseid\":\"3\",\"device_id\":\"14558295348432156\",\"id\":\"\",\"tableno\":\"9999\",\"orderprice\":\"200\",\"tax\":\"46\",\"totalprice\":\"246\",\"menuitems\":[{\"itemtype\":\"1\",\"id\":\"5\",\"quantity\":\"10\"},{\"itemtype\":\"2\",\"id\":3,\"quantity\":\"15\"},{\"itemtype\":\"3\",\"id\":2,\"quantity\":\"12\"},{\"itemtype\":\"1\",\"id\":\"3\",\"quantity\":\"5\"},{\"itemtype\":\"2\",\"id\":\"4\",\"quantity\":\"12\"},{\"itemtype\":\"3\",\"id\":\"1\",\"quantity\":\"20\"}]}}";
                 pushDataToServer(json);
 
             } else {
@@ -197,9 +203,13 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
 
         }
     }
-
+    ProgressDialog pDialog;
     private void pushDataToServer(final String mTableName) {
-        StringRequest req = new StringRequest(Request.Method.POST, place_order_url ,
+        pDialog = new ProgressDialog(this);
+        // Showing progress dialog before making http request
+        pDialog.setMessage("Loading...");
+        pDialog.show();
+        StringRequest req = new StringRequest(Request.Method.POST, POST_ORDER ,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -215,7 +225,8 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(PlaceOrderActivity.this," "+error,Toast.LENGTH_LONG).show();
+                hidePDialog();
+                Util.createErrorAlert(PlaceOrderActivity.this, "", error.getMessage());
             }
         }) {
             @Override
@@ -239,7 +250,12 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(req);
     }
-
+    private void hidePDialog() {
+        if (pDialog != null) {
+            pDialog.dismiss();
+            pDialog = null;
+        }
+    }
     @Override
     public void onDataChanged(int size) {
         setValuesInto();

@@ -8,7 +8,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.effone.hostismeandroid.activity.Booking_History;
 import com.effone.hostismeandroid.model.BookingHistoryItem;
 
 import org.json.JSONObject;
@@ -441,7 +440,7 @@ public class SqlOperations {
 
                 BookingHistoryItem bookingHistoryItem= new BookingHistoryItem();
 
-                bookingHistoryItem.setId(cursor.getInt(cursor.getColumnIndex("_id")));
+              /*  bookingHistoryItem.setId(cursor.getInt(cursor.getColumnIndex("_id")));
                 bookingHistoryItem.setOrder_id( cursor.getString(cursor.getColumnIndex("order_id")));
                 bookingHistoryItem.setDate( cursor.getString(cursor.getColumnIndex("date")));
                 bookingHistoryItem.setRest_name( cursor.getString(cursor.getColumnIndex("rest_name")));
@@ -450,7 +449,7 @@ public class SqlOperations {
                 bookingHistoryItem.setBill_no(cursor.getInt(cursor.getColumnIndex("bill_no")));
                 bookingHistoryItem.setBill_ammount(cursor.getDouble(cursor.getColumnIndex("bill_ammount")));
                 bookingHistoryItem.setStatus(cursor.getString(cursor.getColumnIndex("status")));
-
+*/
                 allElementsDictionarys.add(bookingHistoryItem);
                 if (LogDebug) {
                     Log.d(TAG, "id : " + cursor.getString(0) +

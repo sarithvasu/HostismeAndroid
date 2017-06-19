@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:descendantFocusability="blocksDescendants"
     android:padding="5dp">
 
     <TextView
@@ -17,7 +18,7 @@
         android:id="@+id/tv_restaurant_adress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autoLink="phone"
+
         android:textColor="@color/text_color_grey"
         android:textColorLink="@color/text_color_grey"
         android:textSize="@dimen/text_size_small" />
@@ -37,10 +38,12 @@
 
         <TextView
             android:id="@+id/tv_restaurant_email"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+
             android:autoLink="email"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:textColor="@color/text_color_grey"
             android:textColorLink="@color/text_color_grey"
             android:textSize="@dimen/text_size_small" />
@@ -61,10 +64,12 @@
 
         <TextView
             android:id="@+id/tv_restaurant_mob"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+
             android:autoLink="phone"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:textColor="@color/text_color_grey"
             android:textColorLink="@color/text_color_grey"
             android:textSize="@dimen/text_size_small" />
@@ -85,9 +90,11 @@
 
         <TextView
             android:id="@+id/tv_restaurant_land"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:autoLink="phone"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:textColor="@color/text_color_grey"
             android:textColorLink="@color/text_color_grey"
             android:textSize="@dimen/text_size_small" />

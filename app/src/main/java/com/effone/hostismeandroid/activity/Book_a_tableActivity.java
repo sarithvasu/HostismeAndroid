@@ -34,6 +34,7 @@ import com.effone.hostismeandroid.model.Bill;
 import com.effone.hostismeandroid.model.OrderSummary;
 import com.effone.hostismeandroid.model.Tables;
 import com.effone.hostismeandroid.model.TaxItems;
+import com.effone.hostismeandroid.util.Util;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -82,7 +83,13 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
 
     }
 
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!Util.Operations.isOnline(this)) {
+            Util.createNetErrorDialog(this);
+        }
+    }
 
     private void init() {
         mSpTableNo=(Spinner) findViewById(R.id.et_table_no);
@@ -96,7 +103,7 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
             mBookTableLay.setVisibility(View.VISIBLE);
             mMoveTableTitle.setVisibility(View.GONE);
             mMoveTableLay.setVisibility(View.GONE);
-            mBtViewMenu.setText(getString(R.string.view_cart));
+          //  mBtViewMenu.setText(getString(R.string.view_cart));
         }
         else{
             mBookTableLay.setVisibility(View.GONE);
@@ -137,7 +144,8 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(Book_a_tableActivity.this,error.getMessage(),Toast.LENGTH_LONG).show();
+                        hidePDialog();
+//                        Util.createErrorAlert(Book_a_tableActivity.this, "", error.getMessage());
                     }
                 });
         AppController.getInstance().addToRequestQueue(stringRequest);
@@ -173,19 +181,28 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
             case R.id.bt_subit:
                 String tableNo="";
                 if(mAppPreferences.getTABLE_NAME()==0) {
-                     tableNo = mSpTableNo.getSelectedItem().toString();
+                    try {
+                        tableNo = mSpTableNo.getSelectedItem().toString();
+                    } catch (Exception e){
+
+
+                    }
                 }
                 else{
-                    tableNo = mSpTableToNo.getSelectedItem().toString();
+                    try {
+                        tableNo = mSpTableToNo.getSelectedItem().toString();
+                    }catch (Exception e){
+
+
+                    }
                 }
                 if(tableNo.length() >= 2){
                     if(mAppPreferences.getTABLE_NAME()==0) {
                         mAppPreferences.setTABLE_NAME(Integer.parseInt(tableNo));
                         requestForaTable();
-
                     }
                 }else{
-                    Toast.makeText(this,"Enter the table no",Toast.LENGTH_SHORT).show();
+                    Util.createOKAlert(Book_a_tableActivity.this, getResources().getString(R.string.headercreateaccount),"Enter the table no");
                 }
                 break;
         }
@@ -198,20 +215,20 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
+                        Intent intent = new Intent(Book_a_tableActivity.this, MenuActivity.class);
+                        startActivity(intent);
 
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        Util.createErrorAlert(Book_a_tableActivity.this, "", error.getMessage());
                     }
                 });
         AppController.getInstance().addToRequestQueue(stringRequest);
         /*place this in onRespons sucess*/
-        Intent intent = new Intent(this, MenuActivity.class);
-        startActivity(intent);
+
     }
 
     private void hidePDialog() {

@@ -28,6 +28,8 @@ import com.effone.hostismeandroid.model.BookingHistoryItem;
 import com.effone.hostismeandroid.model.HomePageDish;
 import com.effone.hostismeandroid.model.OrderSummary;
 import com.effone.hostismeandroid.model.Order_Items;
+import com.effone.hostismeandroid.model_for_json.Bill;
+import com.effone.hostismeandroid.util.Util;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -38,6 +40,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.effone.hostismeandroid.common.URL.GET_BOOKING_HISTORY;
 import static com.effone.hostismeandroid.common.URL.booking_hisory_url;
 
 /**
@@ -96,25 +99,40 @@ public class My_BookingActivity extends AppCompatActivity {
         // Showing progress dialog before making http request
         pDialog.setMessage("Loading...");
         pDialog.show();
-        StringRequest movieReq = new StringRequest(booking_hisory_url,
+        StringRequest movieReq = new StringRequest(GET_BOOKING_HISTORY+appPreferences.getDEVICE_ID(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        ;
-                        mBookingHistoryItem = gson.fromJson(response, new TypeToken<ArrayList<BookingHistoryItem> >(){}.getType());
-                        bookingHistoryAdapter=new Booking_HistoryAdapter(My_BookingActivity.this,R.layout.booking_history_items,mBookingHistoryItem);
-                        mLvBookingHistory.setAdapter(bookingHistoryAdapter);
-                        hidePDialog();
+
+                        JSONObject jsonObjec = null;
+                        try {
+                            jsonObjec = new JSONObject(response);
+                            boolean status = jsonObjec.getBoolean("status");
+                        if (status) {
+                            Gson gson = new Gson();
+
+                            mBookingHistoryItem = gson.fromJson(jsonObjec.getString("bookinghistory"), new TypeToken<ArrayList<BookingHistoryItem>>() {
+                            }.getType());
+                            bookingHistoryAdapter = new Booking_HistoryAdapter(My_BookingActivity.this, R.layout.booking_history_items, mBookingHistoryItem);
+                            mLvBookingHistory.setAdapter(bookingHistoryAdapter);
+                            hidePDialog();
+                        }
+                            hidePDialog();
+                        } catch (JSONException e) {
+                            hidePDialog();
+                                e.printStackTrace();
+                            }
 
 
-                        // Parsing json
+                            // Parsing json
 
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
                 hidePDialog();
+//                Util.createErrorAlert(My_BookingActivity.this, "", error.getMessage());
+
 
             }
         });

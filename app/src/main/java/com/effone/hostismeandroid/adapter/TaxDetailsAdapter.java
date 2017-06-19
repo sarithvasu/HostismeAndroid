@@ -14,8 +14,10 @@ import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.activity.View_Pay_BillActivity;
 import com.effone.hostismeandroid.model.Restaurant;
 import com.effone.hostismeandroid.model.TaxItems;
+import com.effone.hostismeandroid.model_for_json.TaxItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static android.R.attr.resource;
 

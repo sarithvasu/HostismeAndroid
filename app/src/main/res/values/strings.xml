@@ -4,6 +4,9 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="restartung_selection_message">Please Select the restaurant</string>
+
+
     <string name="action_settings">Settings</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -68,5 +71,5 @@
     <string name="offline_message">Offline data!</string>
     <string name="no_internet_message">No internet connection!</string>
     <string name="go_online">Go Online</string>
-
+    <string name="headercreateaccount">Please Validate</string>
 </resources>

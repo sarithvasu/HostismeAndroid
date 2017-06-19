@@ -1,6 +1,8 @@
 package com.effone.hostismeandroid.activity;
 
+import android.app.Activity;
 import android.app.Application;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -38,6 +40,7 @@ import com.effone.hostismeandroid.model.CartItems;
 import com.effone.hostismeandroid.model.HISMenuItem;
 import com.effone.hostismeandroid.model.Items;
 import com.effone.hostismeandroid.model.Sample;
+import com.effone.hostismeandroid.util.Util;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -63,7 +66,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
 
     private TextView mTvConfirm,mTvSummary;
     SqlOperation sqlOperation;
-
+    ProgressDialog pDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +88,10 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        pDialog = new ProgressDialog(MenuActivity.this);
+                        // Showing progress dialog before making http request
+                        pDialog.setMessage("Loading...");
+                        pDialog.show();
                         mJson = response;
                         sample = mGson.fromJson(mJson, Sample.class);
 
@@ -95,18 +102,38 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                         }
                         HISMenuPageAdapter menuPageAdapter= new HISMenuPageAdapter(getSupportFragmentManager(),pagerItem);
                         mVpMainMenu.setAdapter(menuPageAdapter);
-
+                        hidePDialog();
 
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(MenuActivity.this,error.getMessage(),Toast.LENGTH_LONG).show();
+                        hidePDialog();
+                        if(!(MenuActivity.this.isFinishing())) {
+
+                            Util.createErrorAlert(MenuActivity.this, "", error.getMessage());
+                        }
                     }
                 });
         mQueue.add(stringRequest);
 
+    }
+
+    private void hidePDialog() {
+        if (pDialog != null) {
+            pDialog.dismiss();
+            pDialog = null;
+        }
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!Util.Operations.isOnline(this)) {
+            Util.createNetErrorDialog(this);
+        }else {
+            showOrderItems();
+        }
     }
     private void setToolbar() {
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -163,6 +190,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                     startActivity(intent);
                 }else{
                     Toast.makeText(MenuActivity.this,"Pick the items Count is .0",Toast.LENGTH_SHORT).show();
+
                 }
 
                 break;
@@ -193,11 +221,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         showOrderItems();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        showOrderItems();
-    }
+
 
     @Override
     public void onDataChanged(int size) {

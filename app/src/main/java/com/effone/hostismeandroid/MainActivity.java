@@ -41,6 +41,7 @@ import com.effone.hostismeandroid.app.AppController;
 import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.db.SqlOperations;
 import com.effone.hostismeandroid.model.HomePageDish;
+import com.effone.hostismeandroid.util.Util;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -112,6 +113,16 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         init(drawer);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ///as off now i am setting the values
+        appPreferences.setDEVICE_ID("14558295348432156");
+        if (!Util.Operations.isOnline(this)) {
+            Util.createNetErrorDialog(this);
+        }
     }
 
     private void setToolbar() {
@@ -270,7 +281,9 @@ public class MainActivity extends AppCompatActivity
                     intent = new Intent(this, Service_RequestActivity.class);
                     startActivity(intent);
                 } else {
-                    sendalert("Please Select the location");
+                    Util.createOKAlert(this,  "", getString(R.string.restartung_selection_message));
+
+
                 }
                 break;
             case R.id.btn_res_list:
@@ -284,7 +297,7 @@ public class MainActivity extends AppCompatActivity
                     intent = new Intent(this, MenuActivity.class);
                     startActivity(intent);
                 } else {
-                    sendalert("Please Select the location");
+                 Util.createOKAlert(this,  "", getString(R.string.restartung_selection_message));
                 }
                 break;
             case R.id.btn_book_table:
@@ -292,7 +305,7 @@ public class MainActivity extends AppCompatActivity
                     intent = new Intent(this, Book_a_tableActivity.class);
                     startActivity(intent);
                 } else {
-                    sendalert("Please Select the location");
+                    Util.createOKAlert(this,  "", getString(R.string.restartung_selection_message));
                 }
                 break;
             case R.id.btn_view_pay:
@@ -308,7 +321,7 @@ public class MainActivity extends AppCompatActivity
                         Toast.makeText(this, "Please Place a order", Toast.LENGTH_SHORT).show();
                     }*/
                 } else {
-                    sendalert("Please Select the location");
+                    Util.createOKAlert(this,  "", getString(R.string.restartung_selection_message));
                 }
                 break;
             case R.id.btn_my_booking:
@@ -318,9 +331,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void sendalert(String s) {
-        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
-    }
+
 
     private class CustomPagerAdapter extends PagerAdapter {
 

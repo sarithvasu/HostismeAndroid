@@ -1,5 +1,6 @@
 package com.effone.hostismeandroid.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,12 +10,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.effone.hostismeandroid.MainActivity;
@@ -23,16 +22,14 @@ import com.effone.hostismeandroid.adapter.RestaurantListAdapter;
 import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.common.Common;
 import com.effone.hostismeandroid.model.Restaurant;
+import com.effone.hostismeandroid.util.Util;
 import com.google.gson.Gson;
 
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 import static com.effone.hostismeandroid.common.URL.GET_RESTAURANT_LIST;
-import static com.effone.hostismeandroid.common.URL.restaurant_list_url;
 
 public class RestaurantListAcitivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -43,7 +40,7 @@ public class RestaurantListAcitivity extends AppCompatActivity implements Adapte
      private Gson mGson;
  private RequestQueue mQueue;
     private Restaurant[] restaurants;
-
+    ProgressDialog pDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,13 +58,15 @@ public class RestaurantListAcitivity extends AppCompatActivity implements Adapte
     }
 
     private void init() {
-
+        pDialog = new ProgressDialog(this);
+        // Showing progress dialog before making http request
+        pDialog.setMessage("Loading...");
+        pDialog.show();
         restList = (ListView) findViewById(R.id.restaurantList);
         StringRequest stringRequest = new StringRequest(GET_RESTAURANT_LIST,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
                         try {
                             JSONObject jsonObjec = new JSONObject(response);
                             boolean status =jsonObjec.getBoolean("status");
@@ -76,8 +75,11 @@ public class RestaurantListAcitivity extends AppCompatActivity implements Adapte
                                 restaurants =mGson.fromJson(jsonObjec.getString("Restaurantlist"), Restaurant[].class);
                                 mRestaurantListAdapter = new RestaurantListAdapter(RestaurantListAcitivity.this, R.layout.restaurant_list_item, restaurants);
                                 restList.setAdapter(mRestaurantListAdapter);
+                                hidePDialog();
                             }
+                            hidePDialog();
                         } catch (JSONException e) {
+                            hidePDialog();
                             e.printStackTrace();
                         }
 
@@ -86,7 +88,8 @@ public class RestaurantListAcitivity extends AppCompatActivity implements Adapte
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(RestaurantListAcitivity.this,error.getMessage(),Toast.LENGTH_LONG).show();
+                        hidePDialog();
+                        Util.createErrorAlert(RestaurantListAcitivity.this, "", error.getMessage());
                     }
                 });
         mQueue.add(stringRequest);
@@ -98,7 +101,11 @@ public class RestaurantListAcitivity extends AppCompatActivity implements Adapte
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Intent showLocationsIntent = new Intent(this, Book_a_tableActivity.class);
         String restaurant = restaurants[i].getRestaurant_name();
+        String address = restaurants[i].getArea()+", "+restaurants[i].getStreet()+", "+restaurants[i].getState()+" "+restaurants[i].getPincode();
+        String restaurant_id = restaurants[i].getId();
         appPreferences.setRRESTAURANT_NAME(restaurant);
+        appPreferences.setRESTAURANT_ID(restaurant_id);
+        appPreferences.setRESTAURANT_ADDRESS(address);
         startActivity(showLocationsIntent);
     }
     @Override
@@ -121,5 +128,10 @@ public class RestaurantListAcitivity extends AppCompatActivity implements Adapte
 
         return super.onOptionsItemSelected(item);
     }
-
+    private void hidePDialog() {
+        if (pDialog != null) {
+            pDialog.dismiss();
+            pDialog = null;
+        }
+    }
 }

@@ -29,11 +29,16 @@ import com.effone.hostismeandroid.app.AppController;
 import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.common.Common;
 import com.effone.hostismeandroid.db.SqlOperations;
-import com.effone.hostismeandroid.model.Bill;
+
 import com.effone.hostismeandroid.model.Order_Items;
 import com.effone.hostismeandroid.model.OrderedItemSummary;
 import com.effone.hostismeandroid.model.Restaurant;
 import com.effone.hostismeandroid.model.TaxItems;
+import com.effone.hostismeandroid.model_for_json.Bill;
+import com.effone.hostismeandroid.model_for_json.Order;
+import com.effone.hostismeandroid.model_for_json.OrderItem;
+import com.effone.hostismeandroid.model_for_json.TaxItem;
+import com.effone.hostismeandroid.util.Util;
 import com.google.gson.Gson;
 
 
@@ -45,12 +50,15 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import static com.effone.hostismeandroid.activity.ViewCartActivity.ser;
 import static com.effone.hostismeandroid.activity.ViewCartActivity.serviceTax;
 import static com.effone.hostismeandroid.activity.ViewCartActivity.vatTax;
+import static com.effone.hostismeandroid.common.URL.APPLY_PROMOCODE;
+import static com.effone.hostismeandroid.common.URL.GET_BILL;
 import static com.effone.hostismeandroid.common.URL.bill_url;
 
 /**
@@ -70,7 +78,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
     private EditText mEtPromoCodeNumber;
     private Button mBtApply;
     private TextView mTvBillSummary,mTvRestAddress,mTvBillDate,mTvBillNo,mTvOrderId,mTvOrderTotal;
-    ArrayList<Order_Items> order_itemses;
+    ArrayList<OrderItem> order_itemses;
     private Bill mBill;
     private  TextView mTvRestName;
     /*private  SqlOperations sqliteoperation;*/
@@ -105,8 +113,9 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
         mBtApply=(Button)findViewById(R.id.bt_apply);
         mBtApply.setOnClickListener(this);
     }
-    String currentDateTimeString;
+
     Long tsLong;
+
     private void init() {
 
         mLvItemQuantity=(ListView)findViewById(R.id.lv_items_list);
@@ -114,62 +123,100 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
         mTvSubmit=(TextView)findViewById(R.id.tv_submit);
         mTvSubmit.setOnClickListener(this);
 
-        taxItemses = new ArrayList<TaxItems>();
-        order_itemses=new ArrayList<Order_Items>();
+        taxItemses = new ArrayList<>();
+        order_itemses=new ArrayList<OrderItem>();
         pDialog = new ProgressDialog(this);
         // Showing progress dialog before making http request
         pDialog.setMessage("Loading...");
         pDialog.show();
-        StringRequest stringRequest = new StringRequest(bill_url,
+        /*save order id and restaurant id in preference*/
+        String url=GET_BILL+"?order_id="+appPreferences.getORDER_ID()+"&restaurant_id="+appPreferences.getRESTAURANT_ID()+"&deviceid=14558295348432156&tableno="+appPreferences.getTABLE_NAME();
+        String Testurl="http://192.168.11.65/hostisme/admin/api/viewandpaybill/get-billdetails?order_id=1&restaurant_id=1&deviceid=14558295348432156&tableno=9999";
+        StringRequest stringRequest = new StringRequest(Testurl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         hidePDialog();
-                        Gson gson=new Gson();
-                        mBill = gson.fromJson(response, Bill.class);
-                        setVaues();
+                        try {
+                            JSONObject jsonObjec = new JSONObject(response);
+                            boolean status = jsonObjec.getBoolean("status");
+
+                            if (status) {
+                                Gson gson = new Gson();
+                                mBill = gson.fromJson(jsonObjec.getString("Bill"), Bill.class);
+                                JSONObject os=jsonObjec.getJSONObject("Bill");
+                               givingarray(os);
+
+                                setVaues();
+                            }
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                            Util.createOKAlert(View_Pay_BillActivity.this,  "", e.getMessage());
+                        }
 
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(View_Pay_BillActivity.this,error.getMessage(),Toast.LENGTH_LONG).show();
+                        Util.createOKAlert(View_Pay_BillActivity.this,  "", error.getMessage());
+
                     }
                 });
         AppController.getInstance().addToRequestQueue(stringRequest);
+    }
 
+    private void givingarray(JSONObject os) {
+        try {
+            JSONArray jsona = os.getJSONArray("taxItems");
+            JSONObject objev = jsona.getJSONObject(0);
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            try {
+                Iterator<String> iterator = objev.keys();
 
-       /* Restaurant restaurant=new Restaurant(1,"Restaurant name One", "39,Lime St", "Sydney NSW 2000", "Australia");
-        Bill bill=new Bill(restaurant,order_itemses,taxItemses);
-        Gson gson=new Gson();
-        String json=gson.toJson(bill);*/
+                while (iterator.hasNext()) {
+                    String key = iterator.next();
+                    double value = Double.parseDouble(objev.getString(key));
+                    TaxItems taxitem=new TaxItems();
+                    taxitem.setName(key);
+                    taxitem.setValue(value);
+                    /*HashMap<String, String> map = new HashMap<>();
+                    map.put("name", key);
+                    map.put("value", value);
+*/
+                    taxItemses.add(taxitem);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setVaues() {
-        order_itemses= mBill.getOrderItems();
-        mTvOrderId.setText(": "+mBill.getOrder_id());
-        mTvBillDate.setText(": "+mBill.getBill_date());
-        mTvBillNo.setText(": "+mBill.getBill_no());
-        mTvRestName.setText(mBill.getAddress().getRestaurant_name());
-        mTvRestAddress.setText(mBill.getAddress().getStreet()+", "+mBill.getAddress().getArea()+", "+mBill.getAddress().getState());
+        order_itemses= (ArrayList<OrderItem>) mBill.getOrderItems();
+        mTvOrderId.setText(": "+appPreferences.getORDER_ID());
+        mTvBillDate.setText(": "+mBill.getBilldetails().getBill_date());
+        mTvBillNo.setText(": "+mBill.getBilldetails().getBillno());
+        /*add restuarent address to preference*/
+
+        mTvRestName.setText(""+appPreferences.getRESTAURANT_NAME());
+        mTvRestAddress.setText(""+appPreferences.getRESTAURANT_ADDRESS());
 
 
 
         orderItemDetails=new OrderItemDetailsAdapter(this,R.layout.order_summary_items,order_itemses);
         mLvItemQuantity.setAdapter(orderItemDetails);
 
+      //  getTaxItems();
 
-        taxItemses=mBill.getTaxItems();
-        double sum=0;
-        for (int i = 0; i < taxItemses.size(); i++) {
-            sum+=taxItemses.get(i).getValue();
-        }
-
-        mTvOrderTotal.setText("$ "+sum);
-        taxDetailsAdapter=new TaxDetailsAdapter(this,R.layout.tax_items,taxItemses);
+        mTvOrderTotal.setText("$ "+mBill.getBilldetails().getOrderTotal());
+        taxDetailsAdapter=new TaxDetailsAdapter(this,R.layout.tax_items,
+                taxItemses);
         mLvTaxQuality.setAdapter(taxDetailsAdapter);
     }
+
 
     private void hidePDialog() {
         if (pDialog != null) {
@@ -184,70 +231,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
     String item_cata;
     String order_id=null;
     List<String> order_ids;
-    private ArrayList<Order_Items> getOrderHistory() {
-        order_itemses=new ArrayList<Order_Items>();
-        orderedItemSummaries= new ArrayList<OrderedItemSummary>();
-        //sqliteoperation = new SqlOperations(getApplicationContext());
-        //sqliteoperation.open();
-        // order_ids=sqliteoperation.getPayItems();
-        List<List<HashMap<String, String>>> dictionary= new ArrayList<List<HashMap<String, String>>>();
-       /*for(int i=0;i<order_ids.size();i++) {
-           dictionary.add(sqliteoperation.getPlaceOrderItems(order_ids.get(i)));
-       }
-        sqliteoperation.close();*/
-        int item_cat;
-        int item_food;
-        String totalbyFood;
-        String quantity;
-        String foodName;
-        String messageOrder;
-        String price;
-        messageOrder = "\nOrder\nYour ordered";
 
-
-        int j;
-
-        JSONArray jsonArray = new JSONArray();
-
-        for (int i = 0; i < dictionary.size(); i++) {
-
-
-            /*I start at index 0 and finish at the penultimate index */
-            List<HashMap<String, String>> maps = dictionary.get(i); //Get the corresponding map from the index
-             for(int k=0;k<maps.size();k++){
-                j = k + 1;
-                HashMap<String, String> map=maps.get(k);
-            item_cat= Integer.parseInt(map.get("index_category"));
-            item_food= Integer.parseInt(map.get("index_food"));
-            totalbyFood = map.get("totalByFood");
-            price = map.get("price");
-            quantity = map.get("quantity");
-            foodName = map.get("food_name");
-            order_id = map.get("order_id");
-            messageOrder += "\n " + j + " - " + foodName + " (" + price + " $  x  " + quantity + ")  " + totalbyFood + "$";
-            totalbyOrder += Float.parseFloat(totalbyFood);
-            totalNumberOfItems += Float.parseFloat(quantity);
-            item_cata=map.get("index_food");
-            Order_Items order_items=new Order_Items(foodName,Float.parseFloat(price),Integer.parseInt(quantity));
-            order_itemses.add(order_items);
-            // OrderedItemSummary orderedItemSummary=new OrderedItemSummary(item_cat,item_food,foodName,Float.parseFloat(totalbyFood),Math.round(Float.parseFloat(quantity)),Float.parseFloat(price),serviceTax,vatTax,ser);
-            //orderedItemSummaries.add(orderedItemSummary);
-            JSONObject food = new JSONObject();
-            try {
-                food.put("totalByFood", totalbyFood);
-                food.put("price", price);
-                food.put("quantity", quantity);
-                food.put("food_name", foodName);
-            } catch (JSONException e) {
-                Log.d("ViewCartActivity", e.toString());
-                throw new RuntimeException(e);
-            }
-            jsonArray.put(food);
-            }
-        }
-        return order_itemses;
-
-    }
 
 
 
@@ -298,7 +282,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
              //   mSelectDbHelper.updateOrderHistory(mOrderId,comments, (String) radioButton.getText());
 
         }else {
-            Toast.makeText(this, "select one payment Type", Toast.LENGTH_SHORT).show();
+            Util.createErrorAlert(View_Pay_BillActivity.this, "", "select one payment Type");
         }
 
     }else  if(v.getId() == R.id.bt_apply){
@@ -306,13 +290,36 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
         if(promoCode.length()>5)
             mEtPromocodeMsg.setText("Promo code not available");
         else
-            promocodeServerSending();
+            promocodeServerSending(promoCode);
             mEtPromocodeMsg.setText("Promo code  available");
     }
 
     }
 
-    private void promocodeServerSending() {
+    private void promocodeServerSending(String promoCode) {
+        String url=APPLY_PROMOCODE+"&restaurant_id="+appPreferences.getRESTAURANT_ID()+"&promocode="+promoCode+"&device_id="+appPreferences.getTABLE_NAME();
+        StringRequest stringRequest=new StringRequest(url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObjec = new JSONObject(response);
+                    String status=jsonObjec.getString("status");
+                    double ammount= Double.parseDouble(jsonObjec.getString("discount_amount"));
+
+                    Util.createErrorAlert(View_Pay_BillActivity.this, "", status);
+                    double amount=Double.parseDouble(mBill.getBilldetails().getOrderTotal())- ammount;
+                    mTvOrderTotal.setText("$ "+amount);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Util.createErrorAlert(View_Pay_BillActivity.this, "", error.getMessage());
+            }
+        });
 
     }
 

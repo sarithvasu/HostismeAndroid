@@ -51,10 +51,12 @@ public class Service_RequestActivity extends AppCompatActivity implements View.O
         String complaint=mTvComplaintList.getText().toString().trim();
         int selectedId = mRadioGroup.getCheckedRadioButtonId();
         if(selectedId != -1){
-            if(complaint.length()>200){
+            if(complaint.length()>20){
                 // send request
+                Toast.makeText(this, "No web api", Toast.LENGTH_SHORT).show();
             }else{
                 Toast.makeText(this, "enter Complaint Type", Toast.LENGTH_SHORT).show();
+
             }
 
         }else {

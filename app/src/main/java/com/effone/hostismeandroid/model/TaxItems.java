@@ -13,6 +13,10 @@ public class TaxItems {
         this.value=price;
     }
 
+    public TaxItems() {
+
+    }
+
     public String getName() {
         return name;
     }
@@ -25,7 +29,7 @@ public class TaxItems {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(double value) {
         this.value = value;
     }
 

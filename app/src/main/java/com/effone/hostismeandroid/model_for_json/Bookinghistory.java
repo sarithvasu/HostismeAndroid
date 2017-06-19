@@ -1,10 +1,10 @@
-package com.effone.hostismeandroid.model;
+package com.effone.hostismeandroid.model_for_json;
 
 /**
- * Created by sumanth.peddinti on 5/5/2017.
+ * Created by sarith.vasu on 16-06-2017.
  */
 
-public class BookingHistoryItem {
+public class Bookinghistory {
     private String status;
 
     private String description;
@@ -106,5 +106,4 @@ public class BookingHistoryItem {
     {
         return "ClassPojo [status = "+status+", description = "+description+", table_no = "+table_no+", bill_amount = "+bill_amount+", bill_no = "+bill_no+", order_id = "+order_id+", date = "+date+", restaurant_name = "+restaurant_name+"]";
     }
-
 }

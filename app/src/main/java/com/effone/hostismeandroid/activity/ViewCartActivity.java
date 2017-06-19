@@ -26,6 +26,7 @@ import com.effone.hostismeandroid.common.OnDataChangeListener;
 import com.effone.hostismeandroid.db.SqlOperations;
 import com.effone.hostismeandroid.model.CartItem;
 import com.effone.hostismeandroid.model.OrderedItemSummary;
+import com.effone.hostismeandroid.util.Util;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -227,7 +228,7 @@ public class ViewCartActivity extends AppCompatActivity implements View.OnClickL
                 intent.putExtra("Order_id",mEtTableNo.getText().toString().trim());
                 startActivity(intent);
             }else{
-                Toast.makeText(this,"enter the Table.no",Toast.LENGTH_SHORT).show();
+                Util.createErrorAlert(ViewCartActivity.this, "", "enter the Table.no");
             }
         }
     }

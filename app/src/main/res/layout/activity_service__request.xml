@@ -30,17 +30,15 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="5dp">
-
+            android:layout_margin="10dp">
 
 
             <TextView
                 android:id="@+id/tv_service_request"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="@string/service"
                 android:layout_marginBottom="5dp"
+                android:text="@string/service"
                 android:textColor="@color/fontColor"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -51,8 +49,7 @@
                 android:layout_height="60dp"
                 android:layout_below="@+id/tv_service_request"
                 android:background="@drawable/payment_background"
-                android:padding="10dp"
-                >
+                android:padding="10dp">
 
 
                 <RadioGroup
@@ -63,38 +60,39 @@
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/tv_payment_method"
                     android:orientation="horizontal"
+                    android:padding="5dp"
                     android:weightSum="1"
-                    android:padding="5dp">
+                    android:layout_weight="1">
+
+                    <RadioButton
+                        android:id="@+id/radioButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/rb_paypal"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignStart="@+id/rb_paypal"
+                        android:layout_below="@+id/rb_paypal"
+                        android:buttonTint="@android:color/holo_green_light"
+                        android:paddingRight="10dp"
+                        android:text="@string/call_waiter"
+                        android:textColor="@color/fontColor"
+                        android:textSize="18sp"
+                        android:layout_weight=".5" />
 
                     <RadioButton
                         android:id="@+id/rb_clear_table"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:buttonTint="@android:color/holo_green_light"
                         android:layout_alignBaseline="@+id/setStatus"
                         android:layout_alignBottom="@+id/setStatus"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_weight="0.58"
+                        android:buttonTint="@android:color/holo_green_light"
                         android:text="@string/clear_table"
                         android:textColor="@color/fontColor"
-                        android:textSize="18sp" />
-
-                    <RadioButton
-                        android:id="@+id/rb_service_request"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/rb_paypal"
-                        android:layout_alignParentEnd="true"
-                        android:buttonTint="@android:color/holo_green_light"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignStart="@+id/rb_paypal"
-                        android:layout_below="@+id/rb_paypal"
-                        android:layout_weight="1"
-                        android:paddingRight="10dp"
-                        android:text="@string/call_waiter"
-                        android:textColor="@color/fontColor"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:layout_weight=".5" />
 
                 </RadioGroup>
 
@@ -105,7 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_below="@+id/linearLayout1"
-
+                android:layout_marginTop="5dp"
                 android:gravity="bottom"
                 android:text="@string/complaints"
                 android:layout_marginBottom="5dp"
@@ -142,7 +140,6 @@
                 layout="@layout/search_box"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginBottom="7dp"
                 android:layout_alignParentBottom="true"
                 />
         </RelativeLayout>

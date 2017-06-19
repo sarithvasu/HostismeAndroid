@@ -1,5 +1,6 @@
 package com.effone.hostismeandroid.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,7 @@ import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.common.Common;
 import com.effone.hostismeandroid.db.SqlOperations;
 import com.effone.hostismeandroid.model.PaymentConfirmation;
+import com.effone.hostismeandroid.util.Util;
 import com.google.gson.Gson;
 
 import static com.effone.hostismeandroid.common.URL.book_a_table_url;
@@ -79,8 +81,12 @@ public class PaymentConfirmationActivity extends AppCompatActivity {
 
         settingValues();
     }
-
+    ProgressDialog pDialog;
     private void settingValues() {
+        pDialog = new ProgressDialog(this);
+        // Showing progress dialog before making http request
+        pDialog.setMessage("Loading...");
+        pDialog.show();
         final Gson gson=new Gson();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, payment_confirmation_url,
                 new Response.Listener<String>() {
@@ -101,12 +107,19 @@ public class PaymentConfirmationActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        hidePDialog();
+                        Util.createErrorAlert(PaymentConfirmationActivity.this, "", error.getMessage());
                     }
                 });
         AppController.getInstance().addToRequestQueue(stringRequest);
 
 
+    }
+    private void hidePDialog() {
+        if (pDialog != null) {
+            pDialog.dismiss();
+            pDialog = null;
+        }
     }
 
     @Override

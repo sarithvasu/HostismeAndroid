@@ -157,7 +157,7 @@ public class MenuListAdpater extends BaseExpandableListAdapter {
                             qty[0]--;
                             tvQuatity.setText("" + qty[0]);
                         }
-                        Toast.makeText(context, "click remove", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(context, "click remove", Toast.LENGTH_LONG).show();
                         sqliteoperation = new SqlOperation(context);
                         sqliteoperation.open();
                         sqliteoperation.AddOrSubstractProduct(heading,sub_item_cat,

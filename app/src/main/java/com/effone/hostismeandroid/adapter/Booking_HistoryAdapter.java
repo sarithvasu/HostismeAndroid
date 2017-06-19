@@ -61,10 +61,10 @@ public class Booking_HistoryAdapter  extends ArrayAdapter<BookingHistoryItem> {
             BookingHistoryItem value = (BookingHistoryItem) orderSummaries.get(position);
             /************  Set Model values in Holder elements ***********/
             holder.tv_date_time.setText(": "+value.getDate());
-            holder.tv_rest_name.setText(": "+value.getRest_name());
+            holder.tv_rest_name.setText(": "+value.getRestaurant_name());
             holder.tv_booking_id.setText(": "+value.getOrder_id());
             holder.tv_table_no.setText(": "+value.getTable_no());
-            holder.tv_order_total.setText(": "+value.getBill_ammount());
+            holder.tv_order_total.setText(": "+value.getBill_amount());
             holder.tv_order_status.setText(": "+value.getStatus());
 
         }

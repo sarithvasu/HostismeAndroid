@@ -22,8 +22,12 @@ public class AppPreferences {
     private String USER_EMAIL_ID="email_id";
     private String USER_NAME="user_name";
     private String RESTAURANT_NAME="rest_name";
+    private String RESTAURANT_ADDRESS="restaurant_address";
     private  String TANLE_NAME="table_name";
     private  String ORDER_ID="order_id";
+    private String RESTAURANT_ID="restaurant_id";
+    private String DEVICE_ID="device_id";
+
 
     public AppPreferences(Context context) {
         this.sharedPrefs = context.getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
@@ -38,6 +42,13 @@ public class AppPreferences {
         prefsEditor.commit();
     }
 
+    public String getRESTAURANT_ADDRESS() {
+        return sharedPrefs.getString(RESTAURANT_ADDRESS, "");
+    }
+    public void setRESTAURANT_ADDRESS(String restaurant_address) {
+        prefsEditor.putString(RESTAURANT_ADDRESS, restaurant_address);
+        prefsEditor.commit();
+    }
     public String getRESTAURANT_NAME() {
         return sharedPrefs.getString(RESTAURANT_NAME, "");
     }
@@ -54,7 +65,20 @@ public class AppPreferences {
         prefsEditor.putString(ORDER_ID, order_id);
         prefsEditor.commit();
     }
-
+    public String getRESTAURANT_ID() {
+        return sharedPrefs.getString(RESTAURANT_ID,"");
+    }
+    public void setRESTAURANT_ID(String restaurant_id) {
+        prefsEditor.putString(RESTAURANT_ID, restaurant_id);
+        prefsEditor.commit();
+    }
+    public String getDEVICE_ID() {
+        return sharedPrefs.getString(DEVICE_ID,"");
+    }
+    public void setDEVICE_ID(String device_id) {
+        prefsEditor.putString(DEVICE_ID, device_id);
+        prefsEditor.commit();
+    }
 
 
 }
