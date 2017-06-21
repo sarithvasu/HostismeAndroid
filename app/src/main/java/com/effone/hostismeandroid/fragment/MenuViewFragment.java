@@ -41,6 +41,7 @@ public class MenuViewFragment extends Fragment implements View.OnClickListener {
     private String heading,preHeading,postHeading;
     private String itemCountOfCart;
     private SqlOperation sqlOperation;
+    private int mTotalPage;
 
     public MenuViewFragment() {
         // Required empty public constructor
@@ -103,7 +104,7 @@ public class MenuViewFragment extends Fragment implements View.OnClickListener {
         } else {
             mImgLeftHand.setVisibility(View.VISIBLE);
         }
-        if (pos == 2) {
+        if (pos == (mTotalPage-1)) {
             mImgRightHand.setVisibility(View.INVISIBLE);
         } else {
             mImgRightHand.setVisibility(View.VISIBLE);
@@ -150,8 +151,9 @@ public class MenuViewFragment extends Fragment implements View.OnClickListener {
         mViewPager = pager;
     }
 
-    public void setValues(Items[] hisMenuItems) {
+    public void setValues(Items[] hisMenuItems,int totalPages) {
         mHisMenuItems = hisMenuItems;
+        mTotalPage=totalPages;
     }
 
 

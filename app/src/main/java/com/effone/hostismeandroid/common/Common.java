@@ -30,7 +30,8 @@ public class Common {
         TextView cust_ttile=(TextView)context.getSupportActionBar().getCustomView().findViewById(R.id.tv_custom_titile);
         cust_ttile.setText(title);
         if(subTitile!=null) {
-            TextView cust_sub_ttile = (TextView) context.getSupportActionBar().getCustomView().findViewById(R.id.tv_custom_sub_titile);
+            TextView cust_sub_ttile
+                    = (TextView) context.getSupportActionBar().getCustomView().findViewById(R.id.tv_custom_sub_titile);
             cust_sub_ttile.setText(subTitile);
         }else{
             TextView cust_sub_ttile = (TextView) context.getSupportActionBar().getCustomView().findViewById(R.id.tv_custom_sub_titile);
@@ -51,5 +52,4 @@ public class Common {
         }
         return newQuery;
     }
-
 }

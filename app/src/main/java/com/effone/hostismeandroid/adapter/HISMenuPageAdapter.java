@@ -61,7 +61,7 @@ public class HISMenuPageAdapter extends FragmentPagerAdapter  {
         MenuViewFragment menuViewFragment = new MenuViewFragment();
         menuViewFragment.setParentView(mViewPager);
         menuViewFragment.setHeading(preheading,postheading,heading,position);
-        menuViewFragment.setValues(hisMenuItems);
+        menuViewFragment.setValues(hisMenuItems,mFullmenu.size());
 
         return menuViewFragment;
 

@@ -10,7 +10,7 @@ public class URL {
     public static final String GET_BILL=BASE_URL+"/viewandpaybill/get-billdetails";
     public static final String APPLY_PROMOCODE=BASE_URL+"/viewandpaybill/get-promocode";
     public static final String GET_BOOKING_HISTORY=BASE_URL+"/bookinghistory/get-bookedhistory?device_id=";
-
+    public static final String GET_MENU=BASE_URL+"/menu/get-menudetails?restaurant_id=";
 
     //?restaurant_id=1&promocode=O75ZRGKEOH&device_id=14558295348432157
 

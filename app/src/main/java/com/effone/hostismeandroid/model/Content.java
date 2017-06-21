@@ -9,6 +9,12 @@ public class Content {
 
     private int menu_item_id;
 
+
+
+    private String countryCusine;
+
+    private String menu_types;
+
     private float price;
 
     private String name;
@@ -40,9 +46,24 @@ public class Content {
     public String getName() {
         return name;
     }
+    public String getMenu_types() {
+        return menu_types;
+    }
+
+    public void setMenu_types(String menu_types) {
+        this.menu_types = menu_types;
+    }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCountryCusine() {
+        return countryCusine;
+    }
+
+    public void setCountryCusine(String countryCusine) {
+        this.countryCusine = countryCusine;
     }
 
     @Override
