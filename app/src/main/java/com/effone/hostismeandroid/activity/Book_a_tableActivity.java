@@ -112,7 +112,25 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
             mTvTableNoForm.setText(""+mAppPreferences.getTABLE_NAME());
             mBtViewMenu.setText(getString(R.string.submit));
         }
-        pDialog = new ProgressDialog(this);
+        ArrayList<Integer> tableNos=new ArrayList<>();
+        for (int i = 1; i <=mAppPreferences.getNUMBER_OF_TABLES() ; i++) {
+            tableNos.add(i);
+        }
+
+        ArrayAdapter<Integer> dataAdapter = new ArrayAdapter<Integer>(Book_a_tableActivity.this, android.R.layout.simple_spinner_item, tableNos);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        if(mAppPreferences.getTABLE_NAME()==0) {
+            mSpTableNo.setAdapter(dataAdapter);
+        }
+        else{
+            mSpTableToNo.setAdapter(dataAdapter);
+        }
+
+        /*pDialog = new ProgressDialog(this);
         // Showing progress dialog before making http request
         pDialog.setMessage("Loading...");
         pDialog.show();
@@ -148,7 +166,7 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
 //                        Util.createErrorAlert(Book_a_tableActivity.this, "", error.getMessage());
                     }
                 });
-        AppController.getInstance().addToRequestQueue(stringRequest);
+        AppController.getInstance().addToRequestQueue(stringRequest);*/
 
         mBtViewMenu.setOnClickListener(this);
 
@@ -196,11 +214,11 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
 
                     }
                 }
-                if(tableNo.length() >= 2){
-                    if(mAppPreferences.getTABLE_NAME()==0) {
+                if(tableNo.length() >= 1){
+
                         mAppPreferences.setTABLE_NAME(Integer.parseInt(tableNo));
                         requestForaTable();
-                    }
+
                 }else{
                     Util.createOKAlert(Book_a_tableActivity.this, getResources().getString(R.string.headercreateaccount),"Enter the table no");
                 }

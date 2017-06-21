@@ -143,6 +143,9 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                                         items.setContent(contents);
                                         itemses.add(items);
                                     }
+                                    else{
+
+                                    }
                                 }
                                 Items[] item1=new Items[0];
                                 pagerItem.put(foodTime, itemses.toArray(item1));

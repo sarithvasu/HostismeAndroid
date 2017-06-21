@@ -1,7 +1,9 @@
 package com.effone.hostismeandroid.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.icu.text.UnicodeSetSpanner;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -9,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,13 +24,16 @@ import com.effone.hostismeandroid.common.UpdateableInterface;
 import com.effone.hostismeandroid.db.SqlOperation;
 import com.effone.hostismeandroid.model.Content;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by sumanth.peddinti on 5/10/2017.
  */
 
-public class MenuListAdpater extends BaseExpandableListAdapter {
+public class MenuListAdpater extends BaseExpandableListAdapter  {
     private HashMap<String,Content[]> childItems;
     private Context context;
     private String[] itemsname;
@@ -102,14 +109,16 @@ public class MenuListAdpater extends BaseExpandableListAdapter {
     public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         final Content food = (Content) getChild(groupPosition, childPosition);
         final String sub_item_cat=itemsname[groupPosition];
+        final ArrayList<String> checkedCountries;
         if (convertView == null) {
-
+            checkedCountries = new ArrayList<String>();
             LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.menu_list_item, parent, false);
             final TextView child_text = (TextView) convertView.findViewById(R.id.tv_dish_name);
             final TextView tv_ingredients=(TextView) convertView.findViewById(R.id.tv_ingredients);
             TextView tv_add_items = (TextView) convertView.findViewById(R.id.tv_add_item);
             tv_add_items.setVisibility(View.INVISIBLE);
+            LinearLayout addChcekBox=(LinearLayout)convertView.findViewById(R.id.ll_checkboxItems);
             LinearLayout tv_Add_Min_Quan = (LinearLayout) convertView.findViewById(R.id.btn_lay);
             final TextView minusBtn = (TextView) convertView.findViewById(R.id.tv_minus);
             final TextView tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
@@ -122,9 +131,31 @@ public class MenuListAdpater extends BaseExpandableListAdapter {
             tv_ingredients.setText(""+food.getIngredients());
             tvPrice.setText("$ "+food.getPrice());
 
+            List<String> menuTypes = Arrays.asList(food.getMenu_types().split(","));
+            CheckBox[] dynamicCheckBoxes = new CheckBox[menuTypes.size()];
+            CompoundButton.OnCheckedChangeListener checkListner=new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                    String checkedText = compoundButton.getText()+"";
 
+                    if(isChecked){
+                        checkedCountries.add(checkedText);
+                        Toast.makeText(context, compoundButton.getText()+"is checked!!!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        checkedCountries.remove(checkedText);
+                        Toast.makeText(context, compoundButton.getText()+" is not checked!!!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            };
+            for(int i=0;i<dynamicCheckBoxes.length;i++){
+                CheckBox cb = new CheckBox(context);
+                cb.setText(menuTypes.get(i));
+                cb.setTextSize(9);
+                dynamicCheckBoxes[i]=cb;
+                addChcekBox.addView(cb);
 
-
+                cb.setOnCheckedChangeListener(checkListner);
+            }
 
             final int[] qty = new int[1];
             if(!tvQuatity.getText().toString().equals(""))
@@ -140,10 +171,12 @@ public class MenuListAdpater extends BaseExpandableListAdapter {
                         qty[0]++;
                         tvQuatity.setText("" + qty[0]);
                     }
+
+
                     sqliteoperation = new SqlOperation(context);
                     sqliteoperation.open();
                     sqliteoperation.AddOrSubstractProduct(heading,sub_item_cat,
-                            food.getMenu_item_id(),food.getName()
+                            food.getMenu_item_id(),food.getName(),checkedCountries
                             ,food.getIngredients(),Float.parseFloat(String.valueOf(food.getPrice())),qty[0],1,1);
 
                     updateableInterface.update();
@@ -161,7 +194,7 @@ public class MenuListAdpater extends BaseExpandableListAdapter {
                         sqliteoperation = new SqlOperation(context);
                         sqliteoperation.open();
                         sqliteoperation.AddOrSubstractProduct(heading,sub_item_cat,
-                                food.getMenu_item_id(),food.getName()
+                                food.getMenu_item_id(),food.getName(),checkedCountries
                                 ,food.getIngredients(),Float.parseFloat(String.valueOf(food.getPrice())),qty[0],1, 2);
                         sqliteoperation.close();
                         updateableInterface.update();

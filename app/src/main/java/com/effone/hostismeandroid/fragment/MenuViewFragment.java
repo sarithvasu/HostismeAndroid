@@ -79,8 +79,13 @@ public class MenuViewFragment extends Fragment implements View.OnClickListener {
         String[] itemsname = new String[mHisMenuItems.length];
         HashMap<String, Content[]> mHashMap = new HashMap<>();
         for (int i = 0; i < mHisMenuItems.length; i++) {
-            itemsname[i] = mHisMenuItems[i].getName();
-            mHashMap.put(mHisMenuItems[i].getName(), mHisMenuItems[i].getContent());
+            try {
+                itemsname[i] = mHisMenuItems[i].getName();
+                mHashMap.put(mHisMenuItems[i].getName(), mHisMenuItems[i].getContent());
+            }catch (Exception e){
+
+            }
+
         }
         MenuListAdpater adapter = new MenuListAdpater(getActivity(), android.R.layout.simple_list_item_1, heading, itemsname, mHashMap);
         expListView.setAdapter(adapter);

@@ -27,6 +27,7 @@ public class AppPreferences {
     private  String ORDER_ID="order_id";
     private String RESTAURANT_ID="restaurant_id";
     private String DEVICE_ID="device_id";
+    private String NUMBER_OF_TABLES="number_of_tables";
 
 
     public AppPreferences(Context context) {
@@ -79,6 +80,12 @@ public class AppPreferences {
         prefsEditor.putString(DEVICE_ID, device_id);
         prefsEditor.commit();
     }
-
+    public int getNUMBER_OF_TABLES(){
+        return  sharedPrefs.getInt(NUMBER_OF_TABLES,0);
+    }
+    public void setNUMBER_OF_TABLES(int number_of_tables) {
+        prefsEditor.putInt(NUMBER_OF_TABLES, number_of_tables);
+        prefsEditor.commit();
+    }
 
 }

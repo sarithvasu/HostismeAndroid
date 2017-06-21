@@ -175,4 +175,14 @@
         android:layout_alignLeft="@+id/tv_vat_value"
         android:layout_alignStart="@+id/tv_vat_value" />
 
+    <LinearLayout
+        android:id="@+id/ll_checkboxItems"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btn_lay"
+        android:layout_alignStart="@+id/tv_service_tax"
+        android:layout_below="@+id/tv_service_tax"
+        android:layout_toStartOf="@+id/tv_total"
+        android:orientation="horizontal"></LinearLayout>
+
 </RelativeLayout>

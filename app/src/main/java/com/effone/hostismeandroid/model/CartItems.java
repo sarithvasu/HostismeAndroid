@@ -12,6 +12,25 @@ public class CartItems {
     public String ItemIngred;
     public float ItemPrice;
     public int ItemQuantity;
+    public String MenuType;
+
+    public int getSpecialType() {
+        return SpecialType;
+    }
+
+    public void setSpecialType(int specialType) {
+        SpecialType = specialType;
+    }
+
+    public int SpecialType;
+
+    public String getMenuType() {
+        return MenuType;
+    }
+
+    public void setMenuType(String menuType) {
+        MenuType = menuType;
+    }
 
     public String getItemCatagerie() {
         return ItemCatagerie;

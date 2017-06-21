@@ -93,5 +93,15 @@
 
         />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tv_ingredients"
+        android:orientation="horizontal"
+        android:id="@+id/ll_checkboxItems"
+        android:layout_toStartOf="@+id/btn_lay"
+        android:layout_alignBottom="@+id/tv_add_item"></LinearLayout>
+
 
 </RelativeLayout>

@@ -47,22 +47,12 @@ public class Service_RequestActivity extends AppCompatActivity implements View.O
 
     @Override
     public void onClick(View v) {
-       // String tableNo=mEtTableToNo.getText().toString().trim();
-        String complaint=mTvComplaintList.getText().toString().trim();
-        int selectedId = mRadioGroup.getCheckedRadioButtonId();
-        if(selectedId != -1){
-            if(complaint.length()>20){
-                // send request
-                Toast.makeText(this, "No web api", Toast.LENGTH_SHORT).show();
-            }else{
-                Toast.makeText(this, "enter Complaint Type", Toast.LENGTH_SHORT).show();
 
-            }
-
-        }else {
-            Toast.makeText(this, "select one service Type", Toast.LENGTH_SHORT).show();
-        }
     }
+
+    private void sendingDataServer() {
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);

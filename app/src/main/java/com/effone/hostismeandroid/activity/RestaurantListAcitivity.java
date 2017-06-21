@@ -102,10 +102,12 @@ public class RestaurantListAcitivity extends AppCompatActivity implements Adapte
         Intent showLocationsIntent = new Intent(this, Book_a_tableActivity.class);
         String restaurant = restaurants[i].getRestaurant_name();
         String address = restaurants[i].getArea()+", "+restaurants[i].getStreet()+", "+restaurants[i].getState()+" "+restaurants[i].getPincode();
+
         String restaurant_id = restaurants[i].getId();
         appPreferences.setRRESTAURANT_NAME(restaurant);
         appPreferences.setRESTAURANT_ID(restaurant_id);
         appPreferences.setRESTAURANT_ADDRESS(address);
+        appPreferences.setNUMBER_OF_TABLES(Integer.parseInt(restaurants[i].getNo_of_tables()));
         startActivity(showLocationsIntent);
     }
     @Override

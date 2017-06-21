@@ -11,15 +11,16 @@ import com.effone.hostismeandroid.fragment.MenuViewFragment;
 import com.effone.hostismeandroid.model.Items;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class HISMenuPageAdapter extends FragmentPagerAdapter  {
 
 
-    private HashMap<String ,Items[]> mFullmenu;
+    private Map<String ,Items[]> mFullmenu;
     private ViewPager mViewPager;
 
 
-    public HISMenuPageAdapter(FragmentManager fm, HashMap<String ,Items[]> mFullmenu) {
+    public HISMenuPageAdapter(FragmentManager fm, Map<String, Items[]> mFullmenu) {
         super(fm);
 
         this.mFullmenu = mFullmenu;

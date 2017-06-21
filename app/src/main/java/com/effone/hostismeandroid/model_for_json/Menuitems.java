@@ -12,6 +12,13 @@ public class Menuitems
 
     private String quantity;
 
+    public Menuitems(int itemMenuCatId, int itemQuantity, String menuType) {
+        this.id=""+itemMenuCatId;
+        this.quantity=""+itemQuantity;
+        this.itemtype=menuType;
+
+    }
+
     public String getId ()
     {
         return id;

@@ -145,7 +145,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
                                 Gson gson = new Gson();
                                 mBill = gson.fromJson(jsonObjec.getString("Bill"), Bill.class);
                                 JSONObject os=jsonObjec.getJSONObject("Bill");
-                               givingarray(os);
+                               getingtax(os);
 
                                 setVaues();
                             }
@@ -165,25 +165,30 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
                 });
         AppController.getInstance().addToRequestQueue(stringRequest);
     }
-
-    private void givingarray(JSONObject os) {
+/*getting text item since Tax name came in json as key "taxItems": [
+            {
+                "Total before Tax": 2490,
+                "Tax1": 100,
+                "Tax2": 124.5,
+                "Tax3": 200,
+                "Tax4": 249
+            }
+        ]*/
+    private void getingtax(JSONObject os) {
         try {
-            JSONArray jsona = os.getJSONArray("taxItems");
-            JSONObject objev = jsona.getJSONObject(0);
+            JSONArray json = os.getJSONArray("taxItems");
+            JSONObject object = json.getJSONObject(0);
             List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
             try {
-                Iterator<String> iterator = objev.keys();
+                Iterator<String> iterator = object.keys();
 
                 while (iterator.hasNext()) {
                     String key = iterator.next();
-                    double value = Double.parseDouble(objev.getString(key));
+                    double value = Double.parseDouble(object.getString(key));
                     TaxItems taxitem=new TaxItems();
                     taxitem.setName(key);
                     taxitem.setValue(value);
-                    /*HashMap<String, String> map = new HashMap<>();
-                    map.put("name", key);
-                    map.put("value", value);
-*/
+
                     taxItemses.add(taxitem);
                 }
             }catch (Exception e){

@@ -34,6 +34,8 @@ import com.effone.hostismeandroid.model.CartItems;
 import com.effone.hostismeandroid.model.OrderToServer;
 import com.effone.hostismeandroid.model.OrderingMenu;
 import com.effone.hostismeandroid.model.TaxItems;
+import com.effone.hostismeandroid.model_for_json.Menuitems;
+import com.effone.hostismeandroid.model_for_json.Order;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -168,21 +170,21 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                 sqlOperation.open();
                 sqlOperation.setFlagaUpdate();
                 sqlOperation.close();
-                ArrayList<OrderToServer> orderToServers = new ArrayList<>();
-                OrderToServer orderToServer = new OrderToServer();
-                orderToServer.setLocationId(22);
-                orderToServer.setRestaurant_id(555);
+                ArrayList<Order> orderToServers = new ArrayList<>();
+                Order orderToServer = new Order();
+                orderToServer.setRestaurantId(appPrefernces.getRESTAURANT_ID());
+
                 if (appPrefernces.getORDER_ID() != null)
-                    orderToServer.setOrder_id(appPrefernces.getORDER_ID());
+                    orderToServer.setId(appPrefernces.getORDER_ID());
                 else
-                    orderToServer.setOrder_id("");
-                orderToServer.setTable_no(Integer.parseInt(mTableName));
-                orderToServer.setTotal_price(totalPrice);
-                ArrayList<OrderingMenu> orderingMenus = new ArrayList<>();
+                    orderToServer.setId("");
+                orderToServer.setTableno(Integer.parseInt(mTableName));
+                orderToServer.setTotalprice(Integer.parseInt(String.valueOf(totalPrice)));
+                ArrayList<Menuitems> orderingMenus = new ArrayList<>();
                 for (CartItems cartItems : cartItemses) {
-                    orderingMenus.add(new OrderingMenu(cartItems.getItemMenuCatId(), cartItems.ItemQuantity));
+                    orderingMenus.add(new Menuitems(cartItems.getItemMenuCatId(), cartItems.ItemQuantity,cartItems.getMenuType()));
                 }
-                orderToServer.setItems(orderingMenus);
+                orderToServer.setMenuitems(orderingMenus);
                 orderToServers.add(orderToServer);
                 Gson gson = new Gson();
                 String json = gson.toJson(orderToServers);
