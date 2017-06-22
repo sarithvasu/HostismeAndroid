@@ -17,6 +17,7 @@ import java.util.List;
 
 import static com.effone.hostismeandroid.db.DBConstant.COLUMN_NAME_CAT_NAME;
 import static com.effone.hostismeandroid.db.DBConstant.COLUMN_NAME_FLAG;
+import static com.effone.hostismeandroid.db.DBConstant.COLUMN_NAME_IS_SPECIAL;
 import static com.effone.hostismeandroid.db.DBConstant.COLUMN_NAME_ITEM_INGRE;
 import static com.effone.hostismeandroid.db.DBConstant.COLUMN_NAME_ITEM_NAME;
 import static com.effone.hostismeandroid.db.DBConstant.COLUMN_NAME_ITEM_PRICE;
@@ -48,12 +49,12 @@ public class SqlOperation {
     }
 
 
-    public void AddOrSubstractProduct(String item_cat, String sub_item_cat, int menu_item_id, String name, ArrayList<String> checkedCountries, String ingredients, float price, int quantity, int flag, int kindOfOperation) {
+    public void AddOrSubstractProduct(String item_cat, String sub_item_cat, int menu_item_id, String name, ArrayList<String> checkedCountries, String specail, String ingredients, float price, int quantity, int flag, int kindOfOperation) {
         int values = 0;
         String listString="";
-        for (String s : checkedCountries)
+        for (int i=0;i<checkedCountries.size();i++)
         {
-            listString += s + ",";
+            listString += checkedCountries.get(i)+"," ;
         }
         if(kindOfOperation == 0) {
             values=0;
@@ -64,7 +65,7 @@ public class SqlOperation {
 
             Cursor cursor;
             String select = "SELECT item_qty FROM "+TABLE_NAME_ORDERITEM +" where " + COLUMN_NAME_CAT_NAME + "= '" + item_cat +
-                    "' and " + COLUMN_NAME_MENU_ITEM_ID + "=" + menu_item_id +" and " + COLUMN_NAME_FLAG +" = " +flag +" and "+COLUMN_NAME_MENU_TYPE +" = '"+listString+"'" ;
+                    "' and " + COLUMN_NAME_MENU_ITEM_ID + "=" + menu_item_id +" and " + COLUMN_NAME_FLAG +" = " +flag +" and "+COLUMN_NAME_MENU_TYPE +" = '"+listString+"' and "+COLUMN_NAME_IS_SPECIAL +" = '"+specail+"'" ;
             cursor = database.rawQuery(select, null);
             if (cursor.getCount() == 0 && kindOfOperation == 1) // if there are no elements and the operation is ADD , set QTY in  1
             {
@@ -76,6 +77,7 @@ public class SqlOperation {
                 row.put(COLUMN_NAME_ITEM_INGRE, ingredients);
                 row.put(COLUMN_NAME_ITEM_PRICE,price);
                 row.put(COLUMN_NAME_ITEM_QTY, quantity);
+                row.put(COLUMN_NAME_IS_SPECIAL,specail);
                 row.put(COLUMN_NAME_MENU_TYPE,listString);
                 row.put(COLUMN_NAME_FLAG, flag);
 
@@ -137,6 +139,7 @@ public class SqlOperation {
                 cartItems.setItemPrice(cursor.getFloat(cursor.getColumnIndex(COLUMN_NAME_ITEM_PRICE)));
                 cartItems.setMenuType(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_MENU_TYPE)));
                 cartItems.setItemQuantity(cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_ITEM_QTY)));
+                cartItems.setSpecial(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_IS_SPECIAL)));
                 cartItemses.add(cartItems);
             }
         }

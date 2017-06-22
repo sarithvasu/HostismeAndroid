@@ -36,12 +36,14 @@ import com.effone.hostismeandroid.model.OrderingMenu;
 import com.effone.hostismeandroid.model.TaxItems;
 import com.effone.hostismeandroid.model_for_json.Menuitems;
 import com.effone.hostismeandroid.model_for_json.Order;
+import com.effone.hostismeandroid.model_for_json.OrderPlacement;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.effone.hostismeandroid.common.URL.POST_ORDER;
 import static com.effone.hostismeandroid.common.URL.place_order_url;
 import static com.effone.hostismeandroid.db.DBConstant.ser;
 import static com.effone.hostismeandroid.db.DBConstant.serviceTax;
@@ -166,28 +168,30 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
             else
                 mTableName = mEtTableNo.getText().toString().trim();
             if (mTableName.length() > 2) {
-                sqlOperation = new SqlOperation(this);
-                sqlOperation.open();
-                sqlOperation.setFlagaUpdate();
-                sqlOperation.close();
+
                 ArrayList<Order> orderToServers = new ArrayList<>();
                 Order orderToServer = new Order();
                 orderToServer.setRestaurantId(appPrefernces.getRESTAURANT_ID());
-
+                orderToServer.setDeviceId("154sdadfaf5464554");
+                orderToServer.setPhaseid(""+2);
                 if (appPrefernces.getORDER_ID() != null)
                     orderToServer.setId(appPrefernces.getORDER_ID());
                 else
                     orderToServer.setId("");
+
                 orderToServer.setTableno(Integer.parseInt(mTableName));
-                orderToServer.setTotalprice(Integer.parseInt(String.valueOf(totalPrice)));
+                orderToServer.setTotalprice(totalPrice+taxAmountCalculation());
+                orderToServer.setTax(taxAmountCalculation());
+                orderToServer.setOrderprice(totalPrice);
                 ArrayList<Menuitems> orderingMenus = new ArrayList<>();
                 for (CartItems cartItems : cartItemses) {
-                    orderingMenus.add(new Menuitems(cartItems.getItemMenuCatId(), cartItems.ItemQuantity,cartItems.getMenuType()));
+                    orderingMenus.add(new Menuitems(cartItems.getItemMenuCatId(), cartItems.ItemQuantity,cartItems.getSpecial()));
                 }
                 orderToServer.setMenuitems(orderingMenus);
-                orderToServers.add(orderToServer);
+                OrderPlacement orderPlacement=new OrderPlacement();
+                orderPlacement.setOrder(orderToServer);
                 Gson gson = new Gson();
-                String json = gson.toJson(orderToServers);
+                String json = gson.toJson(orderPlacement);
                 pushDataToServer(json);
             } else {
                 Toast.makeText(this, "Please enter the Table no", Toast.LENGTH_SHORT).show();
@@ -195,7 +199,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         }
     }
     private void pushDataToServer(final String mTableName) {
-        StringRequest req = new StringRequest(Request.Method.POST, place_order_url,
+        StringRequest req = new StringRequest(Request.Method.POST, POST_ORDER,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

@@ -99,7 +99,10 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
 
         mQueue = Volley.newRequestQueue(this);
         showOrderItems();
+        gettingDataFromService();
+    }
 
+    private void gettingDataFromService() {
         final StringRequest stringRequest = new StringRequest(GET_MENU+"1",
                 new Response.Listener<String>() {
                     @Override
@@ -121,14 +124,15 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
 
                                 JSONObject jsonObject = menuJsonObject.getJSONObject(foodTime);// her i will get the cousin(Italin,..etc) of muenu list
                                 Iterator<String> countryCousins = jsonObject.keys();
-                               ArrayList<Items> itemses=new ArrayList();
+                                ArrayList<Items> itemses=new ArrayList();
                                 while (countryCousins.hasNext()) {
                                     String countryCousin = countryCousins.next();
                                     JSONArray jsonArray = jsonObject.getJSONArray(countryCousin);
                                     Content[] contents = new Content[jsonArray.length()];
-                                    Items items=new Items();
-                                    items.setName(countryCousin);
+
                                     if (!countryCousin.equals("Beverages")) {
+                                        Items items=new Items();
+                                        items.setName(countryCousin);
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             JSONObject contentJson = jsonArray.getJSONObject(i);
                                             Content content = new Content();
@@ -138,12 +142,41 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                                             content.setCountryCusine(countryCousin);
                                             content.setPrice(Float.parseFloat(contentJson.getString("price")));
                                             content.setIngredients(contentJson.getString("description"));
+                                            content.setIs_special(contentJson.getString("is_special"));
                                             contents[i] = content;
                                         }
                                         items.setContent(contents);
                                         itemses.add(items);
                                     }
                                     else{
+                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                            JSONObject contentJson = jsonArray.getJSONObject(i);
+                                            Iterator<String> bevTypes = contentJson.keys();
+
+                                            while (bevTypes.hasNext()) {
+                                                String bevType=bevTypes.next();
+                                                Items items=new Items();
+                                                items.setName(countryCousin+"-"+bevType);
+                                                JSONArray jsonbevType = contentJson.getJSONArray(bevType);
+                                                Log.e("",""+jsonArray);
+
+                                                Content[] contentBevlist = new Content[jsonbevType.length()];
+                                                for (int j = 0; j < jsonbevType.length(); j++) {
+                                                    JSONObject contentBev = jsonbevType.getJSONObject(j);
+                                                    Content content = new Content();
+                                                    content.setMenu_item_id(Integer.parseInt(contentBev.getString("id")));
+                                                    content.setName(bevType+"\n"+contentBev.getString("item"));
+                                                    content.setMenu_types("");
+                                                    /*content.setCountryCusine(countryCousin);*/
+                                                    content.setPrice(Float.parseFloat(contentBev.getString("price")));
+                                                    content.setIngredients(contentBev.getString("description"));
+                                                    contentBevlist[j] = content;
+                                                }
+                                                items.setContent(contentBevlist);
+                                                itemses.add(items);
+                                            }
+
+                                        }
 
                                     }
                                 }
@@ -282,6 +315,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
             Util.createNetErrorDialog(this);
         } else {
             showOrderItems();
+            gettingDataFromService();
         }
     }
 

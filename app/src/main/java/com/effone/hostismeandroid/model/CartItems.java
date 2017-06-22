@@ -14,15 +14,18 @@ public class CartItems {
     public int ItemQuantity;
     public String MenuType;
 
-    public int getSpecialType() {
-        return SpecialType;
+    public String getSpecial() {
+        return Special;
     }
 
-    public void setSpecialType(int specialType) {
-        SpecialType = specialType;
+    public void setSpecial(String special) {
+        Special = special;
     }
 
-    public int SpecialType;
+    public String Special;
+
+
+
 
     public String getMenuType() {
         return MenuType;

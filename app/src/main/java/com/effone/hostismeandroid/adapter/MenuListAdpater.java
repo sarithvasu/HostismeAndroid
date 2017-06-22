@@ -177,7 +177,7 @@ public class MenuListAdpater extends BaseExpandableListAdapter  {
                     sqliteoperation.open();
                     sqliteoperation.AddOrSubstractProduct(heading,sub_item_cat,
                             food.getMenu_item_id(),food.getName(),checkedCountries
-                            ,food.getIngredients(),Float.parseFloat(String.valueOf(food.getPrice())),qty[0],1,1);
+                            ,food.getIngredients(),food.getIs_special(),Float.parseFloat(String.valueOf(food.getPrice())),qty[0],1,1);
 
                     updateableInterface.update();
                     sqliteoperation.close();
@@ -195,7 +195,7 @@ public class MenuListAdpater extends BaseExpandableListAdapter  {
                         sqliteoperation.open();
                         sqliteoperation.AddOrSubstractProduct(heading,sub_item_cat,
                                 food.getMenu_item_id(),food.getName(),checkedCountries
-                                ,food.getIngredients(),Float.parseFloat(String.valueOf(food.getPrice())),qty[0],1, 2);
+                                ,food.getIngredients(),food.getIs_special(),Float.parseFloat(String.valueOf(food.getPrice())),qty[0],1, 2);
                         sqliteoperation.close();
                         updateableInterface.update();
                     }

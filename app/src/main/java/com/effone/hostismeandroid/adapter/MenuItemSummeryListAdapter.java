@@ -158,7 +158,7 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
 
                 sqliteoperation.AddOrSubstractProduct(value.getItemCatagerie(),value.getItemSubCat(),
                         value.getItemMenuCatId(),value.getItemName()
-                        , checkedCountries, value.getItemIngred(),Float.parseFloat(String.valueOf(value.getItemPrice())),qty[0],1,1);
+                        , checkedCountries, value.getSpecial(), value.getItemIngred(),Float.parseFloat(String.valueOf(value.getItemPrice())),qty[0],1,1);
 
                 sqliteoperation.close();
                 mOnDataChangeListener.onDataChanged(1);
@@ -180,7 +180,7 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
                     sqliteoperation.open();
                     sqliteoperation.AddOrSubstractProduct(value.getItemCatagerie(), value.getItemSubCat(),
                             value.getItemMenuCatId(), value.getItemName()
-                            , checkedCountries, value.getItemIngred(), Float.parseFloat(String.valueOf(value.getItemPrice())), qty[0], 1, 2);
+                            , checkedCountries,value.getSpecial(), value.getItemIngred(), Float.parseFloat(String.valueOf(value.getItemPrice())), qty[0], 1, 2);
                         if(qty[0] == 0){
                             if(sqliteoperation.getItemCountInCart()!=0) {
                                 //we are deleteing the item from the cart based on the item_id and ItemName

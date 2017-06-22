@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.effone.hostismeandroid.R;
+import com.effone.hostismeandroid.activity.ConfirmationActivity;
 import com.effone.hostismeandroid.model.Order_Items;
 import com.effone.hostismeandroid.model_for_json.OrderItem;
 
@@ -19,15 +20,19 @@ import java.util.ArrayList;
  * Created by sarith.vasu on 13-06-2017.
  */
 
-public class OrderItemConfirmationAdapter extends ArrayAdapter<Order_Items> {
-    private ArrayList<Order_Items> taxItemses;
+public class OrderItemConfirmationAdapter extends ArrayAdapter<com.effone.hostismeandroid.model_for_confirmation.OrderItem> {
+    private ArrayList<com.effone.hostismeandroid.model_for_confirmation.OrderItem> taxItemses;
     private LayoutInflater inflater;
-    public OrderItemConfirmationAdapter(Context context, int tax_items, ArrayList<Order_Items> taxItemses) {
-        super(context, tax_items,  taxItemses);
-        this.taxItemses =(ArrayList<Order_Items>) taxItemses;
+
+
+    public OrderItemConfirmationAdapter(ConfirmationActivity context, int order_summary_items, ArrayList<com.effone.hostismeandroid.model_for_confirmation.OrderItem> orderItems) {
+        super(context, order_summary_items, orderItems);
+        this.taxItemses =(ArrayList<com.effone.hostismeandroid.model_for_confirmation.OrderItem>) orderItems;
         inflater = (LayoutInflater)context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
+
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -51,11 +56,11 @@ public class OrderItemConfirmationAdapter extends ArrayAdapter<Order_Items> {
 
         } else {
             /***** Get each Model object from Arraylist ********/
-            Order_Items value = (Order_Items) taxItemses.get(position);
+            com.effone.hostismeandroid.model_for_confirmation.OrderItem value = (com.effone.hostismeandroid.model_for_confirmation.OrderItem) taxItemses.get(position);
             /************  Set Model values in Holder elements ***********/
             holder.tv_tax_name.setText(value.getName());
-            holder.tv_tax_money.setText("$ "+value.getPrice()*+value.getQuantity());
-            holder.tv_tax_quantity.setText(value.getPrice()+" * "+ value.getQuantity());
+            holder.tv_tax_money.setText("$ "+value.getItemTotalPrice());
+            holder.tv_tax_quantity.setText(value.getUnitPrice()+" * "+ value.getQuantity());
 
         }
 

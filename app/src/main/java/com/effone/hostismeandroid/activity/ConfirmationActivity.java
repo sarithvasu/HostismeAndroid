@@ -34,6 +34,8 @@ import com.effone.hostismeandroid.db.SqlOperation;
 import com.effone.hostismeandroid.model.OrderSummary;
 import com.effone.hostismeandroid.model.Order_Items;
 import com.effone.hostismeandroid.model.TaxItems;
+import com.effone.hostismeandroid.model_for_confirmation.RootObject;
+import com.effone.hostismeandroid.model_for_json.Bill;
 import com.effone.hostismeandroid.util.Util;
 import com.google.gson.Gson;
 
@@ -41,6 +43,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import static com.effone.hostismeandroid.common.URL.get_placed_order;
 import static com.effone.hostismeandroid.db.DBConstant.ser;
@@ -68,13 +71,17 @@ public class ConfirmationActivity extends AppCompatActivity {
     private OrderItemConfirmationAdapter orderItemDetails;
     private ArrayList<TaxItems> taxItemses;
     private TaxitemConfirmationAdapter taxDetailsAdapter;
-
+    private RootObject mBill;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confiramtion);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        sqlOperation = new SqlOperation(this);
+        sqlOperation.open();
+        sqlOperation.setFlagaUpdate();
+        sqlOperation.close();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         Common.setCustomTitile(this,"Order Confirmation",null);
@@ -83,17 +90,8 @@ public class ConfirmationActivity extends AppCompatActivity {
         mQueue = Volley.newRequestQueue(this);
         Intent intent = getIntent();
         String jsondata = intent.getStringExtra("Order_id");
-        JSONObject myJson = null;
-        try {
-            myJson = new JSONObject(jsondata);
-            mStatus = myJson.getString("msg");
-            order_id = myJson.getString("order_id");
-            urls = get_placed_order + order_id;
-            mAppPrefernces.setORDER_ID(order_id);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-// use myJson as needed, for example
+        mBill = mGson.fromJson(jsondata, RootObject.class);
+
         sqliteoperation = new SqlOperation(getApplicationContext());
         sqliteoperation.open();
         //   List<HashMap<String, String>> dictionary = sqliteoperation.getPlaceOrder(order_id);
@@ -142,23 +140,6 @@ public class ConfirmationActivity extends AppCompatActivity {
         // Showing progress dialog before making http request
         pDialog.setMessage("Loading...");
         pDialog.show();
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, urls,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        mOrderToServers = mGson.fromJson(response, OrderSummary[].class);
-                        showingData();
-                        hidePDialog();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        hidePDialog();
-                        Util.createErrorAlert(ConfirmationActivity.this, "", error.getMessage());
-                    }
-                });
-        mQueue.add(stringRequest);
 
     }
     private void hidePDialog() {
@@ -168,12 +149,12 @@ public class ConfirmationActivity extends AppCompatActivity {
         }
     }
     private void showingData() {
-        mTvDateTime.setText(": " + mOrderToServers[0].getDatatime());
-        mTvRestName.setText(": " + mOrderToServers[0].getRestaurant_id());
-        mAppPrefernces.setORDER_ID(mOrderToServers[0].getOrder_id());
-        mTvBookingId.setText(": " + mOrderToServers[0].getOrder_id());
-        mTvOrderTotal.setText(": $ " + mOrderToServers[0].getTotal_price());
-        mTvStatus.setText(": " + mOrderToServers[0].getStatus());
+        mTvDateTime.setText(": " +mBill.getOrderConfirmation().getOrderSummary().getOrderts());
+        mTvRestName.setText(": " + mAppPrefernces.getRESTAURANT_NAME());
+        mAppPrefernces.setORDER_ID(""+mBill.getOrderConfirmation().getOrderSummary().getOrderId());
+        mTvBookingId.setText(": " + mBill.getOrderConfirmation().getOrderSummary().getOrderstatus());
+        mTvOrderTotal.setText(": $ " + mBill.getOrderConfirmation().getOrderSummary().getTotalprice());
+        mTvStatus.setText(": " + mBill.getOrderConfirmation().getOrderSummary().getOrderstatus());
         showingDataIntoListView();
     }
 
@@ -199,8 +180,8 @@ public class ConfirmationActivity extends AppCompatActivity {
             totalPrice +=order_itemses.get(i).getPrice()* order_itemses.get(i).getQuantity();
         }
 
-        mTvQuantits.setText(": " + quantity);
-        orderItemDetails = new OrderItemConfirmationAdapter(this, R.layout.order_summary_items, order_itemses);
+        mTvQuantits.setText(": " +quantity);
+        orderItemDetails = new OrderItemConfirmationAdapter(ConfirmationActivity.this, R.layout.order_summary_items, mBill.getOrderConfirmation().getOrderDetails().getOrderItems());
         mLvItemQuantity.setAdapter(orderItemDetails);
         populatingTaxMenuList();
 

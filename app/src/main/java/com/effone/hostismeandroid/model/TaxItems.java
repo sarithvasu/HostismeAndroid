@@ -4,7 +4,8 @@ package com.effone.hostismeandroid.model;
  * Created by sumanth.peddinti on 4/17/2017.
  */
 
-public class TaxItems {
+public class
+TaxItems {
     private String name;
     private double  value;
 

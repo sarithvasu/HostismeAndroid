@@ -18,6 +18,18 @@ public class Content {
     private float price;
 
     private String name;
+    private String is_special;
+
+
+    public String getIs_special ()
+    {
+        return is_special;
+    }
+
+    public void setIs_special (String is_special)
+    {
+        this.is_special = is_special;
+    }
 
     public String getIngredients() {
         return ingredients;
@@ -70,4 +82,6 @@ public class Content {
     public String toString() {
         return "ClassPojo [ingredients = " + ingredients + ", menu_item_id = " + menu_item_id + ", price = " + price + ", name = " + name + "]";
     }
+
+
 }
