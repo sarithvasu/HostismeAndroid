@@ -27,6 +27,7 @@ import com.android.volley.toolbox.Volley;
 import com.effone.hostismeandroid.MainActivity;
 import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.adapter.MenuItemSummeryListAdapter;
+import com.effone.hostismeandroid.adapter.TaxDetailsAdapter;
 import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.common.Common;
 import com.effone.hostismeandroid.common.OnDataChangeListener;
@@ -44,6 +45,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.effone.hostismeandroid.activity.ConfirmationActivity.setListViewHeightBasedOnItems;
 import static com.effone.hostismeandroid.activity.MenuActivity.taxList;
 import static com.effone.hostismeandroid.common.URL.POST_ORDER;
 import static com.effone.hostismeandroid.db.DBConstant.ser;
@@ -58,6 +60,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
     private ListView mLvItemSummary;
     private AppPreferences appPrefernces;
     private Switch mCbTakeAway;
+    private ListView mLvTaxQuality;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +74,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void decalartion() {
+        mLvTaxQuality=(ListView)findViewById(R.id.lv_tax_menu);
         mTvItemCount = (TextView) findViewById(R.id.tv_items);
         mTvItemPrice = (TextView) findViewById(R.id.tv_items_price);
         mTvChargers = (TextView) findViewById(R.id.tv_charger_price);
@@ -126,7 +130,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
     private void setValuesInto() {
         showOrderItems();
     }
-
+    private  TaxDetailsAdapter taxDetailsAdapter;
     SqlOperation sqlOperation;
     ArrayList<CartItems> cartItemses;
     float totalPrice = 0;
@@ -157,6 +161,11 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         float twoDigitsF = Float.valueOf(decimalFormat.format(sum));
         mTvEstimatedTotal.setText("" + twoDigitsF);
         getTaxDetails((float) totalPrice);
+        taxDetailsAdapter=new TaxDetailsAdapter(this,R.layout.tax_items,
+                taxItemses);
+        mLvTaxQuality.setAdapter(taxDetailsAdapter);
+
+        setListViewHeightBasedOnItems(mLvTaxQuality);
         getOrderItemsList();
     }
 
@@ -164,13 +173,14 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
 
         MenuItemSummeryListAdapter menuItemSummeryListAdapter = new MenuItemSummeryListAdapter(this, android.R.layout.simple_list_item_1, cartItemses, taxList);
         mLvItemSummary.setAdapter(menuItemSummeryListAdapter);
+        setListViewHeightBasedOnItems(mLvItemSummary);
     }
 
     private float taxAmountCalculation(float totalPrice) {
         float chargers = 0;
         for(int i=0;i<taxList.size();i++){
             if(taxList.get(i).getType().equals("Fixed")){
-             chargers   = chargers+ totalPrice +Float.parseFloat(taxList.get(i).getChargevalue());
+             chargers   = chargers+ Float.parseFloat(taxList.get(i).getChargevalue());
             }else{
                 chargers = chargers + (totalPrice / 100.0f) * Float.parseFloat(taxList.get(i).getChargevalue());
             }
@@ -186,11 +196,11 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         TaxItems res1 = new TaxItems("Total before Tax", totalByItems);
         taxItemses.add(res1);
         for(int i=0;i<taxList.size();i++){
-            float chargers;
+            float chargers=0;
             if(taxList.get(i).getType().equals("Fixed")){
-                chargers   = + totalPrice +Float.parseFloat(taxList.get(i).getChargevalue());
+                chargers   = Float.parseFloat(taxList.get(i).getChargevalue());
             }else{
-                chargers = + (totalPrice / 100.0f) * Float.parseFloat(taxList.get(i).getChargevalue());
+                chargers =  (totalByItems / 100.0f) * Float.parseFloat(taxList.get(i).getChargevalue());
             }
             TaxItems taxi= new TaxItems(taxList.get(i).getName(),chargers);
             taxItemses.add(taxi);
