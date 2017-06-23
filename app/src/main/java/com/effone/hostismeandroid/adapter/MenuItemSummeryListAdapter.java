@@ -96,18 +96,24 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
             final CartItems value = (CartItems) orderedItemSummaries.get(position);
 //            final TaxItems taxItems=(TaxItems) taxItemses.get(position);
             /************  Set Model values in Holder elements ***********/
-            holder.tv_summery_item_name.setText(value.getItemName()+" ( "+value.getItemQuantity()+" ) ");
+            holder.tv_summery_item_name.setText(value.getItemName()+" ( "+value.getItemQuantity() +" X "+ value.getItemPrice()+" ) ");
             holder.tv_item_total_price.setText("$ "+value.getItemPrice()*value.getItemQuantity());
             double ammount=value.getItemPrice()*+value.getItemQuantity()+Float.parseFloat(taxList.get(0).getChargevalue());
             holder.mTaxName1.setText(taxList.get(0).getName());
             holder.tv_service_charges_value.setText("$ "+ammount);
+            holder.tv_service_charges_value.setVisibility(View.GONE);
             holder.tv_vat_value.setText("$ "+(value.getItemPrice()*+value.getItemQuantity() / 100) * Float.parseFloat(taxList.get(1).getChargevalue()));
             holder.mTaxName2.setText(taxList.get(1).getName());
+            holder.mTaxName2.setVisibility(View.GONE);
             double ammounts=value.getItemPrice()*+value.getItemQuantity()*+value.getItemQuantity()+Float.parseFloat(taxList.get(2).getChargevalue());
             holder.mTaxName3.setText(taxList.get(2).getName());
+            holder.mTaxName3.setVisibility(View.GONE);
             holder.tv_service_tax_value.setText("$ "+ammounts);
+            holder.tv_service_tax_value.setVisibility(View.GONE);
             holder.mTaxName4.setText(taxList.get(3).getName());
+            holder.mTaxName4.setVisibility(View.GONE);
             holder.tv_taxfinalItem.setText("$ "+(value.getItemPrice()*+value.getItemQuantity() / 100) * Float.parseFloat(taxList.get(3).getChargevalue()));
+            holder.tv_taxfinalItem.setVisibility(View.GONE);
             holder.tv_total.setText("$ "+totalAmmount(value.getItemQuantity()*value.getItemPrice()));
             holder.tv_quantity.setText(""+value.getItemQuantity());
 
@@ -140,7 +146,6 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
                     dynamicCheckBoxes[i] = cb;
                     checkedCountries.add(menuTypes.get(i));
                     holder.addChcekBox.addView(cb);
-
                     cb.setOnCheckedChangeListener(checkListner);
                     final int finalI = i;
                     cb.setOnClickListener(new View.OnClickListener() {

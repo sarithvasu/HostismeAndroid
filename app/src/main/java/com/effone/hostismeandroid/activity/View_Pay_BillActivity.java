@@ -279,6 +279,10 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
             totalbyOrder +=serviceTax+ser+vatTax;
             RadioButton radioButton = (RadioButton) mRadioGroup.findViewById(selectedId);
             Toast.makeText(this, radioButton.getText(), Toast.LENGTH_SHORT).show();
+            appPreferences.setRRESTAURANT_NAME("");
+            appPreferences.setTABLE_NAME(0);
+            appPreferences.setORDER_ID("");
+            appPreferences.setNUMBER_OF_TABLES(0);
             /*sqliteoperation=new SqlOperations(View_Pay_BillActivity.this);
             sqliteoperation.open();
             for(int i=0;i<order_ids.size();i++) {
