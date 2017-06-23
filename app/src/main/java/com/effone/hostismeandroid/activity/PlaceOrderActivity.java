@@ -170,7 +170,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         float chargers = 0;
         for(int i=0;i<taxList.size();i++){
             if(taxList.get(i).getType().equals("Fixed")){
-             chargers   = chargers+ totalPrice +Float.parseFloat(taxList.get(i).getChargevalue());
+             chargers   = chargers+Float.parseFloat(taxList.get(i).getChargevalue());
             }else{
                 chargers = chargers + (totalPrice / 100.0f) * Float.parseFloat(taxList.get(i).getChargevalue());
             }
@@ -232,12 +232,12 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                         if (cartItems.getSpecial().equals("0")) {
                             cartItems.setSpecial("1");//not special item will be 1
                         } else if (cartItems.getSpecial().equals("1")) {
-                            cartItems.setSpecial("2");//  special item will be 2
+                            cartItems.setSpecial("3");//  special item will be 3
                         } else{
-                            cartItems.setSpecial("3");
+                            cartItems.setSpecial("2");// Bevergaes items will be 2
                         }
                     }else {
-                       cartItems.setSpecial("3");//bevagrages will be 3
+                       cartItems.setSpecial("2");//bevagrages will be 2
                    }
                    count = count+cartItems.getItemQuantity();
                     descriptoin=cartItems.getItemCatagerie();

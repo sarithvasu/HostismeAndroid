@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.icu.text.UnicodeSetSpanner;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -139,7 +140,13 @@ public class MenuListAdpater extends BaseExpandableListAdapter  {
 
 
             //setting valuse into the textview of the exapanable listview
-        holder.child_text.setText(""+food.getName());
+        if(food.getIs_special().equals("1")){
+            holder.child_text.setText(""+food.getName()+"( Special )");
+            String text = food.getName()+"<font color=#ff0000 > (Special) </font>";
+            holder.child_text.setText(Html.fromHtml(text));
+        }else {
+            holder.child_text.setText("" + food.getName());
+        }
         holder.tv_ingredients.setText(""+food.getIngredients());
         holder.tvPrice.setText("$ "+food.getPrice());
             CompoundButton.OnCheckedChangeListener checkListner=new CompoundButton.OnCheckedChangeListener() {

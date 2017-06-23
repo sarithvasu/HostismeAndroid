@@ -114,7 +114,7 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
 
 
 
-            List<String> menuTypes = Arrays.asList(value.getMenuType().split(","));
+            final List<String> menuTypes = Arrays.asList(value.getMenuType().split(","));
             CheckBox[] dynamicCheckBoxes = new CheckBox[menuTypes.size()];
             CompoundButton.OnCheckedChangeListener checkListner=new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -142,9 +142,17 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
                     holder.addChcekBox.addView(cb);
 
                     cb.setOnCheckedChangeListener(checkListner);
+                    final int finalI = i;
+                    cb.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            if (((CheckBox) v).isChecked())
+                                checkedCountries.add(menuTypes.get(finalI));
+                            else
+                                checkedCountries.remove(menuTypes.get(finalI));
+                        }
+                    });
                 }
             }
-
         final int[] qty = new int[1];
         if(! holder.tv_quantity.getText().toString().equals(""))
             qty[0] =Integer.parseInt(holder.tv_quantity.getText().toString());
