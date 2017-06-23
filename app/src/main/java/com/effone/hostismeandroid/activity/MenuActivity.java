@@ -111,7 +111,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         pDialog = new ProgressDialog(MenuActivity.this);
         pDialog.setMessage("Loading...");
         pDialog.show();
-        final StringRequest stringRequest = new StringRequest(GET_MENU+"1",
+        final StringRequest stringRequest = new StringRequest(GET_MENU+mAppPreferences.getRESTAURANT_ID(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

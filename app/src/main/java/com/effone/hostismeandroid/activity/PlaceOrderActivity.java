@@ -39,6 +39,7 @@ import com.effone.hostismeandroid.model_for_json.OrderPlacement;
 import com.effone.hostismeandroid.util.Util;
 import com.google.gson.Gson;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -144,11 +145,17 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
             totalPrice += cartItemses.get(i).getItemPrice() * cartItemses.get(i).getItemQuantity();
 
         }
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
         mTvItemPrice.setText("" + totalPrice);
         mTvItemCount.setText("Items (" + Math.round(totalCount) + ")");
-        mTvChargers.setText("" + taxAmountCalculation(totalPrice));
+
+        float twoDigitsFs = Float.valueOf(decimalFormat.format(taxAmountCalculation(totalPrice)));
+        mTvChargers.setText("" + twoDigitsFs);
+
         double sum = totalPrice + taxAmountCalculation(totalPrice);
-        mTvEstimatedTotal.setText("" + sum);
+
+        float twoDigitsF = Float.valueOf(decimalFormat.format(sum));
+        mTvEstimatedTotal.setText("" + twoDigitsF);
         getTaxDetails((float) totalPrice);
         getOrderItemsList();
     }
@@ -223,9 +230,9 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                 for (CartItems cartItems : cartItemses) {
                     if(cartItems.getSpecial() != null) {
                         if (cartItems.getSpecial().equals("0")) {
-                            cartItems.setSpecial("1");//not speical item will be 1
+                            cartItems.setSpecial("1");//not special item will be 1
                         } else if (cartItems.getSpecial().equals("1")) {
-                            cartItems.setSpecial("2");//  speical item will be 2
+                            cartItems.setSpecial("2");//  special item will be 2
                         } else{
                             cartItems.setSpecial("3");
                         }

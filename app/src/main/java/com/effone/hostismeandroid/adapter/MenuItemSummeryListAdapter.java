@@ -178,19 +178,18 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
                 if(qty[0] <99) {
                     qty[0]++;
                     holder.tv_quantity.setText("" + qty[0]);
-                }
 
-                sqliteoperation = new SqlOperation(mContext);
-                sqliteoperation.open();
 
-                sqliteoperation.AddOrSubstractProduct(value.getItemCatagerie(),value.getItemSubCat(),
-                        value.getItemMenuCatId(),value.getItemName()
-                        , checkedCountries, value.getItemIngred(), value.getSpecial(),Float.parseFloat(String.valueOf(value.getItemPrice())),qty[0],1,1);
+                    sqliteoperation = new SqlOperation(mContext);
+                    sqliteoperation.open();
 
-                sqliteoperation.close();
-                mOnDataChangeListener.onDataChanged(1);
+                    sqliteoperation.AddOrSubstractProduct(value.getItemCatagerie(), value.getItemSubCat(),
+                            value.getItemMenuCatId(), value.getItemName()
+                            , checkedCountries, value.getItemIngred(), value.getSpecial(), Float.parseFloat(String.valueOf(value.getItemPrice())), qty[0], 1, 1);
 
-                // tvQuatity.setText( sqliteoperation.getCount(groupPosition, childPosition, details[0], Float.parseFloat(details[1]), 1));
+                    sqliteoperation.close();
+                    mOnDataChangeListener.onDataChanged(1);
+                }                // tvQuatity.setText( sqliteoperation.getCount(groupPosition, childPosition, details[0], Float.parseFloat(details[1]), 1));
             }
         });
 
@@ -202,7 +201,7 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
                 if(qty[0] >0) {
                     qty[0]--;
                     holder.tv_quantity.setText("" + qty[0]);
-                }
+
           //
                     sqliteoperation = new SqlOperation(mContext);
                     sqliteoperation.open();
@@ -224,7 +223,7 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
                     sqliteoperation.close();
                     mOnDataChangeListener.onDataChanged(1);
                 // tvQuatity.setText( sqliteoperation.getCount(groupPosition, childPosition, details[0], Float.parseFloat(details[1]), 2));
-
+                }
             }
         });
         }

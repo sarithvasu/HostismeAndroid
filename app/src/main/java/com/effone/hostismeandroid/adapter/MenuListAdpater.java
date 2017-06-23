@@ -164,7 +164,7 @@ public class MenuListAdpater extends BaseExpandableListAdapter  {
                     cb.setTextSize(9);
                     holder.dynamicCheckBoxes.add(cb);;
                     holder.addChcekBox.addView(cb);
-
+                    cb.refreshDrawableState();
                     cb.setOnCheckedChangeListener(checkListner);
                 }
             }
@@ -184,15 +184,16 @@ public class MenuListAdpater extends BaseExpandableListAdapter  {
                         if(qty[0] <99) {
                             qty[0]++;
                             holder.tvQuatity.setText("" + qty[0]);
-                        }
-                        sqliteoperation = new SqlOperation(context);
-                        sqliteoperation.open();
-                        sqliteoperation.AddOrSubstractProduct(heading, sub_item_cat,
-                                food.getMenu_item_id(), food.getName(), checkedCountries
-                                , food.getIngredients(), food.getIs_special(), Float.parseFloat(String.valueOf(food.getPrice())), qty[0], 1, 1);
 
-                        updateableInterface.update();
-                        sqliteoperation.close();
+                            sqliteoperation = new SqlOperation(context);
+                            sqliteoperation.open();
+                            sqliteoperation.AddOrSubstractProduct(heading, sub_item_cat,
+                                    food.getMenu_item_id(), food.getName(), checkedCountries
+                                    , food.getIngredients(), food.getIs_special(), Float.parseFloat(String.valueOf(food.getPrice())), qty[0], 1, 1);
+
+                            updateableInterface.update();
+                            sqliteoperation.close();
+                        }
                     }
                     else {
                         if(food.getIs_special().equals("3")){
@@ -200,7 +201,7 @@ public class MenuListAdpater extends BaseExpandableListAdapter  {
                             if(qty[0] <99) {
                                 qty[0]++;
                                 holder.tvQuatity.setText("" + qty[0]);
-                            }
+
                             sqliteoperation = new SqlOperation(context);
                             sqliteoperation.open();
                             sqliteoperation.AddOrSubstractProduct(heading, sub_item_cat,
@@ -211,7 +212,7 @@ public class MenuListAdpater extends BaseExpandableListAdapter  {
                             sqliteoperation.close();
                         }else
                             Util.createOKAlert(context,"Alert","Select atleast one option");
-
+                        }
                     }
 
                 }
