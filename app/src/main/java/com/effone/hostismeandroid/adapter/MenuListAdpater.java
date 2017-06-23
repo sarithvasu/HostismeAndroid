@@ -1,9 +1,7 @@
 package com.effone.hostismeandroid.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.icu.text.UnicodeSetSpanner;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.text.Html;
@@ -17,8 +15,6 @@ import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.common.UpdateableInterface;
@@ -37,8 +33,8 @@ import static com.effone.hostismeandroid.R.id.tv_ingredients;
  * Created by sumanth.peddinti on 5/10/2017.
  */
 
-public class MenuListAdpater extends BaseExpandableListAdapter  {
-    private HashMap<String,Content[]> childItems;
+public class MenuListAdpater extends BaseExpandableListAdapter {
+    private HashMap<String, Content[]> childItems;
     private Context context;
     private String[] itemsname;
     private SqlOperation sqliteoperation;
@@ -47,13 +43,12 @@ public class MenuListAdpater extends BaseExpandableListAdapter  {
 
 
     public MenuListAdpater(@NonNull Context context, @LayoutRes int resource, String heading, String[] itemsname, @NonNull HashMap<String, Content[]> objects) {
-       this.heading=heading;
-        this.context=context;
-        this.itemsname=itemsname;
-        this.childItems=objects;
-        updateableInterface=(UpdateableInterface) context;
+        this.heading = heading;
+        this.context = context;
+        this.itemsname = itemsname;
+        this.childItems = objects;
+        updateableInterface = (UpdateableInterface) context;
     }
-
 
 
     @Override
@@ -114,8 +109,9 @@ public class MenuListAdpater extends BaseExpandableListAdapter  {
         final Content food = (Content) getChild(groupPosition, childPosition);
         List<String> menuTypes = Arrays.asList(food.getMenu_types().split(","));
         View vi = convertView;
-        final String sub_item_cat=itemsname[groupPosition];
-        final ArrayList<String> checkedCountries= new ArrayList<String>();;
+        final String sub_item_cat = itemsname[groupPosition];
+        final ArrayList<String> checkedCountries = new ArrayList<String>();
+        ;
         final FilterViewHolder holder;
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -132,116 +128,111 @@ public class MenuListAdpater extends BaseExpandableListAdapter  {
             holder.tvPrice = (TextView) vi.findViewById(R.id.tv_price);
             holder.tvQuatity = (TextView) vi.findViewById(R.id.tv_qutity);
             holder.addBtn = (TextView) vi.findViewById(R.id.tv_plus);
-            vi.setTag( holder );
-        }
-        else
+            vi.setTag(holder);
+        } else
             holder = (FilterViewHolder) vi.getTag();
 
 
-
-            //setting valuse into the textview of the exapanable listview
-        if(food.getIs_special().equals("1")){
-            holder.child_text.setText(""+food.getName()+"( Special )");
-            String text = food.getName()+"<font color=#ff0000 > (Special) </font>";
+        //setting valuse into the textview of the exapanable listview
+        if (food.getIs_special().equals("1")) {
+            holder.child_text.setText("" + food.getName() + "( Special )");
+            String text = food.getName() + "<font color=#ff0000 > (Special) </font>";
             holder.child_text.setText(Html.fromHtml(text));
-        }else {
+        } else {
             holder.child_text.setText("" + food.getName());
         }
-        holder.tv_ingredients.setText(""+food.getIngredients());
-        holder.tvPrice.setText("$ "+food.getPrice());
-            CompoundButton.OnCheckedChangeListener checkListner=new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                    String checkedText = compoundButton.getText()+"";
+        holder.tv_ingredients.setText("" + food.getIngredients());
+        holder.tvPrice.setText("$ " + food.getPrice());
+        CompoundButton.OnCheckedChangeListener checkListner = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                String checkedText = compoundButton.getText() + "";
 
-                    if(isChecked){
-                        checkedCountries.add(checkedText);
-                       // Toast.makeText(context, compoundButton.getText()+"is checked!!!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        checkedCountries.remove(checkedText);
-                      //  Toast.makeText(context, compoundButton.getText()+" is not checked!!!", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            };
-        holder.addChcekBox.removeAllViews();
-            if(!food.getMenu_types().equals("")&&menuTypes.size()>0) {
-                for (int i = 0; i < menuTypes.size(); i++) {
-                    CheckBox cb = new CheckBox(context);
-                    cb.setText(menuTypes.get(i));
-                    cb.setTextSize(9);
-                    holder.dynamicCheckBoxes.add(cb);;
-                    holder.addChcekBox.addView(cb);
-                    cb.refreshDrawableState();
-                    cb.setOnCheckedChangeListener(checkListner);
+                if (isChecked) {
+                    checkedCountries.add(checkedText);
+                    // Toast.makeText(context, compoundButton.getText()+"is checked!!!", Toast.LENGTH_SHORT).show();
+                } else {
+                    checkedCountries.remove(checkedText);
+                    //  Toast.makeText(context, compoundButton.getText()+" is not checked!!!", Toast.LENGTH_SHORT).show();
                 }
             }
+        };
+        holder.addChcekBox.removeAllViews();
+        if (!food.getMenu_types().equals("") && menuTypes.size() > 0) {
+            for (int i = 0; i < menuTypes.size(); i++) {
+                CheckBox cb = new CheckBox(context);
+                cb.setText(menuTypes.get(i));
+                cb.setTextSize(9);
+                holder.dynamicCheckBoxes.add(cb);
+                ;
+                holder.addChcekBox.addView(cb);
+                cb.refreshDrawableState();
+                cb.setOnCheckedChangeListener(checkListner);
+            }
+        }
 
-            final int[] qty = new int[1];
-            if(!holder.tvQuatity.getText().toString().equals(""))
-                qty[0] =Integer.parseInt(holder.tvQuatity.getText().toString());
-
+        final int[] qty = new int[1];
+        if (!holder.tvQuatity.getText().toString().equals(""))
+            qty[0] = Integer.parseInt(holder.tvQuatity.getText().toString());
 
 
         holder.addBtn.setOnClickListener(new View.OnClickListener() {
 
-                public void onClick(View v) {
+            public void onClick(View v) {
 
-                    if(checkedCountries.size()!=0 && !food.getMenu_types().equals("")) {
-                        Log.d("click", "click add for" + food);
-                        if(qty[0] <99) {
-                            qty[0]++;
-                            holder.tvQuatity.setText("" + qty[0]);
+                if (checkedCountries.size() != 0 && !food.getMenu_types().equals("")) {
+                    Log.d("click", "click add for" + food);
+                    if (qty[0] < 99) {
+                        qty[0]++;
+                        holder.tvQuatity.setText("" + qty[0]);
 
-                            sqliteoperation = new SqlOperation(context);
-                            sqliteoperation.open();
-                            sqliteoperation.AddOrSubstractProduct(heading, sub_item_cat,
-                                    food.getMenu_item_id(), food.getName(), checkedCountries
-                                    , food.getIngredients(), food.getIs_special(), Float.parseFloat(String.valueOf(food.getPrice())), qty[0], 1, 1);
-
-                            updateableInterface.update();
-                            sqliteoperation.close();
-                        }
-                    }
-                    else {
-                        if(food.getIs_special().equals("3")){
-                            Log.d("click", "click add for" + food);
-                            if(qty[0] <99) {
-                                qty[0]++;
-                                holder.tvQuatity.setText("" + qty[0]);
-
-                            sqliteoperation = new SqlOperation(context);
-                            sqliteoperation.open();
-                            sqliteoperation.AddOrSubstractProduct(heading, sub_item_cat,
-                                    food.getMenu_item_id(), food.getName(), checkedCountries
-                                    , food.getIngredients(), food.getIs_special(), Float.parseFloat(String.valueOf(food.getPrice())), qty[0], 1, 1);
-
-                            updateableInterface.update();
-                            sqliteoperation.close();
-                        }else
-                            Util.createOKAlert(context,"Alert","Select at least one option.");
-                        }
-                    }
-
-                }
-            });
-        holder.minusBtn.setOnClickListener(new View.OnClickListener() {
-
-                    public void onClick(View v) {
-                        if(qty[0] >0) {
-                            qty[0]--;
-                            holder.tvQuatity.setText("" + qty[0]);
-                        }
-                        //Toast.makeText(context, "click remove", Toast.LENGTH_LONG).show();
                         sqliteoperation = new SqlOperation(context);
                         sqliteoperation.open();
-                        sqliteoperation.AddOrSubstractProduct(heading,sub_item_cat,
-                                food.getMenu_item_id(),food.getName(),checkedCountries
-                                ,food.getIngredients(),food.getIs_special(),Float.parseFloat(String.valueOf(food.getPrice())),qty[0],1, 2);
-                        sqliteoperation.close();
-                        updateableInterface.update();
-                    }
-            });
+                        sqliteoperation.AddOrSubstractProduct(heading, sub_item_cat,
+                                food.getMenu_item_id(), food.getName(), checkedCountries
+                                , food.getIngredients(), food.getIs_special(), Float.parseFloat(String.valueOf(food.getPrice())), qty[0], 1, 1);
 
+                        updateableInterface.update();
+                        sqliteoperation.close();
+                    }
+                } else if (food.getIs_special().equals("3")) {
+                    Log.d("click", "click add for" + food);
+                    if (qty[0] < 99) {
+                        qty[0]++;
+                        holder.tvQuatity.setText("" + qty[0]);
+
+                        sqliteoperation = new SqlOperation(context);
+                        sqliteoperation.open();
+                        sqliteoperation.AddOrSubstractProduct(heading, sub_item_cat,
+                                food.getMenu_item_id(), food.getName(), checkedCountries
+                                , food.getIngredients(), food.getIs_special(), Float.parseFloat(String.valueOf(food.getPrice())), qty[0], 1, 1);
+
+                        updateableInterface.update();
+                        sqliteoperation.close();
+                    }
+                }else
+                    Util.createOKAlert(context, "Alert", "Select at least one option.");
+
+
+            }
+        });
+        holder.minusBtn.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                if (qty[0] > 0) {
+                    qty[0]--;
+                    holder.tvQuatity.setText("" + qty[0]);
+                }
+                //Toast.makeText(context, "click remove", Toast.LENGTH_LONG).show();
+                sqliteoperation = new SqlOperation(context);
+                sqliteoperation.open();
+                sqliteoperation.AddOrSubstractProduct(heading, sub_item_cat,
+                        food.getMenu_item_id(), food.getName(), checkedCountries
+                        , food.getIngredients(), food.getIs_special(), Float.parseFloat(String.valueOf(food.getPrice())), qty[0], 1, 2);
+                sqliteoperation.close();
+                updateableInterface.update();
+            }
+        });
 
 
         return vi;
@@ -252,13 +243,13 @@ public class MenuListAdpater extends BaseExpandableListAdapter  {
         return true;
     }
 
-    public static  class FilterViewHolder {
+    public static class FilterViewHolder {
 
         public TextView child_text;
         public TextView tv_ingredients;
         public TextView tv_add_items;
         public LinearLayout addChcekBox;
-        public LinearLayout  tv_Add_Min_Quan;
+        public LinearLayout tv_Add_Min_Quan;
         public TextView minusBtn;
         public TextView tvPrice;
         public TextView tvQuatity;

@@ -396,7 +396,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                     Intent intent = new Intent(this, PlaceOrderActivity.class);
                     startActivity(intent);
                 } else {
-                    Util.createOKAlert(MenuActivity.this,"Alert","No Item Selected");
+                    Util.createOKAlert(MenuActivity.this,"Alert","Select at least one option.");
 
                 }
 

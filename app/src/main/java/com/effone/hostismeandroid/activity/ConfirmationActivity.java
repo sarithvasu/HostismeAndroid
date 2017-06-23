@@ -82,7 +82,7 @@ public class ConfirmationActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         sqlOperation = new SqlOperation(this);
         sqlOperation.open();
-        sqlOperation.setFlagaUpdate();
+        sqlOperation.delete();
         sqlOperation.close();
       /*  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);*/

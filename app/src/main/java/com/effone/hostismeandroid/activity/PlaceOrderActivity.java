@@ -54,7 +54,7 @@ import static com.effone.hostismeandroid.db.DBConstant.vatTax;
 
 
 public class PlaceOrderActivity extends AppCompatActivity implements View.OnClickListener, OnDataChangeListener {
-    private TextView mTvItemPrice, mTvItemCount, mTvChargers, mTvEstimatedTotal, mTableNo;
+    private TextView mTvItemPrice, mTvItemCount, mTvChargers, mTvEstimatedTotal, mTableNo,mTvItemTotalPrice;
     private TextView mTvPlaceOrder;
     private Spinner mSpTableNo;
     private ListView mLvItemSummary;
@@ -76,6 +76,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
     private void decalartion() {
         mLvTaxQuality=(ListView)findViewById(R.id.lv_tax_menu);
         mTvItemCount = (TextView) findViewById(R.id.tv_items);
+        mTvItemTotalPrice = (TextView) findViewById(R.id.tv_total_price);
         mTvItemPrice = (TextView) findViewById(R.id.tv_items_price);
         mTvChargers = (TextView) findViewById(R.id.tv_charger_price);
         mCbTakeAway = (Switch) findViewById(R.id.cb_take_away);
@@ -160,6 +161,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
 
         float twoDigitsF = Float.valueOf(decimalFormat.format(sum));
         mTvEstimatedTotal.setText("" + twoDigitsF);
+        mTvItemTotalPrice.setText(""+ twoDigitsF);
         getTaxDetails((float) totalPrice);
         taxDetailsAdapter=new TaxDetailsAdapter(this,R.layout.tax_items,
                 taxItemses);
@@ -180,7 +182,11 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         float chargers = 0;
         for(int i=0;i<taxList.size();i++){
             if(taxList.get(i).getType().equals("Fixed")){
-             chargers   = chargers+ Float.parseFloat(taxList.get(i).getChargevalue());
+                if(appPrefernces.getORDER_ID().equals(0)){
+                    chargers   = chargers+ Float.parseFloat(taxList.get(i).getChargevalue());
+                }else {
+
+                }
             }else{
                 chargers = chargers + (totalPrice / 100.0f) * Float.parseFloat(taxList.get(i).getChargevalue());
             }
@@ -198,7 +204,11 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         for(int i=0;i<taxList.size();i++){
             float chargers=0;
             if(taxList.get(i).getType().equals("Fixed")){
-                chargers   = Float.parseFloat(taxList.get(i).getChargevalue());
+                if(appPrefernces.getORDER_ID().equals(0)){
+                    chargers   = chargers+ Float.parseFloat(taxList.get(i).getChargevalue());
+                }else {
+
+                }
             }else{
                 chargers =  (totalByItems / 100.0f) * Float.parseFloat(taxList.get(i).getChargevalue());
             }
@@ -242,16 +252,17 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                         if (cartItems.getSpecial().equals("0")) {
                             cartItems.setSpecial("1");//not special item will be 1
                         } else if (cartItems.getSpecial().equals("1")) {
-                            cartItems.setSpecial("2");//  special item will be 2
+                            cartItems.setSpecial("3");//  special item will be 2
                         } else{
-                            cartItems.setSpecial("3");
+                            cartItems.setSpecial("2");
                         }
                     }else {
-                       cartItems.setSpecial("3");//bevagrages will be 3
+                       cartItems.setSpecial("2");//bevagrages will be 3
                    }
                    count = count+cartItems.getItemQuantity();
                     descriptoin=cartItems.getItemCatagerie();
-                    orderingMenus.add(new Menuitems(cartItems.getItemMenuCatId(), cartItems.getItemQuantity(),cartItems.getSpecial(),cartItems.getMenuType()));
+
+                    orderingMenus.add(new Menuitems(cartItems.getItemMenuCatId(), cartItems.getItemQuantity(),cartItems.getSpecial(),cartItems.getMenuType().trim()));
                 }
                 appPrefernces.setQunatity(count);
                 if(!descriptoin.equals("")){
