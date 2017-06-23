@@ -14,6 +14,7 @@ import com.effone.hostismeandroid.model.TaxItems;
 import com.effone.hostismeandroid.model_for_json.TaxItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sarith.vasu on 13-06-2017.
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 public class TaxitemConfirmationAdapter extends ArrayAdapter<TaxItems> {
     private ArrayList<TaxItems> taxItemses;
     private LayoutInflater inflater;
-    public TaxitemConfirmationAdapter(Context context, int tax_items, ArrayList<TaxItems> taxItemses) {
+    public TaxitemConfirmationAdapter(Context context, int tax_items, List<TaxItems> taxItemses) {
         super(context, tax_items,  taxItemses);
         this.taxItemses =(ArrayList<TaxItems>) taxItemses;
         inflater = (LayoutInflater)context.

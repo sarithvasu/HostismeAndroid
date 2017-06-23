@@ -3,6 +3,7 @@ package com.effone.hostismeandroid.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,15 +17,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.effone.hostismeandroid.MainActivity;
 import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.app.AppController;
@@ -34,11 +39,19 @@ import com.effone.hostismeandroid.model.Bill;
 import com.effone.hostismeandroid.model.OrderSummary;
 import com.effone.hostismeandroid.model.Tables;
 import com.effone.hostismeandroid.model.TaxItems;
+import com.effone.hostismeandroid.model_for_json.ServiceRequest;
+import com.effone.hostismeandroid.model_for_json.ServiceRequestJson;
 import com.effone.hostismeandroid.util.Util;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.effone.hostismeandroid.common.URL.REQUEST_SERVICE;
 import static com.effone.hostismeandroid.common.URL.bill_url;
 import static com.effone.hostismeandroid.common.URL.book_a_table_url;
 import static com.effone.hostismeandroid.common.URL.tables_url;
@@ -58,6 +71,8 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
     private RelativeLayout mBookTableLay;
     private ProgressDialog pDialog;
     private Tables mTables;
+    private ServiceRequestJson mServiceRequestJson;
+    private Gson mGson;
 
 
     @Override
@@ -65,13 +80,14 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_a_table);
         mAppPreferences=new AppPreferences(this);
+        mGson=new Gson();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         if(mAppPreferences.getRESTAURANT_NAME()!= "") {
-            if(mAppPreferences.getTABLE_NAME()==0) {
+            if(mAppPreferences.getTABLE_NAME()==0||mAppPreferences.getTABLE_NAME()==9999) {
                 Common.setCustomTitile(this, getString(R.string.book_a_table), mAppPreferences.getRESTAURANT_NAME());
             }
             else{
@@ -99,7 +115,7 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
         mMoveTableTitle=(TextView)findViewById(R.id.move_table_title);
         mBookTableLay=(RelativeLayout)findViewById(R.id.book_table_lay);
         mBtViewMenu=(Button)findViewById(R.id.bt_subit);
-        if(mAppPreferences.getTABLE_NAME()==0){
+        if(mAppPreferences.getTABLE_NAME()==0||mAppPreferences.getTABLE_NAME()==9999){
             mBookTableLay.setVisibility(View.VISIBLE);
             mMoveTableTitle.setVisibility(View.GONE);
             mMoveTableLay.setVisibility(View.GONE);
@@ -123,7 +139,7 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // attaching data adapter to spinner
-        if(mAppPreferences.getTABLE_NAME()==0) {
+        if(mAppPreferences.getTABLE_NAME()==0||mAppPreferences.getTABLE_NAME()==9999) {
             mSpTableNo.setAdapter(dataAdapter);
         }
         else{
@@ -198,7 +214,8 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
         switch(view.getId()){
             case R.id.bt_subit:
                 String tableNo="";
-                if(mAppPreferences.getTABLE_NAME()==0) {
+                boolean fromMoveTable=false;
+                if(mAppPreferences.getTABLE_NAME()==0||mAppPreferences.getTABLE_NAME()==9999) {
                     try {
                         tableNo = mSpTableNo.getSelectedItem().toString();
                     } catch (Exception e){
@@ -209,6 +226,7 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
                 else{
                     try {
                         tableNo = mSpTableToNo.getSelectedItem().toString();
+                        fromMoveTable=true;
                     }catch (Exception e){
 
 
@@ -216,8 +234,15 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
                 }
                 if(tableNo.length() >= 1){
 
-                        mAppPreferences.setTABLE_NAME(Integer.parseInt(tableNo));
-                        requestForaTable();
+
+                        if(fromMoveTable){
+                            requestForaTable(tableNo);
+                        }
+                        else{
+                            mAppPreferences.setTABLE_NAME(Integer.parseInt(tableNo));
+                            Intent intent = new Intent(Book_a_tableActivity.this, MenuActivity.class);
+                            startActivity(intent);
+                        }
 
                 }else{
                     Util.createOKAlert(Book_a_tableActivity.this, getResources().getString(R.string.headercreateaccount),"Enter the table no");
@@ -226,25 +251,64 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    private void requestForaTable() {
-        /* important see below*/
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, book_a_table_url,
+    private void requestForaTable(final String tableNo) {
+        ServiceRequest ServiceRequest = new ServiceRequest();
+        ServiceRequest.setComplaint("");
+        ServiceRequest.setService_type("Move Table_"+mAppPreferences.getTABLE_NAME()+"_"+tableNo);
+        ServiceRequest.setDevice_id(Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID));
+        ServiceRequest.setOrder_id("1"+mAppPreferences.getORDER_ID());
+        ServiceRequest.setRestaurant_id(mAppPreferences.getRESTAURANT_ID());
+        ServiceRequest.setTable_no("" + mAppPreferences.getTABLE_NAME());
+        mServiceRequestJson=new ServiceRequestJson();
+        mServiceRequestJson.setServiceRequest(ServiceRequest);
+        final String json=mGson.toJson(mServiceRequestJson);
+        StringRequest req = new StringRequest(Request.Method.POST, REQUEST_SERVICE,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Intent intent = new Intent(Book_a_tableActivity.this, MenuActivity.class);
-                        startActivity(intent);
+                        String value = response;
+                        if (!value.equals("")) {
+                            try {
+                                JSONObject jsonObjec = new JSONObject(response);
+                                boolean status =jsonObjec.getBoolean("status");
+                                if(status) {
+                                    mAppPreferences.setTABLE_NAME(Integer.parseInt(tableNo));
+                                    Intent intent = new Intent(Book_a_tableActivity.this, MenuActivity.class);
+                                    startActivity(intent);
+                                }
+                            }
+                            catch (JSONException e){
 
+                            }
+
+                        }
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Util.createErrorAlert(Book_a_tableActivity.this, "", error.getMessage());
-                    }
-                });
-        AppController.getInstance().addToRequestQueue(stringRequest);
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                return json.getBytes();
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(req);
         /*place this in onRespons sucess*/
 
     }

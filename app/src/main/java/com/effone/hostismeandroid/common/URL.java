@@ -4,14 +4,14 @@ public class URL {
 
     /*urls effone local*/
 
-    public static final String BASE_URL="http://192.168.11.65/hostisme/admin/api";
+    public static final String BASE_URL="http://192.168.11.23/hostisme/admin/api";
     public static final String GET_RESTAURANT_LIST=BASE_URL+"/restaurant/get-restaurant?cityid=1";
     public static final String POST_ORDER=BASE_URL+"/orders/get-orderdetails";
     public static final String GET_BILL=BASE_URL+"/viewandpaybill/get-billdetails";
     public static final String APPLY_PROMOCODE=BASE_URL+"/viewandpaybill/get-promocode";
     public static final String GET_BOOKING_HISTORY=BASE_URL+"/bookinghistory/get-bookedhistory?device_id=";
     public static final String GET_MENU=BASE_URL+"/menu/get-menudetails?restaurant_id=";
-
+    public static final String REQUEST_SERVICE=BASE_URL+"/servicerequest/get-servicerequestdetails";
     //?restaurant_id=1&promocode=O75ZRGKEOH&device_id=14558295348432157
 
 

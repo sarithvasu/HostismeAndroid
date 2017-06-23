@@ -12,10 +12,22 @@ public class Menuitems
 
     private String quantity;
 
-    public Menuitems(int itemMenuCatId, int itemQuantity, String menuType) {
+    private String menuType;
+
+
+    public String getMenuType() {
+        return menuType;
+    }
+
+    public void setMenuType(String menuType) {
+        this.menuType = menuType;
+    }
+
+    public Menuitems(int itemMenuCatId, int itemQuantity, String itemType, String menuType) {
         this.id=""+itemMenuCatId;
         this.quantity=""+itemQuantity;
-        this.itemtype=menuType;
+        this.itemtype=itemType;
+        this.menuType=menuType;
 
     }
 

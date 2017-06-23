@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
@@ -119,7 +120,7 @@ public class MainActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         ///as off now i am setting the values
-        appPreferences.setDEVICE_ID("14558295348432156");
+        appPreferences.setDEVICE_ID(Settings.Secure.getString(getApplicationContext().getContentResolver(),Settings.Secure.ANDROID_ID));
         if (!Util.Operations.isOnline(this)) {
             Util.createNetErrorDialog(this);
         }
@@ -159,7 +160,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
-        if(mTvBook_a_table!=null&&appPreferences!=null&&appPreferences.getTABLE_NAME()==0){
+        if(mTvBook_a_table!=null&&appPreferences!=null&&appPreferences.getTABLE_NAME()==0||appPreferences.getTABLE_NAME()==9999){
             mTvBook_a_table.setText(getString(R.string.book_a_table));
         }
         else{
@@ -241,7 +242,7 @@ public class MainActivity extends AppCompatActivity
     private void declerations() {
         mTvRestaurantList = (TextView) findViewById(R.id.btn_res_list);
         mTvBook_a_table = (TextView) findViewById(R.id.btn_book_table);
-        if(appPreferences.getTABLE_NAME()==0){
+        if(appPreferences.getTABLE_NAME()==0||appPreferences.getTABLE_NAME()==9999){
            mTvBook_a_table.setText(getString(R.string.book_a_table));
         }
         else{
@@ -309,7 +310,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case R.id.btn_view_pay:
-                if (appPreferences.getRESTAURANT_NAME() != "") {
+                if (appPreferences.getRESTAURANT_NAME() != ""&& !appPreferences.getORDER_ID().equals("")) {
                     intent = new Intent(this, View_Pay_BillActivity.class);
                     startActivity(intent);
                     /*SqlOperations sqliteoperation = new SqlOperations(getApplicationContext());
@@ -321,7 +322,7 @@ public class MainActivity extends AppCompatActivity
                         Toast.makeText(this, "Please Place a order", Toast.LENGTH_SHORT).show();
                     }*/
                 } else {
-                    Util.createOKAlert(this,  "", getString(R.string.restartung_selection_message));
+                    Util.createOKAlert(this,  "", getString(R.string.restartung_selection_message)+" or Place a Order");
                 }
                 break;
             case R.id.btn_my_booking:

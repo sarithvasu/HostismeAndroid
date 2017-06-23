@@ -12,22 +12,24 @@ import android.widget.TextView;
 import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.activity.ConfirmationActivity;
 import com.effone.hostismeandroid.model.Order_Items;
+import com.effone.hostismeandroid.model_for_confirmation.OrderDetails;
 import com.effone.hostismeandroid.model_for_json.OrderItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sarith.vasu on 13-06-2017.
  */
 
-public class OrderItemConfirmationAdapter extends ArrayAdapter<com.effone.hostismeandroid.model_for_confirmation.OrderItem> {
-    private ArrayList<com.effone.hostismeandroid.model_for_confirmation.OrderItem> taxItemses;
+public class OrderItemConfirmationAdapter extends ArrayAdapter<OrderItem> {
+    private List<OrderItem> taxItemses;
     private LayoutInflater inflater;
 
 
-    public OrderItemConfirmationAdapter(ConfirmationActivity context, int order_summary_items, ArrayList<com.effone.hostismeandroid.model_for_confirmation.OrderItem> orderItems) {
-        super(context, order_summary_items, orderItems);
-        this.taxItemses =(ArrayList<com.effone.hostismeandroid.model_for_confirmation.OrderItem>) orderItems;
+    public OrderItemConfirmationAdapter(ConfirmationActivity context, int order_summary_items, List<OrderItem> orderItems) {
+        super(context, order_summary_items, (List<OrderItem>) orderItems);
+        this.taxItemses =(List<OrderItem>) orderItems;
         inflater = (LayoutInflater)context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -56,11 +58,11 @@ public class OrderItemConfirmationAdapter extends ArrayAdapter<com.effone.hostis
 
         } else {
             /***** Get each Model object from Arraylist ********/
-            com.effone.hostismeandroid.model_for_confirmation.OrderItem value = (com.effone.hostismeandroid.model_for_confirmation.OrderItem) taxItemses.get(position);
+            OrderItem value = (OrderItem) taxItemses.get(position);
             /************  Set Model values in Holder elements ***********/
             holder.tv_tax_name.setText(value.getName());
-            holder.tv_tax_money.setText("$ "+value.getItemTotalPrice());
-            holder.tv_tax_quantity.setText(value.getUnitPrice()+" * "+ value.getQuantity());
+            holder.tv_tax_money.setText("$ "+value.getItem_total_price());
+            holder.tv_tax_quantity.setText(value.getQuantity()+" * "+ value.getUnit_price());
 
         }
 

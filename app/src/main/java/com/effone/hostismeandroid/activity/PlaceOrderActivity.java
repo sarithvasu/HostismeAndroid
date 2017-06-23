@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -31,20 +30,19 @@ import com.effone.hostismeandroid.common.Common;
 import com.effone.hostismeandroid.common.OnDataChangeListener;
 import com.effone.hostismeandroid.db.SqlOperation;
 import com.effone.hostismeandroid.model.CartItems;
-import com.effone.hostismeandroid.model.OrderToServer;
-import com.effone.hostismeandroid.model.OrderingMenu;
 import com.effone.hostismeandroid.model.TaxItems;
 import com.effone.hostismeandroid.model_for_json.Menuitems;
 import com.effone.hostismeandroid.model_for_json.Order;
 import com.effone.hostismeandroid.model_for_json.OrderPlacement;
+import com.effone.hostismeandroid.util.Util;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.effone.hostismeandroid.activity.MenuActivity.taxList;
 import static com.effone.hostismeandroid.common.URL.POST_ORDER;
-import static com.effone.hostismeandroid.common.URL.place_order_url;
 import static com.effone.hostismeandroid.db.DBConstant.ser;
 import static com.effone.hostismeandroid.db.DBConstant.serviceTax;
 import static com.effone.hostismeandroid.db.DBConstant.vatTax;
@@ -76,13 +74,20 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         mTvItemPrice = (TextView) findViewById(R.id.tv_items_price);
         mTvChargers = (TextView) findViewById(R.id.tv_charger_price);
         mCbTakeAway = (Switch) findViewById(R.id.cb_take_away);
-        mCbTakeAway.setChecked(true);
         mTvEstimatedTotal = (TextView) findViewById(R.id.tv_estimated_price);
         mTvPlaceOrder = (TextView) findViewById(R.id.tv_place_order);
         mTableNo = (TextView) findViewById(R.id.tableNo);
         mEtTableNo = (EditText) findViewById(R.id.et_table_no);
-        mTableNo.setVisibility(View.INVISIBLE);
-        mEtTableNo.setVisibility(View.INVISIBLE);
+        if(appPrefernces.getTABLE_NAME()==0||appPrefernces.getTABLE_NAME()==9999) {
+            mTableNo.setVisibility(View.INVISIBLE);
+            mEtTableNo.setVisibility(View.INVISIBLE);
+            mCbTakeAway.setChecked(true);
+        }
+        else {
+            mCbTakeAway.setChecked(false);
+            mTableNo.setVisibility(View.VISIBLE);
+            mEtTableNo.setVisibility(View.VISIBLE);
+        }
         if (appPrefernces.getTABLE_NAME() != 0) {
             mEtTableNo.setText("" + appPrefernces.getTABLE_NAME());
             mEtTableNo.setFocusable(false);
@@ -94,8 +99,14 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                     mTableNo.setVisibility(View.INVISIBLE);
                     mEtTableNo.setVisibility(View.INVISIBLE);
                 } else {
-                    mTableNo.setVisibility(View.VISIBLE);
-                    mEtTableNo.setVisibility(View.VISIBLE);
+                    if(appPrefernces.getTABLE_NAME()!=0) {
+                        if(appPrefernces.getTABLE_NAME()==9999){
+
+                            mEtTableNo.setText("");
+                        }
+                        mTableNo.setVisibility(View.VISIBLE);
+                        mEtTableNo.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         });
@@ -128,20 +139,30 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         }
         mTvItemPrice.setText("" + totalPrice);
         mTvItemCount.setText("Items (" + Math.round(totalCount) + ")");
-        mTvChargers.setText("" + taxAmountCalculation());
-        double sum = totalPrice + taxAmountCalculation();
+        mTvChargers.setText("" + taxAmountCalculation(totalPrice));
+        double sum = totalPrice + taxAmountCalculation(totalPrice);
         mTvEstimatedTotal.setText("" + sum);
-        getTaxDetails(totalPrice);
+        getTaxDetails((float) totalPrice);
         getOrderItemsList();
     }
 
     private void getOrderItemsList() {
-        MenuItemSummeryListAdapter menuItemSummeryListAdapter = new MenuItemSummeryListAdapter(this, android.R.layout.simple_list_item_1, cartItemses, taxItemses);
+
+        MenuItemSummeryListAdapter menuItemSummeryListAdapter = new MenuItemSummeryListAdapter(this, android.R.layout.simple_list_item_1, cartItemses, taxList);
         mLvItemSummary.setAdapter(menuItemSummeryListAdapter);
     }
 
-    private float taxAmountCalculation() {
-        return (float) (serviceTax + vatTax + ser);
+    private float taxAmountCalculation(float totalPrice) {
+        float chargers = 0;
+        for(int i=0;i<taxList.size();i++){
+            if(taxList.get(i).getType().equals("Fixed")){
+             chargers   = chargers+ totalPrice +Float.parseFloat(taxList.get(i).getChargevalue());
+            }else{
+                chargers = chargers + (totalPrice / 100.0f) * Float.parseFloat(taxList.get(i).getChargevalue());
+            }
+        }
+
+        return chargers;
     }
 
     ArrayList<TaxItems> taxItemses;
@@ -149,13 +170,17 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
     private void getTaxDetails(float totalByItems) {
         taxItemses = new ArrayList<TaxItems>();
         TaxItems res1 = new TaxItems("Total before Tax", totalByItems);
-        TaxItems res2 = new TaxItems("Service Charges", serviceTax);
-        TaxItems res3 = new TaxItems("Service Tax", vatTax);
-        TaxItems res4 = new TaxItems("VAT Tax", ser);
         taxItemses.add(res1);
-        taxItemses.add(res2);
-        taxItemses.add(res3);
-        taxItemses.add(res4);
+        for(int i=0;i<taxList.size();i++){
+            float chargers;
+            if(taxList.get(i).getType().equals("Fixed")){
+                chargers   = + totalPrice +Float.parseFloat(taxList.get(i).getChargevalue());
+            }else{
+                chargers = + (totalPrice / 100.0f) * Float.parseFloat(taxList.get(i).getChargevalue());
+            }
+            TaxItems taxi= new TaxItems(taxList.get(i).getName(),chargers);
+            taxItemses.add(taxi);
+        }
         totalPrice = totalByItems;
     }
 
@@ -167,34 +192,69 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                 mTableName = "9999";
             else
                 mTableName = mEtTableNo.getText().toString().trim();
-            if (mTableName.length() > 2) {
+            if (mTableName.length() >= 1) {
 
                 ArrayList<Order> orderToServers = new ArrayList<>();
                 Order orderToServer = new Order();
                 orderToServer.setRestaurantId(appPrefernces.getRESTAURANT_ID());
-                orderToServer.setDeviceId("154sdadfaf5464554");
-                orderToServer.setPhaseid(""+2);
+                orderToServer.setDeviceId(appPrefernces.getDEVICE_ID());
+
+
                 if (appPrefernces.getORDER_ID() != null)
                     orderToServer.setId(appPrefernces.getORDER_ID());
                 else
                     orderToServer.setId("");
-
+                appPrefernces.setTABLE_NAME(Integer.parseInt(mTableName));
                 orderToServer.setTableno(Integer.parseInt(mTableName));
-                orderToServer.setTotalprice(totalPrice+taxAmountCalculation());
-                orderToServer.setTax(taxAmountCalculation());
                 orderToServer.setOrderprice(totalPrice);
+                double sum = totalPrice + taxAmountCalculation(totalPrice);
+                orderToServer.setTotalprice(sum);
+                orderToServer.setTax(taxAmountCalculation(totalPrice));
+                    int count=0;
+                String descriptoin = null;
                 ArrayList<Menuitems> orderingMenus = new ArrayList<>();
                 for (CartItems cartItems : cartItemses) {
-                    orderingMenus.add(new Menuitems(cartItems.getItemMenuCatId(), cartItems.ItemQuantity,cartItems.getSpecial()));
+                    if(cartItems.getSpecial() != null) {
+                        if (cartItems.getSpecial().equals("0")) {
+                            cartItems.setSpecial("1");//not speical item will be 1
+                        } else if (cartItems.getSpecial().equals("1")) {
+                            cartItems.setSpecial("2");//  speical item will be 2
+                        } else{
+                            cartItems.setSpecial("3");
+                        }
+                    }else {
+                       cartItems.setSpecial("3");//bevagrages will be 3
+                   }
+                   count = count+cartItems.getItemQuantity();
+                    descriptoin=cartItems.getItemCatagerie();
+                    orderingMenus.add(new Menuitems(cartItems.getItemMenuCatId(), cartItems.getItemQuantity(),cartItems.getSpecial(),cartItems.getMenuType()));
                 }
+                appPrefernces.setQunatity(count);
+                if(!descriptoin.equals("")){
+                if(descriptoin.equals("Breakfast")){
+                    orderToServer.setPhaseid(""+1);
+                }else if(descriptoin.equals("Lunch")) {
+                    orderToServer.setPhaseid(""+2);
+                }else if(descriptoin.equals("Dinner")){
+                    orderToServer.setPhaseid(""+3);
+                }else if(descriptoin.equals("Allday")){
+                    orderToServer.setPhaseid(""+4);
+                }
+                }
+
+                appPrefernces.setDESCRIPTION(descriptoin);
                 orderToServer.setMenuitems(orderingMenus);
                 OrderPlacement orderPlacement=new OrderPlacement();
                 orderPlacement.setOrder(orderToServer);
                 Gson gson = new Gson();
                 String json = gson.toJson(orderPlacement);
-                pushDataToServer(json);
+                if(count != 0) {
+                    pushDataToServer(json);
+                }else{
+                    Util.createOKAlert(PlaceOrderActivity.this,"Heading","No Items Found...");
+                }
             } else {
-                Toast.makeText(this, "Please enter the Table no", Toast.LENGTH_SHORT).show();
+                Util.createOKAlert(PlaceOrderActivity.this,"Heading","Please enter the Table no");
             }
         }
     }
@@ -205,7 +265,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                     public void onResponse(String response) {
                         String value = response;
                         if (!value.equals("")) {
-                            Toast.makeText(PlaceOrderActivity.this, " " + response, Toast.LENGTH_LONG).show();
+                           // Toast.makeText(PlaceOrderActivity.this, " " + response, Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(PlaceOrderActivity.this, ConfirmationActivity.class);
                             intent.putExtra("Order_id", response);
                             startActivity(intent);
@@ -214,7 +274,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(PlaceOrderActivity.this, " " + error, Toast.LENGTH_LONG).show();
+                Util.createOKAlert(PlaceOrderActivity.this,"",error.getMessage()+"Ërror has Encounterd");
             }
         }) {
             @Override

@@ -21,6 +21,8 @@ import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.adapter.RestaurantListAdapter;
 import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.common.Common;
+import com.effone.hostismeandroid.db.SqlOperation;
+import com.effone.hostismeandroid.db.SqliteConnection;
 import com.effone.hostismeandroid.model.Restaurant;
 import com.effone.hostismeandroid.util.Util;
 import com.google.gson.Gson;
@@ -104,10 +106,20 @@ public class RestaurantListAcitivity extends AppCompatActivity implements Adapte
         String address = restaurants[i].getArea()+", "+restaurants[i].getStreet()+", "+restaurants[i].getState()+" "+restaurants[i].getPincode();
 
         String restaurant_id = restaurants[i].getId();
+        if(!appPreferences.getRESTAURANT_ID().equals(restaurant_id)&&appPreferences.getTABLE_NAME()!=0){
+            appPreferences.setTABLE_NAME(0);
+            appPreferences.setORDER_ID("");
+            SqlOperation     sqlOperation = new SqlOperation(this);
+            sqlOperation.open();
+            sqlOperation.delete();
+            sqlOperation.close();
+
+        }
         appPreferences.setRRESTAURANT_NAME(restaurant);
         appPreferences.setRESTAURANT_ID(restaurant_id);
         appPreferences.setRESTAURANT_ADDRESS(address);
         appPreferences.setNUMBER_OF_TABLES(Integer.parseInt(restaurants[i].getNo_of_tables()));
+
         startActivity(showLocationsIntent);
     }
     @Override

@@ -37,8 +37,7 @@ import com.effone.hostismeandroid.model.Categories;
 import com.effone.hostismeandroid.model.Content;
 import com.effone.hostismeandroid.model.Items;
 import com.effone.hostismeandroid.model.Sample;
-import com.effone.hostismeandroid.model_for_menu.Dinner;
-import com.effone.hostismeandroid.model_for_menu.ModelTotal;
+import com.effone.hostismeandroid.model_for_json.MenuTaxItens;
 import com.effone.hostismeandroid.util.Util;
 import com.google.gson.Gson;
 
@@ -47,14 +46,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.List;
 
 import static com.effone.hostismeandroid.common.URL.GET_MENU;
-import static com.effone.hostismeandroid.common.URL.menu_url;
 
 public class MenuActivity extends AppCompatActivity implements View.OnClickListener, UpdateableInterface, OnDataChangeListener, OnHandClickInterface {
 
@@ -98,24 +96,36 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
 
 
         mQueue = Volley.newRequestQueue(this);
-        showOrderItems();
+
+       // gettingDataFromService();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         gettingDataFromService();
+        showOrderItems();
     }
 
     private void gettingDataFromService() {
+        pDialog = new ProgressDialog(MenuActivity.this);
+        pDialog.setMessage("Loading...");
+        pDialog.show();
         final StringRequest stringRequest = new StringRequest(GET_MENU+"1",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         String[] keysValues = new String[]{};
-                        pDialog = new ProgressDialog(MenuActivity.this);
+
                         // Showing progress dialog before making http request
-                        pDialog.setMessage("Loading...");
-                        pDialog.show();
+
+
 
                         try {
                             JSONObject jsonObjec = new JSONObject(response);
                             JSONObject menuJsonObject = jsonObjec.getJSONObject("MenuList");
+                            JSONArray taxName=jsonObjec.getJSONArray("Taxes");
+                            gettingTaxValues(taxName);
                             Iterator<String> foodTimes = menuJsonObject.keys();
 
 
@@ -165,11 +175,12 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                                                     JSONObject contentBev = jsonbevType.getJSONObject(j);
                                                     Content content = new Content();
                                                     content.setMenu_item_id(Integer.parseInt(contentBev.getString("id")));
-                                                    content.setName(bevType+"\n"+contentBev.getString("item"));
+                                                    content.setName(contentBev.getString("item"));
                                                     content.setMenu_types("");
                                                     /*content.setCountryCusine(countryCousin);*/
                                                     content.setPrice(Float.parseFloat(contentBev.getString("price")));
                                                     content.setIngredients(contentBev.getString("description"));
+                                                    content.setIs_special("3");
                                                     contentBevlist[j] = content;
                                                 }
                                                 items.setContent(contentBevlist);
@@ -189,10 +200,12 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                         } catch (JSONException e) {
                             Log.e("", "" + e);
                         }
+
                         HISMenuPageAdapter menuPageAdapter = new HISMenuPageAdapter(getSupportFragmentManager(), pagerItem);
                         mVpMainMenu.setAdapter(menuPageAdapter);
-                        hidePDialog();
 
+
+                        hidePDialog();
                     }
                 },
                 new Response.ErrorListener() {
@@ -200,12 +213,20 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                     public void onErrorResponse(VolleyError error) {
                         hidePDialog();
                         if (!(MenuActivity.this.isFinishing())) {
-                            Util.createErrorAlert(MenuActivity.this, "", error.getMessage());
+                            Util.createErrorAlert(MenuActivity.this, "", "Server Error");
                         }
                     }
                 });
         mQueue.add(stringRequest);
 
+    }
+    public  static List<MenuTaxItens> taxList;
+    private void gettingTaxValues(JSONArray os) {
+        taxList= new ArrayList<>();
+        MenuTaxItens[] menuTaxItems;
+        Gson gson=new Gson();
+        menuTaxItems=gson.fromJson(String.valueOf(os),MenuTaxItens[].class);
+        taxList  = new ArrayList<MenuTaxItens>(Arrays.asList(menuTaxItems));
     }
 
     private void doFilterMitheCountryCusine( JSONObject menuJsonObject) {
@@ -314,8 +335,8 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         if (!Util.Operations.isOnline(this)) {
             Util.createNetErrorDialog(this);
         } else {
-            showOrderItems();
-            gettingDataFromService();
+           // showOrderItems();
+           // gettingDataFromService();
         }
     }
 
@@ -375,7 +396,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                     Intent intent = new Intent(this, PlaceOrderActivity.class);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(MenuActivity.this, "Pick the items Count is .0", Toast.LENGTH_SHORT).show();
+                    Util.createOKAlert(MenuActivity.this,"Alert","No Item Selected");
 
                 }
 

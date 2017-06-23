@@ -28,12 +28,31 @@ public class AppPreferences {
     private String RESTAURANT_ID="restaurant_id";
     private String DEVICE_ID="device_id";
     private String NUMBER_OF_TABLES="number_of_tables";
-
+    private String QUANTITY ="quanity";
+    private String DESCRIPTION ="desc";
 
     public AppPreferences(Context context) {
         this.sharedPrefs = context.getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
         this.prefsEditor = sharedPrefs.edit();
     }
+
+    public int getQunatity(){
+        return  sharedPrefs.getInt(QUANTITY,0);
+    }
+    public void setQunatity(int table_name) {
+        prefsEditor.putInt(QUANTITY, table_name);
+        prefsEditor.commit();
+    }
+
+    public String getDescription(){
+        return  sharedPrefs.getString(DESCRIPTION,"");
+    }
+    public void setDESCRIPTION(String table_namess) {
+        prefsEditor.putString(DESCRIPTION, table_namess);
+        prefsEditor.commit();
+    }
+
+
 
     public int getTABLE_NAME(){
         return  sharedPrefs.getInt(TANLE_NAME,0);

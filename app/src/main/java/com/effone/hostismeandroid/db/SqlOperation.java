@@ -49,12 +49,15 @@ public class SqlOperation {
     }
 
 
-    public void AddOrSubstractProduct(String item_cat, String sub_item_cat, int menu_item_id, String name, ArrayList<String> checkedCountries, String specail, String ingredients, float price, int quantity, int flag, int kindOfOperation) {
+    public void AddOrSubstractProduct(String item_cat, String sub_item_cat, int menu_item_id, String name, ArrayList<String> checkedCountries, String ingredients, String specail, float price, int quantity, int flag, int kindOfOperation) {
         int values = 0;
         String listString="";
         for (int i=0;i<checkedCountries.size();i++)
         {
-            listString += checkedCountries.get(i)+"," ;
+            if(i == 0)
+            listString += checkedCountries.get(i) ;
+            else
+                listString += ","+checkedCountries.get(i);
         }
         if(kindOfOperation == 0) {
             values=0;
@@ -154,10 +157,14 @@ public class SqlOperation {
         return  cursor.getCount();
     }
 
-    public void cartItemDelete(int itemMenuCatId, String itemName, String menuType) {
-        database.execSQL(String.format("DELETE FROM "+ TABLE_NAME_ORDERITEM +" WHERE "+
-                COLUMN_NAME_MENU_ITEM_ID +" = "+ itemMenuCatId +" and "+COLUMN_NAME_ITEM_NAME+ " = '"+itemName+"'" +
-                " and "+COLUMN_NAME_MENU_TYPE+" = '"+menuType+"'"));
+    public boolean cartItemDelete(int itemMenuCatId, String itemName, String menuType) {
+
+
+
+        return database.delete(TABLE_NAME_ORDERITEM,
+                COLUMN_NAME_MENU_ITEM_ID + "="+itemMenuCatId+" AND " + COLUMN_NAME_ITEM_NAME + " = '"+itemName+"' AND " +
+                        COLUMN_NAME_MENU_TYPE + "= '"+menuType+"'",
+                null) > 0;
     }
 
     public void setFlagaUpdate() {
@@ -170,6 +177,12 @@ public class SqlOperation {
             database.update(TABLE_NAME_ORDERITEM, row, COLUMN_NAME_FLAG+" = 1" , null); //update qty DB the request
         }
     }
+    public boolean delete() {
+/*      this is what your database delete method should look like
+        this method deletes by id, the first column in your database*/
+        return database.delete(TABLE_NAME_ORDERITEM, null, null) > 0;
+    }
+
 
     public ArrayList<Order_Items> getItemName(String[] values, String order_id) {
         String whereClouse;

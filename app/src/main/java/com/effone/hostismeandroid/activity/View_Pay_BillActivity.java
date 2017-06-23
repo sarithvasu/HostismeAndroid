@@ -17,9 +17,11 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.effone.hostismeandroid.MainActivity;
 import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.adapter.OrderItemDetailsAdapter;
@@ -54,6 +56,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import static com.effone.hostismeandroid.activity.ConfirmationActivity.setListViewHeightBasedOnItems;
 import static com.effone.hostismeandroid.activity.ViewCartActivity.ser;
 import static com.effone.hostismeandroid.activity.ViewCartActivity.serviceTax;
 import static com.effone.hostismeandroid.activity.ViewCartActivity.vatTax;
@@ -77,7 +80,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
 
     private EditText mEtPromoCodeNumber;
     private Button mBtApply;
-    private TextView mTvBillSummary,mTvRestAddress,mTvBillDate,mTvBillNo,mTvOrderId,mTvOrderTotal;
+    private TextView mTvBillSummary,mTvRestAddress,mTvBillDate,mTvBillNo,mTvOrderId,mTvOrderTotal,mTvDiscount;
     ArrayList<OrderItem> order_itemses;
     private Bill mBill;
     private  TextView mTvRestName;
@@ -109,6 +112,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
         mTvBillSummary=(TextView)findViewById(R.id.tv_bill_table);
         mTvBillSummary.setText(getString(R.string.bill_summary));
         mEtPromoCodeNumber=(EditText)findViewById(R.id.et_promo_code);
+        mTvDiscount=(TextView) findViewById(R.id.tv_discount_price_bill);
         mEtPromocodeMsg=(TextView)findViewById(R.id.tv_price_of_total_msg);
         mBtApply=(Button)findViewById(R.id.bt_apply);
         mBtApply.setOnClickListener(this);
@@ -130,9 +134,9 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
         pDialog.setMessage("Loading...");
         pDialog.show();
         /*save order id and restaurant id in preference*/
-        String url=GET_BILL+"?order_id="+appPreferences.getORDER_ID()+"&restaurant_id="+appPreferences.getRESTAURANT_ID()+"&deviceid=14558295348432156&tableno="+appPreferences.getTABLE_NAME();
-        String Testurl="http://192.168.11.65/hostisme/admin/api/viewandpaybill/get-billdetails?order_id=1&restaurant_id=1&deviceid=14558295348432156&tableno=9999";
-        StringRequest stringRequest = new StringRequest(Testurl,
+        String url=GET_BILL+"?order_id="+appPreferences.getORDER_ID()+"&restaurant_id="+appPreferences.getRESTAURANT_ID()+"&deviceid="+appPreferences.getDEVICE_ID()+"&tableno="+appPreferences.getTABLE_NAME();
+      //  String Testurl="http://192.168.11.65/hostisme/admin/api/viewandpaybill/get-billdetails?order_id=1&restaurant_id=1&deviceid=14558295348432156&tableno=9999";
+        StringRequest stringRequest = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -213,6 +217,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
 
         orderItemDetails=new OrderItemDetailsAdapter(this,R.layout.order_summary_items,order_itemses);
         mLvItemQuantity.setAdapter(orderItemDetails);
+        setListViewHeightBasedOnItems(mLvItemQuantity);
 
       //  getTaxItems();
 
@@ -220,6 +225,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
         taxDetailsAdapter=new TaxDetailsAdapter(this,R.layout.tax_items,
                 taxItemses);
         mLvTaxQuality.setAdapter(taxDetailsAdapter);
+        setListViewHeightBasedOnItems(mLvTaxQuality);
     }
 
 
@@ -281,9 +287,9 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
             sqliteoperation.pymentStatment(appPreferences.getTABLE_NAME(),currentDateTimeString,appPreferences.getRESTAURANT_NAME(),order_id,appPreferences.getTABLE_NAME(),"Dinner",tsLong,totalbyOrder,"Received");
             sqliteoperation.close();*/
 
-            Intent intent=new Intent(this,PaymentConfirmationActivity.class);
+         /*   Intent intent=new Intent(this,PaymentConfirmationActivity.class);
             intent.putExtra("bill_no",tsLong);
-            startActivity(intent);
+            startActivity(intent);*/
              //   mSelectDbHelper.updateOrderHistory(mOrderId,comments, (String) radioButton.getText());
 
         }else {
@@ -292,29 +298,33 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
 
     }else  if(v.getId() == R.id.bt_apply){
         String promoCode=mEtPromoCodeNumber.getText().toString().trim();
-        if(promoCode.length()>5)
-            mEtPromocodeMsg.setText("Promo code not available");
-        else
+        if(promoCode.length() == 10)
             promocodeServerSending(promoCode);
-            mEtPromocodeMsg.setText("Promo code  available");
+        else
+            mEtPromocodeMsg.setText("Promo code not available");
     }
 
     }
 
     private void promocodeServerSending(String promoCode) {
-        String url=APPLY_PROMOCODE+"&restaurant_id="+appPreferences.getRESTAURANT_ID()+"&promocode="+promoCode+"&device_id="+appPreferences.getTABLE_NAME();
+        String url=APPLY_PROMOCODE+"?restaurant_id="+appPreferences.getRESTAURANT_ID()+"&promocode="+promoCode+"&device_id="+appPreferences.getDEVICE_ID();
         StringRequest stringRequest=new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     JSONObject jsonObjec = new JSONObject(response);
                     String status=jsonObjec.getString("status");
-                    double ammount= Double.parseDouble(jsonObjec.getString("discount_amount"));
-
+                    double ammount=0;
+                    if(jsonObjec.getString("discount_amount").equals("")){
+                    ammount=0;
+                    } else{
+                        ammount = Double.parseDouble(jsonObjec.getString("discount_amount"));
+                    }
                     Util.createErrorAlert(View_Pay_BillActivity.this, "", status);
-                    double amount=Double.parseDouble(mBill.getBilldetails().getOrderTotal())- ammount;
-                    mTvOrderTotal.setText("$ "+amount);
-
+                    double amounts=Double.parseDouble(mBill.getBilldetails().getOrderTotal())- ammount;
+                    mTvOrderTotal.setText("$ "+amounts);
+                    mEtPromocodeMsg.setText(status);
+                    mTvDiscount.setText("$ "+ammount);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -325,7 +335,8 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
                 Util.createErrorAlert(View_Pay_BillActivity.this, "", error.getMessage());
             }
         });
-
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
 }

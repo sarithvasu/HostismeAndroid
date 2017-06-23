@@ -116,6 +116,10 @@ public class My_BookingActivity extends AppCompatActivity {
                             bookingHistoryAdapter = new Booking_HistoryAdapter(My_BookingActivity.this, R.layout.booking_history_items, mBookingHistoryItem);
                             mLvBookingHistory.setAdapter(bookingHistoryAdapter);
                             hidePDialog();
+                        }else{
+                            Util.createErrorAlert(My_BookingActivity.this, "", "No OrderDetails Found.");
+                            Intent intent=new Intent(My_BookingActivity.this,MainActivity.class);
+                            startActivity(intent);
                         }
                             hidePDialog();
                         } catch (JSONException e) {
@@ -131,6 +135,8 @@ public class My_BookingActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 hidePDialog();
+                Intent intent=new Intent(My_BookingActivity.this,MainActivity.class);
+                startActivity(intent);
 //                Util.createErrorAlert(My_BookingActivity.this, "", error.getMessage());
 
 

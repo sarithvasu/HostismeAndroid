@@ -40,8 +40,6 @@
             android:id="@+id/tv_restaurant_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:autoLink="email"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:textColor="@color/text_color_grey"
@@ -66,7 +64,6 @@
             android:id="@+id/tv_restaurant_mob"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:autoLink="phone"
             android:focusable="false"
             android:focusableInTouchMode="false"

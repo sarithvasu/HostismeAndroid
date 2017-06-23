@@ -11,41 +11,39 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.effone.hostismeandroid.MainActivity;
 import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.adapter.OrderItemConfirmationAdapter;
-import com.effone.hostismeandroid.adapter.OrderItemDetailsAdapter;
-import com.effone.hostismeandroid.adapter.TaxDetailsAdapter;
 import com.effone.hostismeandroid.adapter.TaxitemConfirmationAdapter;
 import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.common.Common;
 import com.effone.hostismeandroid.db.SqlOperation;
 import com.effone.hostismeandroid.model.OrderSummary;
-import com.effone.hostismeandroid.model.Order_Items;
 import com.effone.hostismeandroid.model.TaxItems;
 import com.effone.hostismeandroid.model_for_confirmation.RootObject;
-import com.effone.hostismeandroid.model_for_json.Bill;
+import com.effone.hostismeandroid.model_for_json.OrderItem;
+import com.effone.hostismeandroid.model_for_json.OrderSumm;
 import com.effone.hostismeandroid.util.Util;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
-import static com.effone.hostismeandroid.common.URL.get_placed_order;
 import static com.effone.hostismeandroid.db.DBConstant.ser;
 import static com.effone.hostismeandroid.db.DBConstant.serviceTax;
 import static com.effone.hostismeandroid.db.DBConstant.vatTax;
@@ -72,6 +70,10 @@ public class ConfirmationActivity extends AppCompatActivity {
     private ArrayList<TaxItems> taxItemses;
     private TaxitemConfirmationAdapter taxDetailsAdapter;
     private RootObject mBill;
+    private String jsondata;
+    private OrderItem[] orderItems;
+    private OrderSumm orderSumm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,15 +84,35 @@ public class ConfirmationActivity extends AppCompatActivity {
         sqlOperation.open();
         sqlOperation.setFlagaUpdate();
         sqlOperation.close();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        Common.setCustomTitile(this,"Order Confirmation",null);
+      /*  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);*/
+        Common.setCustomTitileCOnfirmation(this, "Order Confirmation", null);
         mAppPrefernces = new AppPreferences(this);
         mGson = new Gson();
         mQueue = Volley.newRequestQueue(this);
         Intent intent = getIntent();
-        String jsondata = intent.getStringExtra("Order_id");
-        mBill = mGson.fromJson(jsondata, RootObject.class);
+        jsondata = intent.getStringExtra("Order_id");
+
+
+        try {
+            JSONObject jsonObjec = new JSONObject(jsondata);
+            JSONObject menuJsonObject = jsonObjec.getJSONObject("orderConfirmation");
+            String oderSummary = menuJsonObject.getString("order_summary");
+            JSONObject order_details = menuJsonObject.getJSONObject("order_details");
+            String orderIterms = order_details.getString("orderItems");
+            String taxItems = order_details.getString("taxItems");
+            mLvTaxQuality = (ListView) findViewById(R.id.lv_tax_menu);
+            getingtax(order_details);
+            orderItems = mGson.fromJson(String.valueOf(orderIterms), OrderItem[].class);
+            orderSumm = mGson.fromJson(oderSummary, OrderSumm.class);
+     /*       JSONArray taxItemss = order_details.getJSONArray("Taxes");
+            String data=oderSummary.getString("orderts");
+            String order=oderSummary.getString("order_id");
+            String totalprice=oderSummary.getString("totalprice");
+            String orderstatus=oderSummary.getString("orderstatus");*/
+        } catch (Exception e) {
+
+        }
 
         sqliteoperation = new SqlOperation(getApplicationContext());
         sqliteoperation.open();
@@ -101,6 +123,7 @@ public class ConfirmationActivity extends AppCompatActivity {
         }
         // sqliteoperation.updatetheCart();
     }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -108,15 +131,14 @@ public class ConfirmationActivity extends AppCompatActivity {
             Util.createNetErrorDialog(this);
         }
     }
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void init() {
         mTvConfirmationMessage = (TextView) findViewById(R.id.tv_confiramtion_msg);
-        mTvConfirmationMessage.setText(mStatus);
         mLvItemQuantity = (ListView) findViewById(R.id.lv_items_list);
-        mLvTaxQuality = (ListView) findViewById(R.id.lv_tax_menu);
         mListView = (ListView) findViewById(R.id.historyView);
         mListView.setVisibility(View.GONE);
-        AppBarLayout titel_na=(AppBarLayout) findViewById(R.id.titel_na);
+        AppBarLayout titel_na = (AppBarLayout) findViewById(R.id.titel_na);
         titel_na.setVisibility(View.GONE);
         mRelativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -132,7 +154,10 @@ public class ConfirmationActivity extends AppCompatActivity {
         mTvStatus = (TextView) findViewById(R.id.tv_order_status);
         mTvTotalPrice = (TextView) findViewById(R.id.tv_total_price);
         settingValues();
+        showingData();
+        hidePDialog();
     }
+
     private ProgressDialog pDialog;
 
     private void settingValues() {
@@ -140,71 +165,128 @@ public class ConfirmationActivity extends AppCompatActivity {
         // Showing progress dialog before making http request
         pDialog.setMessage("Loading...");
         pDialog.show();
+        showingDataIntoListView();
 
     }
+
     private void hidePDialog() {
         if (pDialog != null) {
             pDialog.dismiss();
             pDialog = null;
         }
     }
+
     private void showingData() {
-        mTvDateTime.setText(": " +mBill.getOrderConfirmation().getOrderSummary().getOrderts());
+        mTvDateTime.setText(": " + orderSumm.getOrderts());
         mTvRestName.setText(": " + mAppPrefernces.getRESTAURANT_NAME());
-        mAppPrefernces.setORDER_ID(""+mBill.getOrderConfirmation().getOrderSummary().getOrderId());
-        mTvBookingId.setText(": " + mBill.getOrderConfirmation().getOrderSummary().getOrderstatus());
-        mTvOrderTotal.setText(": $ " + mBill.getOrderConfirmation().getOrderSummary().getTotalprice());
-        mTvStatus.setText(": " + mBill.getOrderConfirmation().getOrderSummary().getOrderstatus());
+        mAppPrefernces.setORDER_ID("" + orderSumm.getOrder_id());
+
+        mTvDescription.setText(": " + mAppPrefernces.getDescription());
+        if (mAppPrefernces.getTABLE_NAME() != 9999)
+            mTvTableNo.setText(": " + mAppPrefernces.getTABLE_NAME());
+        else
+            mTvTableNo.setText(": " + "Take Away");
+        mTvQuantits.setText(": " + mAppPrefernces.getQunatity());
+        mTvBookingId.setText(": " + orderSumm.getOrder_id());
+        mTvOrderTotal.setText(": $ " + orderSumm.getTotalprice());
+        mTvStatus.setText(": " + orderSumm.getOrderstatus());
+        mTvTotalPrice.setText("$ " + orderSumm.getTotalprice());
+        hidePDialog();
         showingDataIntoListView();
     }
 
-    double totalPrice=0;
+    double totalPrice = 0;
+
     private void showingDataIntoListView() {
-
-        sqliteoperation.open();
-        String[] values = new String[mOrderToServers[0].getItems_values().length];
-        for (int i = 0; i < values.length; i++) {
-            values[i] = mOrderToServers[0].getItems_values()[i].getItem_id();
-        }
-        sqliteoperation.setOrderFlagsUpdate(Integer.parseInt(order_id));
-        ArrayList<Order_Items> order_itemses = sqliteoperation.getItemName(values, order_id);
-
-        sqliteoperation.close();
-        mTvDescription.setText(": " + mOrderToServers[0].getDatatime());
-        mTvTableNo.setText(": " + mOrderToServers[0].getTable_no());
-
-        int quantity = 0;
-
-        for (int i = 0; i < order_itemses.size(); i++) {
-            quantity += order_itemses.get(i).getQuantity();
-            totalPrice +=order_itemses.get(i).getPrice()* order_itemses.get(i).getQuantity();
-        }
-
-        mTvQuantits.setText(": " +quantity);
-        orderItemDetails = new OrderItemConfirmationAdapter(ConfirmationActivity.this, R.layout.order_summary_items, mBill.getOrderConfirmation().getOrderDetails().getOrderItems());
+        List<OrderItem> list = Arrays.asList(orderItems);
+        orderItemDetails = new OrderItemConfirmationAdapter(ConfirmationActivity.this, R.layout.order_summary_items, list);
         mLvItemQuantity.setAdapter(orderItemDetails);
-        populatingTaxMenuList();
+        setListViewHeightBasedOnItems(mLvItemQuantity);
+
+        //populatingTaxMenuList();
 
     }
 
+    public static boolean setListViewHeightBasedOnItems(ListView listView) {
+
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter != null) {
+
+            int numberOfItems = listAdapter.getCount();
+
+            // Get total height of all items.
+            int totalItemsHeight = 0;
+            for (int itemPos = 0; itemPos < numberOfItems; itemPos++) {
+                View item = listAdapter.getView(itemPos, null, listView);
+                float px = 500 * (listView.getResources().getDisplayMetrics().density);
+                item.measure(View.MeasureSpec.makeMeasureSpec((int) px, View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                totalItemsHeight += item.getMeasuredHeight();
+            }
+
+            // Get total height of all item dividers.
+            int totalDividersHeight = listView.getDividerHeight() *
+                    (numberOfItems - 1);
+            // Get padding
+            int totalPadding = listView.getPaddingTop() + listView.getPaddingBottom();
+
+            // Set list height.
+            ViewGroup.LayoutParams params = listView.getLayoutParams();
+            params.height = totalItemsHeight + totalDividersHeight + totalPadding;
+            listView.setLayoutParams(params);
+            listView.requestLayout();
+            return true;
+
+        } else {
+            return false;
+        }
+
+    }
+
+    private void getingtax(JSONObject os) {
+        taxItemses = new ArrayList<>();
+        try {
+            JSONArray json = os.getJSONArray("taxItems");
+            JSONObject object = json.getJSONObject(0);
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            try {
+                Iterator<String> iterator = object.keys();
+
+                while (iterator.hasNext()) {
+                    String key = iterator.next();
+                    double value = Double.parseDouble(object.getString(key));
+                    TaxItems taxitem = new TaxItems();
+                    taxitem.setName(key);
+                    taxitem.setValue(value);
+
+                    taxItemses.add(taxitem);
+                }
+                taxDetailsAdapter = new TaxitemConfirmationAdapter(this, R.layout.tax_items, taxItemses);
+                mLvTaxQuality.setAdapter(taxDetailsAdapter);
+               /* double sum = mBill.getOrderConfirmation().getOrderSummary().getTotalprice()+ serviceTax + ser + vatTax;
+                mTvTotalPrice.setText("$ " + sum);*/
+                setListViewHeightBasedOnItems(mLvTaxQuality);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     private void populatingTaxMenuList() {
 
         taxItemses = new ArrayList<TaxItems>();
         TaxItems res1 = new TaxItems("Total before Tax", totalPrice);
-        TaxItems res2 = new TaxItems("Service Charges", serviceTax);
-        TaxItems res3 = new TaxItems("Service Tax", ser);
-        TaxItems res4 = new TaxItems("VAT Tax", vatTax);
+
+
         taxItemses.add(res1);
-        taxItemses.add(res2);
-        taxItemses.add(res3);
-        taxItemses.add(res4);
         taxDetailsAdapter = new TaxitemConfirmationAdapter(this, R.layout.tax_items, taxItemses);
         mLvTaxQuality.setAdapter(taxDetailsAdapter);
         double sum = Double.parseDouble(mOrderToServers[0].getTotal_price()) + serviceTax + ser + vatTax;
         mTvTotalPrice.setText("$ " + sum);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);

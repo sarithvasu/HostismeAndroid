@@ -87,26 +87,22 @@
         android:id="@+id/tv_total"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/tv_service_tax_value"
         android:text="$ 120.00"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="23dp"
         android:textSize="@dimen/text_size_small"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_below="@+id/tv_service_tax_value"
+        android:layout_alignParentEnd="true" />
 
 
     <LinearLayout
         android:id="@+id/btn_lay"
         android:layout_width="60dp"
         android:layout_height="40dp"
-        android:layout_alignEnd="@+id/tv_service_charges"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/tv_service_charges"
-        android:layout_below="@+id/tv_total"
-        android:layout_marginBottom="10dp"
         android:background="@drawable/rounded_corner"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_below="@+id/tv_total"
+        android:layout_alignStart="@+id/ll_checkboxItems">
 
         <TextView
             android:id="@+id/tv_minus"
@@ -181,8 +177,31 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/btn_lay"
         android:layout_alignStart="@+id/tv_service_tax"
-        android:layout_below="@+id/tv_service_tax"
         android:layout_toStartOf="@+id/tv_total"
-        android:orientation="horizontal"></LinearLayout>
+        android:orientation="horizontal"
+        android:layout_below="@+id/tv_tax_items">
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_tax_items"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/tv_service_tax_value"
+        android:gravity="right"
+        android:text="0.6"
+        android:layout_alignStart="@+id/tv_service_tax_value" />
+
+    <TextView
+        android:id="@+id/tax4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tv_service_tax"
+        android:layout_weight="1"
+        android:textSize="12sp"
+        android:layout_marginLeft="5dp"
+        android:text="TextView" />
 
 </RelativeLayout>
