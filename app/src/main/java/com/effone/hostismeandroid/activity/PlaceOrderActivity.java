@@ -65,8 +65,6 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         appPrefernces = new AppPreferences(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        // getSupportActionBar().setTitle(getString(R.string.booking_history));
         Common.setCustomTitile(this, "View Order", null);
         decalartion();
     }
@@ -84,7 +82,6 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         for (int i = 1; i <=appPrefernces.getNUMBER_OF_TABLES() ; i++) {
             tableNos.add(i);
         }
-
         ArrayAdapter<Integer> dataAdapter = new ArrayAdapter<Integer>(PlaceOrderActivity.this, android.R.layout.simple_spinner_item, tableNos);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpTableNo.setAdapter(dataAdapter);
