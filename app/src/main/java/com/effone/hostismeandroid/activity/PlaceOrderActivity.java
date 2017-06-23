@@ -7,9 +7,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,7 +53,7 @@ import static com.effone.hostismeandroid.db.DBConstant.vatTax;
 public class PlaceOrderActivity extends AppCompatActivity implements View.OnClickListener, OnDataChangeListener {
     private TextView mTvItemPrice, mTvItemCount, mTvChargers, mTvEstimatedTotal, mTableNo;
     private TextView mTvPlaceOrder;
-    private EditText mEtTableNo;
+    private Spinner mSpTableNo;
     private ListView mLvItemSummary;
     private AppPreferences appPrefernces;
     private Switch mCbTakeAway;
@@ -77,35 +79,43 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         mTvEstimatedTotal = (TextView) findViewById(R.id.tv_estimated_price);
         mTvPlaceOrder = (TextView) findViewById(R.id.tv_place_order);
         mTableNo = (TextView) findViewById(R.id.tableNo);
-        mEtTableNo = (EditText) findViewById(R.id.et_table_no);
+        mSpTableNo = (Spinner) findViewById(R.id.et_table_no);
+        ArrayList<Integer> tableNos=new ArrayList<>();
+        for (int i = 1; i <=appPrefernces.getNUMBER_OF_TABLES() ; i++) {
+            tableNos.add(i);
+        }
+
+        ArrayAdapter<Integer> dataAdapter = new ArrayAdapter<Integer>(PlaceOrderActivity.this, android.R.layout.simple_spinner_item, tableNos);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpTableNo.setAdapter(dataAdapter);
         if(appPrefernces.getTABLE_NAME()==0||appPrefernces.getTABLE_NAME()==9999) {
             mTableNo.setVisibility(View.INVISIBLE);
-            mEtTableNo.setVisibility(View.INVISIBLE);
+            mSpTableNo.setVisibility(View.INVISIBLE);
             mCbTakeAway.setChecked(true);
         }
         else {
             mCbTakeAway.setChecked(false);
             mTableNo.setVisibility(View.VISIBLE);
-            mEtTableNo.setVisibility(View.VISIBLE);
+            mSpTableNo.setVisibility(View.VISIBLE);
         }
-        if (appPrefernces.getTABLE_NAME() != 0) {
-            mEtTableNo.setText("" + appPrefernces.getTABLE_NAME());
-            mEtTableNo.setFocusable(false);
+        if (appPrefernces.getTABLE_NAME() != 0&&appPrefernces.getTABLE_NAME()!=9999) {
+            mSpTableNo.setSelection(appPrefernces.getTABLE_NAME()-1);
+            mSpTableNo.setEnabled(false);
         }
         mCbTakeAway.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     mTableNo.setVisibility(View.INVISIBLE);
-                    mEtTableNo.setVisibility(View.INVISIBLE);
+                    mSpTableNo.setVisibility(View.INVISIBLE);
                 } else {
                     if(appPrefernces.getTABLE_NAME()!=0) {
                         if(appPrefernces.getTABLE_NAME()==9999){
 
-                            mEtTableNo.setText("");
+                            mSpTableNo.setEnabled(true);
                         }
                         mTableNo.setVisibility(View.VISIBLE);
-                        mEtTableNo.setVisibility(View.VISIBLE);
+                        mSpTableNo.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -191,7 +201,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
             if (mCbTakeAway.isChecked())
                 mTableName = "9999";
             else
-                mTableName = mEtTableNo.getText().toString().trim();
+                mTableName = mSpTableNo.getSelectedItem().toString().trim();
             if (mTableName.length() >= 1) {
 
                 ArrayList<Order> orderToServers = new ArrayList<>();
