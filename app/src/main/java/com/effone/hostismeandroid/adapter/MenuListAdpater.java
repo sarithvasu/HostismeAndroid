@@ -218,7 +218,7 @@ public class MenuListAdpater extends BaseExpandableListAdapter  {
                             updateableInterface.update();
                             sqliteoperation.close();
                         }else
-                            Util.createOKAlert(context,"Alert","Select atleast one option");
+                            Util.createOKAlert(context,"Alert","Select at least one option.");
                         }
                     }
 

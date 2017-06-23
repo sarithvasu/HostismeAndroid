@@ -322,7 +322,7 @@ public class MainActivity extends AppCompatActivity
                         Toast.makeText(this, "Please Place a order", Toast.LENGTH_SHORT).show();
                     }*/
                 } else {
-                    Util.createOKAlert(this,  "", getString(R.string.restartung_selection_message)+" or Place a Order");
+                    Util.createOKAlert(this,  "", getString(R.string.restartung_selection_message)+" Order is not yet placed. ");
                 }
                 break;
             case R.id.btn_my_booking:
