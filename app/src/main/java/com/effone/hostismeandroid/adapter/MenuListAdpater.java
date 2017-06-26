@@ -25,7 +25,9 @@ import com.effone.hostismeandroid.util.Util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import static com.effone.hostismeandroid.R.id.tv_ingredients;
 
@@ -47,7 +49,20 @@ public class MenuListAdpater extends BaseExpandableListAdapter {
         this.context = context;
         this.itemsname = itemsname;
         this.childItems = objects;
+        clear(childItems);
         updateableInterface = (UpdateableInterface) context;
+    }
+
+    private void clear(HashMap<String, Content[]> childItems) {
+        Iterator it = childItems.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            Content[] contents= (Content[]) pair.getValue();
+            for (int i = 0; i <contents.length ; i++) {
+                contents[i].setQuantity(0);
+            }
+
+        }
     }
 
 
@@ -107,6 +122,7 @@ public class MenuListAdpater extends BaseExpandableListAdapter {
     @Override
     public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         final Content food = (Content) getChild(groupPosition, childPosition);
+        int quatity=food.getQuantity();
         List<String> menuTypes = Arrays.asList(food.getMenu_types().split(","));
         View vi = convertView;
         final String sub_item_cat = itemsname[groupPosition];
@@ -141,6 +157,8 @@ public class MenuListAdpater extends BaseExpandableListAdapter {
         } else {
             holder.child_text.setText("" + food.getName());
         }
+        holder.tvQuatity.setTag(childPosition);
+        holder.tvQuatity.setText(""+quatity);
         holder.tv_ingredients.setText("" + food.getIngredients());
         holder.tvPrice.setText("$ " + food.getPrice());
         CompoundButton.OnCheckedChangeListener checkListner = new CompoundButton.OnCheckedChangeListener() {
@@ -185,6 +203,7 @@ public class MenuListAdpater extends BaseExpandableListAdapter {
                     if (qty[0] < 99) {
                         qty[0]++;
                         holder.tvQuatity.setText("" + qty[0]);
+                        food.setQuantity(qty[0]);
 
                         sqliteoperation = new SqlOperation(context);
                         sqliteoperation.open();
@@ -200,7 +219,7 @@ public class MenuListAdpater extends BaseExpandableListAdapter {
                     if (qty[0] < 99) {
                         qty[0]++;
                         holder.tvQuatity.setText("" + qty[0]);
-
+                        food.setQuantity(qty[0]);
                         sqliteoperation = new SqlOperation(context);
                         sqliteoperation.open();
                         sqliteoperation.AddOrSubstractProduct(heading, sub_item_cat,
@@ -211,7 +230,7 @@ public class MenuListAdpater extends BaseExpandableListAdapter {
                         sqliteoperation.close();
                     }
                 }else
-                    Util.createOKAlert(context, "Alert", "Select at least one option.");
+                    Util.createOKAlert(context, "Alert", "Please select at least one option.");
 
 
             }
@@ -222,6 +241,7 @@ public class MenuListAdpater extends BaseExpandableListAdapter {
                 if (qty[0] > 0) {
                     qty[0]--;
                     holder.tvQuatity.setText("" + qty[0]);
+                    food.setQuantity(qty[0]);
                 }
                 //Toast.makeText(context, "click remove", Toast.LENGTH_LONG).show();
                 sqliteoperation = new SqlOperation(context);

@@ -297,7 +297,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
              //   mSelectDbHelper.updateOrderHistory(mOrderId,comments, (String) radioButton.getText());
 
         }else {
-            Util.createErrorAlert(View_Pay_BillActivity.this, "", "select Payment Type.");
+            Util.createErrorAlert(View_Pay_BillActivity.this, "", "Please Select Payment Type.");
         }
 
     }else  if(v.getId() == R.id.bt_apply){

@@ -5,6 +5,10 @@ public class URL {
     /*urls effone local*/
 
     public static final String BASE_URL="http://192.168.11.23/hostisme/admin/api";
+
+    /*url effone public */
+    //   public static final String BASE_URL="http://182.75.30.200/hostisme/admin/api";
+
     public static final String GET_RESTAURANT_LIST=BASE_URL+"/restaurant/get-restaurant?cityid=1";
     public static final String POST_ORDER=BASE_URL+"/orders/get-orderdetails";
     public static final String GET_BILL=BASE_URL+"/viewandpaybill/get-billdetails";

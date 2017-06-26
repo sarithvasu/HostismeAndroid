@@ -91,7 +91,7 @@ public class RestaurantListAcitivity extends AppCompatActivity implements Adapte
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         hidePDialog();
-                        Util.createErrorAlert(RestaurantListAcitivity.this, "", error.getMessage());
+                        Util.createErrorAlert(RestaurantListAcitivity.this, "", "Server Error."+error.getMessage());
                     }
                 });
         mQueue.add(stringRequest);

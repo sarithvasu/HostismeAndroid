@@ -103,11 +103,14 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+        if(mVpMainMenu!=null)
+        mVpMainMenu.setAdapter(null);
         gettingDataFromService();
         showOrderItems();
     }
 
     private void gettingDataFromService() {
+        pagerItem = new LinkedHashMap<>();
         pDialog = new ProgressDialog(MenuActivity.this);
         pDialog.setMessage("Loading...");
         pDialog.show();
@@ -153,6 +156,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                                             content.setPrice(Float.parseFloat(contentJson.getString("price")));
                                             content.setIngredients(contentJson.getString("description"));
                                             content.setIs_special(contentJson.getString("is_special"));
+                                            content.setQuantity(0);
                                             contents[i] = content;
                                         }
                                         items.setContent(contents);
@@ -178,6 +182,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                                                     content.setName(contentBev.getString("item"));
                                                     content.setMenu_types("");
                                                     /*content.setCountryCusine(countryCousin);*/
+                                                    content.setQuantity(0);
                                                     content.setPrice(Float.parseFloat(contentBev.getString("price")));
                                                     content.setIngredients(contentBev.getString("description"));
                                                     content.setIs_special("3");
@@ -202,7 +207,9 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                         }
 
                         HISMenuPageAdapter menuPageAdapter = new HISMenuPageAdapter(getSupportFragmentManager(), pagerItem);
+                        menuPageAdapter.notifyDataSetChanged();
                         mVpMainMenu.setAdapter(menuPageAdapter);
+
 
 
                         hidePDialog();
@@ -396,7 +403,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                     Intent intent = new Intent(this, PlaceOrderActivity.class);
                     startActivity(intent);
                 } else {
-                    Util.createOKAlert(MenuActivity.this,"Alert","Select at least one option.");
+                    Util.createOKAlert(MenuActivity.this,"Alert","Please select at least one option.");
 
                 }
 

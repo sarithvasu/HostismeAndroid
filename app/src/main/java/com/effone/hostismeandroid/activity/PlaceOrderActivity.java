@@ -182,11 +182,11 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         float chargers = 0;
         for(int i=0;i<taxList.size();i++){
             if(taxList.get(i).getType().equals("Fixed")){
-                if(appPrefernces.getORDER_ID().equals(0)){
+                //if(appPrefernces.getORDER_ID().equals("")){
                     chargers   = chargers+ Float.parseFloat(taxList.get(i).getChargevalue());
-                }else {
+               // }else {
 
-                }
+             //   }
             }else{
                 chargers = chargers + (totalPrice / 100.0f) * Float.parseFloat(taxList.get(i).getChargevalue());
             }
@@ -204,11 +204,11 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         for(int i=0;i<taxList.size();i++){
             float chargers=0;
             if(taxList.get(i).getType().equals("Fixed")){
-                if(appPrefernces.getORDER_ID().equals(0)){
+               // if(appPrefernces.getORDER_ID().equals("")){
                     chargers   = chargers+ Float.parseFloat(taxList.get(i).getChargevalue());
-                }else {
+             //   }else {
 
-                }
+               // }
             }else{
                 chargers =  (totalByItems / 100.0f) * Float.parseFloat(taxList.get(i).getChargevalue());
             }

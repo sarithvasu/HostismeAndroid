@@ -20,6 +20,15 @@ public class Content {
     private String name;
     private String is_special;
 
+    private int quantity;
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
     public String getIs_special ()
     {

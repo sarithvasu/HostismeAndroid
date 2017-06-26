@@ -78,7 +78,7 @@ public class Service_RequestActivity extends AppCompatActivity implements View.O
 
                 if (mRadioGroup.getCheckedRadioButtonId() == -1) {
 
-                    Util.createOKAlert(Service_RequestActivity.this,"Alert","Please select Service Type");
+                    Util.createOKAlert(Service_RequestActivity.this,"Alert","Please Select Service Type.");
                 } else {
                     // get selected radio button from radioGroup
                     int selectedId = mRadioGroup.getCheckedRadioButtonId();

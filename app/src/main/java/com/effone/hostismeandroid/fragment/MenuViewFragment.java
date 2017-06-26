@@ -76,8 +76,11 @@ public class MenuViewFragment extends Fragment implements View.OnClickListener {
         mQueue = Volley.newRequestQueue(getActivity());
         sqlOperation = new SqlOperation(getActivity());
         expListView = (ExpandableListView) root.findViewById(R.id.elv_menu);
+
+
         String[] itemsname = new String[mHisMenuItems.length];
         HashMap<String, Content[]> mHashMap = new HashMap<>();
+        mHashMap.clear();
         for (int i = 0; i < mHisMenuItems.length; i++) {
             try {
                 itemsname[i] = mHisMenuItems[i].getName();
@@ -88,10 +91,17 @@ public class MenuViewFragment extends Fragment implements View.OnClickListener {
 
         }
         MenuListAdpater adapter = new MenuListAdpater(getActivity(), android.R.layout.simple_list_item_1, heading, itemsname, mHashMap);
+        adapter.notifyDataSetChanged();
         expListView.setAdapter(adapter);
 
 
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 
     private void showingHands(int pos) {
