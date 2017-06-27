@@ -94,15 +94,15 @@ public class SqlOperation {
                         //its a sum, update the qty in 1
                         row.put(COLUMN_NAME_ITEM_QTY, oldQty + 1);//add  1
 
-                        database.update(TABLE_NAME_ORDERITEM, row, COLUMN_NAME_MENU_ITEM_ID+" = "  + menu_item_id+ " and  "+ COLUMN_NAME_ITEM_NAME +" = '"+name+"'", null); //update qty in DB the request
+                        database.update(TABLE_NAME_ORDERITEM, row, COLUMN_NAME_MENU_ITEM_ID+" = "  + menu_item_id+ " and  "+ COLUMN_NAME_ITEM_NAME +" = '"+name+"' and "+ COLUMN_NAME_IS_SPECIAL +" = '"+specail+"'", null); //update qty in DB the request
                         break;
 
                     case 2:
                         if (oldQty > 0) {
                             row.put(COLUMN_NAME_ITEM_QTY, oldQty - 1);//substract -1 if the qty is greater than 0,
-                            database.update(TABLE_NAME_ORDERITEM, row, COLUMN_NAME_MENU_ITEM_ID+" = "  + menu_item_id+ " and  "+ COLUMN_NAME_ITEM_NAME +" =  '"+name+"'", null); //update qty DB the request
+                            database.update(TABLE_NAME_ORDERITEM, row, COLUMN_NAME_MENU_ITEM_ID+" = "  + menu_item_id+ " and  "+ COLUMN_NAME_ITEM_NAME +" =  '"+name+"' and "+ COLUMN_NAME_IS_SPECIAL +" = '"+specail+"'", null); //update qty DB the request
                             if(oldQty == 1) {
-                                database.delete(TABLE_NAME_ORDERITEM, COLUMN_NAME_MENU_ITEM_ID+" = "  + menu_item_id+ " and  "+ COLUMN_NAME_ITEM_NAME +" =  '"+name+"'", null);//delete the complete row if the qunatity is 0
+                                database.delete(TABLE_NAME_ORDERITEM, COLUMN_NAME_MENU_ITEM_ID+" = "  + menu_item_id+ " and  "+ COLUMN_NAME_ITEM_NAME +" =  '"+name+"' and "+ COLUMN_NAME_IS_SPECIAL +" = '"+specail+"'", null);//delete the complete row if the qunatity is 0
                             }
                         }
                         break;
@@ -152,13 +152,13 @@ public class SqlOperation {
         return  cursor.getCount();
     }
 
-    public boolean cartItemDelete(int itemMenuCatId, String itemName, String menuType) {
+    public boolean cartItemDelete(int itemMenuCatId, String itemName, String menuType,String special) {
 
 
 
         return database.delete(TABLE_NAME_ORDERITEM,
                 COLUMN_NAME_MENU_ITEM_ID + "="+itemMenuCatId+" AND " + COLUMN_NAME_ITEM_NAME + " = '"+itemName+"' AND " +
-                        COLUMN_NAME_MENU_TYPE + "= '"+menuType+"'",
+                        COLUMN_NAME_MENU_TYPE + "= '"+menuType+"' AND "+COLUMN_NAME_IS_SPECIAL+"= '"+special+"'" ,
                 null) > 0;
     }
 

@@ -222,6 +222,9 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                         if (!(MenuActivity.this.isFinishing())) {
                             Util.createErrorAlert(MenuActivity.this, "", "Server Error");
                         }
+                        Intent intent=new Intent(MenuActivity.this,MenuActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
                 });
         mQueue.add(stringRequest);

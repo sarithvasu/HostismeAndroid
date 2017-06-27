@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="fjdksjfj"
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:textStyle="bold"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
@@ -27,7 +27,7 @@
         android:gravity="right"
         android:layout_toEndOf="@+id/ll_checkboxItems"
         android:text="sdsajdj"
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:textStyle="bold" />
 
     <TextView
@@ -211,6 +211,7 @@
         android:id="@+id/ll_checkboxItems"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="12sp"
         android:orientation="horizontal"
         android:layout_below="@+id/tv_summery_item_name"
         android:layout_toStartOf="@+id/tv_close">

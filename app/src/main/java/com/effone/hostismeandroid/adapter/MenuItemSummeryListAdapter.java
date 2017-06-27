@@ -171,12 +171,12 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
                 if(sqliteoperation.getItemCountInCart()!=1) {
                     //we are deleteing the item from the cart based on the item_id and ItemNamei
 
-                    if(sqliteoperation.cartItemDelete(value.getItemMenuCatId(), value.getItemName(),value.getMenuType()))
+                    if(sqliteoperation.cartItemDelete(value.getItemMenuCatId(), value.getItemName(),value.getMenuType(),value.getSpecial()))
                     {
                         Toast.makeText(mContext,"Item removed",Toast.LENGTH_SHORT).show();
                     }
                 }else{
-                    sqliteoperation.cartItemDelete(value.getItemMenuCatId(), value.getItemName(),value.getMenuType());
+                    sqliteoperation.cartItemDelete(value.getItemMenuCatId(), value.getItemName(),value.getMenuType(),value.getSpecial());
                     Intent intent=new Intent(mContext, MenuActivity.class);
                     intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     mContext.startActivity(intent);
@@ -227,9 +227,9 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
                         if(qty[0] == 0){
                             if(sqliteoperation.getItemCountInCart()!=0) {
                                 //we are deleteing the item from the cart based on the item_id and ItemName
-                                sqliteoperation.cartItemDelete(value.getItemMenuCatId(), value.getItemName(), value.getMenuType());
+                                sqliteoperation.cartItemDelete(value.getItemMenuCatId(), value.getItemName(), value.getMenuType(),value.getSpecial());
                             }else{
-                                sqliteoperation.cartItemDelete(value.getItemMenuCatId(), value.getItemName(), value.getMenuType());
+                                sqliteoperation.cartItemDelete(value.getItemMenuCatId(), value.getItemName(), value.getMenuType(),value.getSpecial());
                                 Intent intent=new Intent(mContext, MenuActivity.class);
                                 intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 mContext.startActivity(intent);

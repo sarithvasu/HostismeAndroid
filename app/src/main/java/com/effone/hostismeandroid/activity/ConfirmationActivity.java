@@ -182,10 +182,13 @@ public class ConfirmationActivity extends AppCompatActivity {
         mAppPrefernces.setORDER_ID("" + orderSumm.getOrder_id());
 
         mTvDescription.setText(": " + mAppPrefernces.getDescription());
-        if (mAppPrefernces.getTABLE_NAME() != 9999)
-            mTvTableNo.setText(": " + mAppPrefernces.getTABLE_NAME());
+        if (mAppPrefernces.getTABLE_NAME() == 9999)
+               mTvTableNo.setText(": " +getString(R.string.take_away));
+        else if (mAppPrefernces.getTABLE_NAME() == 8888)
+            mTvTableNo.setText(": " + getString(R.string.bar));
         else
-            mTvTableNo.setText(": " + "Take Away");
+            mTvTableNo.setText(": " + mAppPrefernces.getTABLE_NAME());
+
         mTvQuantits.setText(": " + mAppPrefernces.getQunatity());
         mTvBookingId.setText(": " + orderSumm.getOrder_id());
         mTvOrderTotal.setText(": $ " + orderSumm.getTotalprice());
@@ -307,5 +310,11 @@ public class ConfirmationActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
+    @Override
+    public void onBackPressed() {
+        finish();
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
 }

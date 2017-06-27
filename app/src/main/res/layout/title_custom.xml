@@ -9,7 +9,6 @@
         android:textSize="22sp"
         android:gravity="center"
         android:id="@+id/tv_custom_titile"
-        android:layout_marginLeft="-30dp"
         android:textColor="@color/white"
         android:textStyle="bold"
       />
@@ -20,7 +19,6 @@
         android:gravity="center"
         android:textStyle="bold"
         android:id="@+id/tv_custom_sub_titile"
-        android:layout_marginLeft="-30dp"
         android:layout_marginTop="-5dp"
         android:textColor="@color/white"
        />

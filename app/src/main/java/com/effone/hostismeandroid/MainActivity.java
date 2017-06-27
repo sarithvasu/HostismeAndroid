@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+        toggle.setDrawerIndicatorEnabled(false);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -310,9 +311,13 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case R.id.btn_view_pay:
-                if (appPreferences.getRESTAURANT_NAME() != ""&& !appPreferences.getORDER_ID().equals("")) {
-                    intent = new Intent(this, View_Pay_BillActivity.class);
-                    startActivity(intent);
+                if (appPreferences.getRESTAURANT_NAME() != "") {
+                    if(!appPreferences.getORDER_ID().equals("")) {
+                        intent = new Intent(this, View_Pay_BillActivity.class);
+                        startActivity(intent);
+                    }else
+                        Util.createOKAlert(this,  "", " Order is not yet placed. ");
+
                     /*SqlOperations sqliteoperation = new SqlOperations(getApplicationContext());
                     sqliteoperation.open();
 
@@ -322,7 +327,7 @@ public class MainActivity extends AppCompatActivity
                         Toast.makeText(this, "Please Place a order", Toast.LENGTH_SHORT).show();
                     }*/
                 } else {
-                    Util.createOKAlert(this,  "",  getString(R.string.restartung_selection_message)+" (or) Order is not yet placed. ");
+                    Util.createOKAlert(this,  "",  getString(R.string.restartung_selection_message));
                 }
                 break;
             case R.id.btn_my_booking:

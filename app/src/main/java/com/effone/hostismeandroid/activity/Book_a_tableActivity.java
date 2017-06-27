@@ -4,24 +4,18 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -32,13 +26,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.effone.hostismeandroid.MainActivity;
 import com.effone.hostismeandroid.R;
-import com.effone.hostismeandroid.app.AppController;
 import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.common.Common;
-import com.effone.hostismeandroid.model.Bill;
-import com.effone.hostismeandroid.model.OrderSummary;
 import com.effone.hostismeandroid.model.Tables;
-import com.effone.hostismeandroid.model.TaxItems;
 import com.effone.hostismeandroid.model_for_json.ServiceRequest;
 import com.effone.hostismeandroid.model_for_json.ServiceRequestJson;
 import com.effone.hostismeandroid.util.Util;
@@ -52,9 +42,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.effone.hostismeandroid.common.URL.REQUEST_SERVICE;
-import static com.effone.hostismeandroid.common.URL.bill_url;
-import static com.effone.hostismeandroid.common.URL.book_a_table_url;
-import static com.effone.hostismeandroid.common.URL.tables_url;
 
 
 /**
@@ -62,11 +49,11 @@ import static com.effone.hostismeandroid.common.URL.tables_url;
  */
 
 public class Book_a_tableActivity extends AppCompatActivity implements View.OnClickListener {
-        private Spinner mSpTableNo;
+    private Spinner mSpTableNo;
     Button mBtViewMenu;
     private AppPreferences mAppPreferences;
     private Spinner mSpTableToNo;
-    private TextView mMoveTableTitle,mTvTableNoForm;
+    private TextView mMoveTableTitle, mTvTableNoForm;
     private LinearLayout mMoveTableLay;
     private RelativeLayout mBookTableLay;
     private ProgressDialog pDialog;
@@ -79,23 +66,22 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_a_table);
-        mAppPreferences=new AppPreferences(this);
-        mGson=new Gson();
+        mAppPreferences = new AppPreferences(this);
+        mGson = new Gson();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
-        if(mAppPreferences.getRESTAURANT_NAME()!= "") {
-            if(mAppPreferences.getTABLE_NAME()==0||mAppPreferences.getTABLE_NAME()==9999) {
+        if (mAppPreferences.getRESTAURANT_NAME() != "") {
+            if (mAppPreferences.getTABLE_NAME() == 0 || mAppPreferences.getTABLE_NAME() == 9999) {
                 Common.setCustomTitile(this, getString(R.string.book_a_table), mAppPreferences.getRESTAURANT_NAME());
-            }
-            else{
+            } else {
                 Common.setCustomTitile(this, getString(R.string.move_a_table), mAppPreferences.getRESTAURANT_NAME());
             }
 
         }
-            init();
+        //init();
 
     }
 
@@ -105,34 +91,46 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
         if (!Util.Operations.isOnline(this)) {
             Util.createNetErrorDialog(this);
         }
+        init();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //init();
     }
 
     private void init() {
-        mSpTableNo=(Spinner) findViewById(R.id.et_table_no);
-        mSpTableToNo=(Spinner) findViewById(R.id.tv_table_no_to);
-        mTvTableNoForm=(TextView) findViewById(R.id.tv_table_no_form);
-        mMoveTableLay=(LinearLayout)findViewById(R.id.move_table_lay);
-        mMoveTableTitle=(TextView)findViewById(R.id.move_table_title);
-        mBookTableLay=(RelativeLayout)findViewById(R.id.book_table_lay);
-        mBtViewMenu=(Button)findViewById(R.id.bt_subit);
-        if(mAppPreferences.getTABLE_NAME()==0||mAppPreferences.getTABLE_NAME()==9999){
+        mSpTableNo = (Spinner) findViewById(R.id.et_table_no);
+        mSpTableToNo = (Spinner) findViewById(R.id.tv_table_no_to);
+        mTvTableNoForm = (TextView) findViewById(R.id.tv_table_no_form);
+        mMoveTableLay = (LinearLayout) findViewById(R.id.move_table_lay);
+        mMoveTableTitle = (TextView) findViewById(R.id.move_table_title);
+        mBookTableLay = (RelativeLayout) findViewById(R.id.book_table_lay);
+        mBtViewMenu = (Button) findViewById(R.id.bt_subit);
+        if (mAppPreferences.getTABLE_NAME() == 0 || mAppPreferences.getTABLE_NAME() == 9999) {
             mBookTableLay.setVisibility(View.VISIBLE);
             mMoveTableTitle.setVisibility(View.GONE);
             mMoveTableLay.setVisibility(View.GONE);
-          //  mBtViewMenu.setText(getString(R.string.view_cart));
-        }
-        else{
+            //  mBtViewMenu.setText(getString(R.string.view_cart));
+        } else {
             mBookTableLay.setVisibility(View.GONE);
             mMoveTableTitle.setVisibility(View.VISIBLE);
             mMoveTableLay.setVisibility(View.VISIBLE);
-            mTvTableNoForm.setText(""+mAppPreferences.getTABLE_NAME());
+            if (mAppPreferences.getTABLE_NAME() == 8888)
+                mTvTableNoForm.setText(getString(R.string.bar));
+            else
+                mTvTableNoForm.setText("" + mAppPreferences.getTABLE_NAME());
             mBtViewMenu.setText(getString(R.string.submit));
         }
-        ArrayList<String> tableNos=new ArrayList<>();
-        tableNos.add(getString(R.string.togo));
-        tableNos.add(getString(R.string.bar));
-        for (int i = 1; i <=mAppPreferences.getNUMBER_OF_TABLES() ; i++) {
-            tableNos.add(""+i);
+        ArrayList<String> tableNos = new ArrayList<>();
+        if (mAppPreferences.getTABLE_NAME() != 9999)
+            tableNos.add(getString(R.string.togo));
+        if (mAppPreferences.getTABLE_NAME() != 8888)
+            tableNos.add(getString(R.string.bar));
+        for (int i = 1; i <= mAppPreferences.getNUMBER_OF_TABLES(); i++) {
+            if (mAppPreferences.getTABLE_NAME() != i)
+                tableNos.add("" + i);
         }
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(Book_a_tableActivity.this, android.R.layout.simple_spinner_item, tableNos);
@@ -141,10 +139,9 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // attaching data adapter to spinner
-        if(mAppPreferences.getTABLE_NAME()==0||mAppPreferences.getTABLE_NAME()==9999) {
+        if (mAppPreferences.getTABLE_NAME() == 0|| mAppPreferences.getTABLE_NAME() == 9999) {
             mSpTableNo.setAdapter(dataAdapter);
-        }
-        else{
+        } else {
             mSpTableToNo.setAdapter(dataAdapter);
         }
 
@@ -212,45 +209,57 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onClick(View view) {
-        switch(view.getId()){
+        switch (view.getId()) {
             case R.id.bt_subit:
-                String tableNo="";
-                boolean fromMoveTable=false;
-                if(mAppPreferences.getTABLE_NAME()==0||mAppPreferences.getTABLE_NAME()==9999) {
+                String tableNo = "";
+                boolean fromMoveTable = false;
+                if (mAppPreferences.getTABLE_NAME() == 0|| mAppPreferences.getTABLE_NAME() == 9999) {
                     try {
                         tableNo = mSpTableNo.getSelectedItem().toString();
-                    } catch (Exception e){
+                    } catch (Exception e) {
 
 
                     }
-                }
-                else{
+                } else {
                     try {
                         tableNo = mSpTableToNo.getSelectedItem().toString();
-                        fromMoveTable=true;
-                    }catch (Exception e){
+                        fromMoveTable = true;
+                    } catch (Exception e) {
 
 
                     }
                 }
-                if(tableNo.length() >= 1){
+                if (tableNo.length() >= 1) {
 
 
-                        if(fromMoveTable){
-                            requestForaTable(tableNo);
+                    if (fromMoveTable) {
+                        if (tableNo.equals(getString(R.string.togo))) {
+                            requestForaTable("" + 9999);
+                            Log.e("String", "" + 9999);
+                        } else if (tableNo.equals(getString(R.string.bar))) {
+                            requestForaTable("" + 8888);
+                            Log.e("String", "" + 8888);
+                        } else {
+                            requestForaTable("" + Integer.parseInt(tableNo));
                         }
-                        else{
-                            if(tableNo.equals(getString(R.string.togo))){
-                                mAppPreferences.setTABLE_NAME(Integer.parseInt(tableNo));
-                            }else{
-                                mAppPreferences.setTABLE_NAME(Integer.parseInt(tableNo));
-                            }
 
-                            Intent intent = new Intent(Book_a_tableActivity.this, MenuActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-                            finish();
+                    } else {
+                        if (tableNo.equals(getString(R.string.togo))) {
+                            mAppPreferences.setTABLE_NAME(9999);
+                            Log.e("String", "" + 9999);
+                        } else if (tableNo.equals(getString(R.string.bar))) {
+                            mAppPreferences.setTABLE_NAME(8888);
+                            Log.e("String", "" + 8888);
+                        } else {
+                            mAppPreferences.setTABLE_NAME(Integer.parseInt(tableNo));
+                            Log.e("String", "" + 8888);
                         }
+
+                        Intent intent = new Intent(Book_a_tableActivity.this, MenuActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+                    }
 
                 }
                 break;
@@ -260,15 +269,15 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
     private void requestForaTable(final String tableNo) {
         ServiceRequest ServiceRequest = new ServiceRequest();
         ServiceRequest.setComplaint("");
-        ServiceRequest.setService_type("Move Table_"+mAppPreferences.getTABLE_NAME()+"_"+tableNo);
+        ServiceRequest.setService_type("Move Table_" + mAppPreferences.getTABLE_NAME() + "_" + tableNo);
         ServiceRequest.setDevice_id(Settings.Secure.getString(getApplicationContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID));
-        ServiceRequest.setOrder_id("1"+mAppPreferences.getORDER_ID());
+        ServiceRequest.setOrder_id("1" + mAppPreferences.getORDER_ID());
         ServiceRequest.setRestaurant_id(mAppPreferences.getRESTAURANT_ID());
         ServiceRequest.setTable_no("" + mAppPreferences.getTABLE_NAME());
-        mServiceRequestJson=new ServiceRequestJson();
+        mServiceRequestJson = new ServiceRequestJson();
         mServiceRequestJson.setServiceRequest(ServiceRequest);
-        final String json=mGson.toJson(mServiceRequestJson);
+        final String json = mGson.toJson(mServiceRequestJson);
         StringRequest req = new StringRequest(Request.Method.POST, REQUEST_SERVICE,
                 new Response.Listener<String>() {
                     @Override
@@ -277,14 +286,13 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
                         if (!value.equals("")) {
                             try {
                                 JSONObject jsonObjec = new JSONObject(response);
-                                boolean status =jsonObjec.getBoolean("status");
-                                if(status) {
+                                boolean status = jsonObjec.getBoolean("status");
+                                if (status) {
                                     mAppPreferences.setTABLE_NAME(Integer.parseInt(tableNo));
                                     Intent intent = new Intent(Book_a_tableActivity.this, MenuActivity.class);
                                     startActivity(intent);
                                 }
-                            }
-                            catch (JSONException e){
+                            } catch (JSONException e) {
 
                             }
 

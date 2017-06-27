@@ -4,7 +4,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="restartung_selection_message">Please Select the Restaurant.</string>
+    <string name="restartung_selection_message">Please select a restaurant.</string>
 
 
     <string name="action_settings">Settings</string>
@@ -26,7 +26,7 @@
     <string name="address">Address</string>
     <string name="price_summary">Price Summary</string>
     <string name="items">Items (20)        </string>
-    <string name="charges">Chargers       </string>
+    <string name="charges">Taxes       </string>
     <string name="estimated_total">Estimated Total</string>
     <string name="proceed">proceed to Checkout</string>
     <string name="place_order">Place Order</string>
@@ -72,6 +72,7 @@
     <string name="no_internet_message">No internet connection!</string>
     <string name="go_online">Go Online</string>
     <string name="headercreateaccount">Please Validate</string>
-    <string name="togo">ToGo</string>
+    <string name="togo">To-Go</string>
     <string name="bar">Bar</string>
+    <string name="take_away">Take Away</string>
 </resources>
