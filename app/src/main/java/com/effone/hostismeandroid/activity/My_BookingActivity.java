@@ -12,11 +12,13 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.effone.hostismeandroid.MainActivity;
 import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.adapter.Booking_HistoryAdapter;
@@ -118,8 +120,8 @@ public class My_BookingActivity extends AppCompatActivity {
                             hidePDialog();
                         }else{
                             Util.createErrorAlert(My_BookingActivity.this, "", "No OrderDetails Found.");
-                            Intent intent=new Intent(My_BookingActivity.this,MainActivity.class);
-                            startActivity(intent);
+                           /* Intent intent=new Intent(My_BookingActivity.this,MainActivity.class);
+                            startActivity(intent);*/
                         }
                             hidePDialog();
                         } catch (JSONException e) {
@@ -143,8 +145,8 @@ public class My_BookingActivity extends AppCompatActivity {
             }
         });
 
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(movieReq);
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(movieReq);
     }
     private void hidePDialog() {
         if (pDialog != null) {

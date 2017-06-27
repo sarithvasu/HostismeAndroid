@@ -21,16 +21,15 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:layout_below="@+id/titel_na">
+
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp">
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/titel_na">
 
 
             <TextView
@@ -143,8 +142,6 @@
                 android:layout_alignParentBottom="true"
                 />
         </RelativeLayout>
-
-    </ScrollView>
 
 
 

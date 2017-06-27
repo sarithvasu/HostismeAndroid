@@ -16,6 +16,7 @@ public class URL {
     public static final String GET_BOOKING_HISTORY=BASE_URL+"/bookinghistory/get-bookedhistory?device_id=";
     public static final String GET_MENU=BASE_URL+"/menu/get-menudetails?restaurant_id=";
     public static final String REQUEST_SERVICE=BASE_URL+"/servicerequest/get-servicerequestdetails";
+    public static final String POST_PAYMENT=BASE_URL+"/orders/get-paymentdetails";
     //?restaurant_id=1&promocode=O75ZRGKEOH&device_id=14558295348432157
 
 

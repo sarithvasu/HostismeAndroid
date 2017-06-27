@@ -31,7 +31,7 @@
             android:id="@+id/tv_restaurant_email_label"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:text="email"
+            android:text="Email"
             android:textColor="@color/text_color_grey"
             android:textColorLink="@color/text_color_grey"
             android:textSize="@dimen/text_size_small" />
@@ -55,7 +55,7 @@
             android:id="@+id/tv_restaurant_mob_label"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:text="mob"
+            android:text="Mob"
             android:textColor="@color/text_color_grey"
             android:textColorLink="@color/text_color_grey"
             android:textSize="@dimen/text_size_small" />
@@ -80,7 +80,7 @@
             android:id="@+id/tv_restaurant_land_label"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:text="phone"
+            android:text="Phone"
             android:textColor="@color/text_color_grey"
             android:textColorLink="@color/text_color_grey"
             android:textSize="@dimen/text_size_small" />

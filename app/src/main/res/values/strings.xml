@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HostismeAndroid</string>
+    <string name="app_name">Hostisme</string>
     <string name="home">Location</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -72,4 +72,6 @@
     <string name="no_internet_message">No internet connection!</string>
     <string name="go_online">Go Online</string>
     <string name="headercreateaccount">Please Validate</string>
+    <string name="togo">ToGo</string>
+    <string name="bar">Bar</string>
 </resources>

@@ -7,9 +7,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -114,9 +116,11 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                 } else {
                     if(appPrefernces.getTABLE_NAME()!=0) {
                         if(appPrefernces.getTABLE_NAME()==9999){
-
                             mSpTableNo.setEnabled(true);
                         }
+                        mTableNo.setVisibility(View.VISIBLE);
+                        mSpTableNo.setVisibility(View.VISIBLE);
+                    }else{
                         mTableNo.setVisibility(View.VISIBLE);
                         mSpTableNo.setVisibility(View.VISIBLE);
                     }
@@ -167,28 +171,70 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                 taxItemses);
         mLvTaxQuality.setAdapter(taxDetailsAdapter);
 
-        setListViewHeightBasedOnItems(mLvTaxQuality);
         getOrderItemsList();
+
+
+
     }
 
     private void getOrderItemsList() {
-
         MenuItemSummeryListAdapter menuItemSummeryListAdapter = new MenuItemSummeryListAdapter(this, android.R.layout.simple_list_item_1, cartItemses, taxList);
         mLvItemSummary.setAdapter(menuItemSummeryListAdapter);
-        setListViewHeightBasedOnItems(mLvItemSummary);
+        setListViewHeightBasedOnItemss(mLvItemSummary);
+        setListViewHeightBasedOnItems(mLvTaxQuality);
+    }
+
+
+
+    public  boolean setListViewHeightBasedOnItemss(ListView listView) {
+
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter != null) {
+
+            int numberOfItems = listAdapter.getCount();
+
+            // Get total height of all items.
+            int totalItemsHeight = 0;
+            for (int itemPos = 0; itemPos < numberOfItems; itemPos++) {
+                View item = listAdapter.getView(itemPos, null, listView);
+                float px = 500 * (listView.getResources().getDisplayMetrics().density);
+                item.measure(View.MeasureSpec.makeMeasureSpec((int) px, View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                totalItemsHeight += item.getMeasuredHeight();
+            }
+
+            // Get total height of all item dividers.
+            int totalDividersHeight = listView.getDividerHeight() *
+                    (numberOfItems - 1);
+            // Get padding
+            int totalPadding = listView.getPaddingTop() + listView.getPaddingBottom();
+
+            // Set list height.
+            ViewGroup.LayoutParams params = listView.getLayoutParams();
+            params.height = totalItemsHeight + totalDividersHeight + totalPadding;
+            listView.setLayoutParams(params);
+            listView.requestLayout();
+            return true;
+
+        } else {
+            return false;
+        }
+
     }
 
     private float taxAmountCalculation(float totalPrice) {
         float chargers = 0;
         for(int i=0;i<taxList.size();i++){
             if(taxList.get(i).getType().equals("Fixed")){
-                //if(appPrefernces.getORDER_ID().equals("")){
+                if(appPrefernces.getORDER_ID().equals("")){
                     chargers   = chargers+ Float.parseFloat(taxList.get(i).getChargevalue());
-               // }else {
+            }else {
 
-             //   }
+               }
             }else{
-                chargers = chargers + (totalPrice / 100.0f) * Float.parseFloat(taxList.get(i).getChargevalue());
+               // chargers=Math.round((( totalPrice / 100.0f) * Float.parseFloat(taxList.get(i).getChargevalue())) * 100) / 100;
+             //chargers= ( totalPrice / 100.0f) * Float.parseFloat(taxList.get(i).getChargevalue());
+                chargers = chargers+(totalPrice / 100.0f) * Float.parseFloat(taxList.get(i).getChargevalue());
+
             }
         }
 
@@ -204,14 +250,18 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         for(int i=0;i<taxList.size();i++){
             float chargers=0;
             if(taxList.get(i).getType().equals("Fixed")){
-               // if(appPrefernces.getORDER_ID().equals("")){
+              if(appPrefernces.getORDER_ID().equals("")){
                     chargers   = chargers+ Float.parseFloat(taxList.get(i).getChargevalue());
-             //   }else {
-
-               // }
+              }else {
+                  chargers=0;
+                }
             }else{
-                chargers =  (totalByItems / 100.0f) * Float.parseFloat(taxList.get(i).getChargevalue());
+
+                chargers = (totalByItems / 100.0f) * Float.parseFloat(taxList.get(i).getChargevalue());
+
+
             }
+
             TaxItems taxi= new TaxItems(taxList.get(i).getName(),chargers);
             taxItemses.add(taxi);
         }
@@ -252,19 +302,20 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                         if (cartItems.getSpecial().equals("0")) {
                             cartItems.setSpecial("1");//not special item will be 1
                         } else if (cartItems.getSpecial().equals("1")) {
-                            cartItems.setSpecial("3");//  special item will be 2
+                            cartItems.setSpecial("3");//  special item will be 3
                         } else{
-                            cartItems.setSpecial("2");
+                            cartItems.setSpecial("2");//BEVARAGERS WILL BE 3
                         }
                     }else {
-                       cartItems.setSpecial("2");//bevagrages will be 3
+                       cartItems.setSpecial("2");//bevagrages will be 2
                    }
                    count = count+cartItems.getItemQuantity();
                     descriptoin=cartItems.getItemCatagerie();
 
-                    orderingMenus.add(new Menuitems(cartItems.getItemMenuCatId(), cartItems.getItemQuantity(),cartItems.getSpecial(),cartItems.getMenuType().trim()));
+                    orderingMenus.add(new Menuitems(cartItems.getItemMenuCatId(), cartItems.getItemQuantity(),cartItems.getSpecial(),cartItems.getMenuType()));
                 }
                 appPrefernces.setQunatity(count);
+                try{
                 if(!descriptoin.equals("")){
                 if(descriptoin.equals("Breakfast")){
                     orderToServer.setPhaseid(""+1);
@@ -275,6 +326,8 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                 }else if(descriptoin.equals("Allday")){
                     orderToServer.setPhaseid(""+4);
                 }
+                }
+                }catch (Exception e){
                 }
 
                 appPrefernces.setDESCRIPTION(descriptoin);

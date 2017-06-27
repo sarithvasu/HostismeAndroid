@@ -128,12 +128,14 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
             mTvTableNoForm.setText(""+mAppPreferences.getTABLE_NAME());
             mBtViewMenu.setText(getString(R.string.submit));
         }
-        ArrayList<Integer> tableNos=new ArrayList<>();
+        ArrayList<String> tableNos=new ArrayList<>();
+        tableNos.add(getString(R.string.togo));
+        tableNos.add(getString(R.string.bar));
         for (int i = 1; i <=mAppPreferences.getNUMBER_OF_TABLES() ; i++) {
-            tableNos.add(i);
+            tableNos.add(""+i);
         }
 
-        ArrayAdapter<Integer> dataAdapter = new ArrayAdapter<Integer>(Book_a_tableActivity.this, android.R.layout.simple_spinner_item, tableNos);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(Book_a_tableActivity.this, android.R.layout.simple_spinner_item, tableNos);
 
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -202,7 +204,6 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
         }
         if (item.getItemId() == R.id.home_btn) {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }
 
@@ -239,13 +240,18 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
                             requestForaTable(tableNo);
                         }
                         else{
-                            mAppPreferences.setTABLE_NAME(Integer.parseInt(tableNo));
+                            if(tableNo.equals(getString(R.string.togo))){
+                                mAppPreferences.setTABLE_NAME(Integer.parseInt(tableNo));
+                            }else{
+                                mAppPreferences.setTABLE_NAME(Integer.parseInt(tableNo));
+                            }
+
                             Intent intent = new Intent(Book_a_tableActivity.this, MenuActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
+                            finish();
                         }
 
-                }else{
-                    Util.createOKAlert(Book_a_tableActivity.this, getResources().getString(R.string.headercreateaccount),"Enter the table no");
                 }
                 break;
         }

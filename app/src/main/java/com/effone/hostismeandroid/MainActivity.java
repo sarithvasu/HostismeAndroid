@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity
         TextView cust_ttile = (TextView) getSupportActionBar().getCustomView().findViewById(R.id.tv_custom_titile);
         cust_ttile.setText(getString(R.string.home));
         TextView cust_sub_ttile = (TextView) getSupportActionBar().getCustomView().findViewById(R.id.tv_custom_sub_titile);
-        cust_sub_ttile.setText("Syndey");
+        cust_sub_ttile.setText("Sydney");
 
 
     }

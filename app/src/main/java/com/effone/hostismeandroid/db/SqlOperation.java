@@ -49,16 +49,11 @@ public class SqlOperation {
     }
 
 
-    public void AddOrSubstractProduct(String item_cat, String sub_item_cat, int menu_item_id, String name, ArrayList<String> checkedCountries, String ingredients, String specail, float price, int quantity, int flag, int kindOfOperation) {
+    public void AddOrSubstractProduct(String item_cat, String sub_item_cat, int menu_item_id, String name, String checkedCountries, String ingredients, String specail, float price, int quantity, int flag, int kindOfOperation) {
         int values = 0;
-        String listString="";
-        for (int i=0;i<checkedCountries.size();i++)
-        {
-            if(i == 0)
-            listString += checkedCountries.get(i) ;
-            else
-                listString += ","+checkedCountries.get(i);
-        }
+        String listString=checkedCountries;
+
+
         if(kindOfOperation == 0) {
             values=0;
         }else {
@@ -79,7 +74,7 @@ public class SqlOperation {
                 row.put(COLUMN_NAME_ITEM_NAME, name);
                 row.put(COLUMN_NAME_ITEM_INGRE, ingredients);
                 row.put(COLUMN_NAME_ITEM_PRICE,price);
-                row.put(COLUMN_NAME_ITEM_QTY, quantity);
+                row.put(COLUMN_NAME_ITEM_QTY, 1);
                 row.put(COLUMN_NAME_IS_SPECIAL,specail);
                 row.put(COLUMN_NAME_MENU_TYPE,listString);
                 row.put(COLUMN_NAME_FLAG, flag);
@@ -99,15 +94,15 @@ public class SqlOperation {
                         //its a sum, update the qty in 1
                         row.put(COLUMN_NAME_ITEM_QTY, oldQty + 1);//add  1
 
-                        database.update(TABLE_NAME_ORDERITEM, row, COLUMN_NAME_MENU_ITEM_ID+" = "  + menu_item_id, null); //update qty in DB the request
+                        database.update(TABLE_NAME_ORDERITEM, row, COLUMN_NAME_MENU_ITEM_ID+" = "  + menu_item_id+ " and  "+ COLUMN_NAME_ITEM_NAME +" = '"+name+"'", null); //update qty in DB the request
                         break;
 
                     case 2:
                         if (oldQty > 0) {
                             row.put(COLUMN_NAME_ITEM_QTY, oldQty - 1);//substract -1 if the qty is greater than 0,
-                            database.update(TABLE_NAME_ORDERITEM, row, COLUMN_NAME_MENU_ITEM_ID+" = " + menu_item_id, null); //update qty DB the request
+                            database.update(TABLE_NAME_ORDERITEM, row, COLUMN_NAME_MENU_ITEM_ID+" = "  + menu_item_id+ " and  "+ COLUMN_NAME_ITEM_NAME +" =  '"+name+"'", null); //update qty DB the request
                             if(oldQty == 1) {
-                                database.delete(TABLE_NAME_ORDERITEM, COLUMN_NAME_MENU_ITEM_ID + "= " + menu_item_id, null);//delete the complete row if the qunatity is 0
+                                database.delete(TABLE_NAME_ORDERITEM, COLUMN_NAME_MENU_ITEM_ID+" = "  + menu_item_id+ " and  "+ COLUMN_NAME_ITEM_NAME +" =  '"+name+"'", null);//delete the complete row if the qunatity is 0
                             }
                         }
                         break;

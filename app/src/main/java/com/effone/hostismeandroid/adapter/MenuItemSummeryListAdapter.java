@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.effone.hostismeandroid.MainActivity;
 import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.activity.MenuActivity;
+import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.common.OnDataChangeListener;
 import com.effone.hostismeandroid.db.SqlOperation;
 import com.effone.hostismeandroid.model.CartItems;
@@ -45,9 +46,11 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
     private SqlOperation sqliteoperation;
     private  List<MenuTaxItens> taxItemses;
     private OnDataChangeListener mOnDataChangeListener;
+    private AppPreferences mAppPreference;
     public MenuItemSummeryListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<CartItems> orderedItemSummaries, List<MenuTaxItens> taxItemses) {
         super(context, resource,  orderedItemSummaries);
         this.mContext=context;
+        mAppPreference=new AppPreferences(context);
         this.orderedItemSummaries =(ArrayList<CartItems>) orderedItemSummaries;
         inflater = (LayoutInflater)context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -80,7 +83,7 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
             holder.mTaxName3=(TextView) convertView.findViewById(R.id.tv_service_tax);
             holder.mTaxName4=(TextView) convertView.findViewById(R.id.tax4);
 
-            holder.addChcekBox = (LinearLayout) convertView.findViewById(R.id.ll_checkboxItems);
+            holder.addChcekBox = (TextView) convertView.findViewById(R.id.ll_checkboxItems);
 
             convertView.setTag(holder);
         } else
@@ -116,11 +119,10 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
             holder.tv_taxfinalItem.setVisibility(View.GONE);
             holder.tv_total.setText("$ "+totalAmmount(value.getItemQuantity()*value.getItemPrice()));
             holder.tv_quantity.setText(""+value.getItemQuantity());
+            holder.addChcekBox.setText(""+value.getMenuType());
+            holder.tv_quantity.setTag(position);
 
-
-
-
-            final List<String> menuTypes = Arrays.asList(value.getMenuType().split(","));
+         /*   final List<String> menuTypes = Arrays.asList(value.getMenuType().split(","));
             CheckBox[] dynamicCheckBoxes = new CheckBox[menuTypes.size()];
             CompoundButton.OnCheckedChangeListener checkListner=new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -157,7 +159,7 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
                         }
                     });
                 }
-            }
+            }*/
         final int[] qty = new int[1];
         if(! holder.tv_quantity.getText().toString().equals(""))
             qty[0] =Integer.parseInt(holder.tv_quantity.getText().toString());
@@ -191,17 +193,18 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
                 if(qty[0] <99) {
                     qty[0]++;
                     holder.tv_quantity.setText("" + qty[0]);
-
+                    value.setItemQuantity(qty[0]);
 
                     sqliteoperation = new SqlOperation(mContext);
                     sqliteoperation.open();
 
                     sqliteoperation.AddOrSubstractProduct(value.getItemCatagerie(), value.getItemSubCat(),
                             value.getItemMenuCatId(), value.getItemName()
-                            , checkedCountries, value.getItemIngred(), value.getSpecial(), Float.parseFloat(String.valueOf(value.getItemPrice())), qty[0], 1, 1);
+                            , value.getMenuType(), value.getItemIngred(), value.getSpecial(), Float.parseFloat(String.valueOf(value.getItemPrice())), qty[0], 1, 1);
 
                     sqliteoperation.close();
                     mOnDataChangeListener.onDataChanged(1);
+
                 }                // tvQuatity.setText( sqliteoperation.getCount(groupPosition, childPosition, details[0], Float.parseFloat(details[1]), 1));
             }
         });
@@ -214,15 +217,15 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
                 if(qty[0] >0) {
                     qty[0]--;
                     holder.tv_quantity.setText("" + qty[0]);
-
+                    value.setItemQuantity(qty[0]);
           //
                     sqliteoperation = new SqlOperation(mContext);
                     sqliteoperation.open();
                     sqliteoperation.AddOrSubstractProduct(value.getItemCatagerie(), value.getItemSubCat(),
                             value.getItemMenuCatId(), value.getItemName()
-                            , checkedCountries, value.getItemIngred(), value.getSpecial(), Float.parseFloat(String.valueOf(value.getItemPrice())), qty[0], 1, 2);
+                            , value.getMenuType(), value.getItemIngred(), value.getSpecial(), Float.parseFloat(String.valueOf(value.getItemPrice())), qty[0], 1, 2);
                         if(qty[0] == 0){
-                            if(sqliteoperation.getItemCountInCart()!=1) {
+                            if(sqliteoperation.getItemCountInCart()!=0) {
                                 //we are deleteing the item from the cart based on the item_id and ItemName
                                 sqliteoperation.cartItemDelete(value.getItemMenuCatId(), value.getItemName(), value.getMenuType());
                             }else{
@@ -248,7 +251,8 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
         double sum=0;
         for(int i=0;i<taxList.size();i++){
             if(taxList.get(i).getType().equals("Fixed")){
-                sum   = sum+ price +Float.parseFloat(taxList.get(i).getChargevalue());
+                if(mAppPreference.getORDER_ID().equals(0))
+                sum   = sum+Float.parseFloat(taxList.get(i).getChargevalue());
             }else{
                 sum = sum + (price / 100.0f) * Float.parseFloat(taxList.get(i).getChargevalue());
             }
@@ -269,7 +273,7 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
         TextView tv_add;
         TextView tv_quantity;
         TextView tv_close;
-        LinearLayout addChcekBox;
+        TextView addChcekBox;
 
 
         TextView mTaxName1;

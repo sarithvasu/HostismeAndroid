@@ -123,7 +123,7 @@ public class MenuListAdpater extends BaseExpandableListAdapter {
     public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         final Content food = (Content) getChild(groupPosition, childPosition);
         int quatity=food.getQuantity();
-        List<String> menuTypes = Arrays.asList(food.getMenu_types().split(","));
+        final List<String> menuTypes = Arrays.asList(food.getMenu_types().split(","));
         View vi = convertView;
         final String sub_item_cat = itemsname[groupPosition];
         final ArrayList<String> checkedCountries = new ArrayList<String>();
@@ -138,7 +138,7 @@ public class MenuListAdpater extends BaseExpandableListAdapter {
             holder.tv_add_items = (TextView) vi.findViewById(R.id.tv_add_item);
             holder.tv_add_items.setVisibility(View.INVISIBLE);
             holder.dynamicCheckBoxes = new ArrayList<>();
-            holder.addChcekBox = (LinearLayout) vi.findViewById(R.id.ll_checkboxItems);
+            holder.addChcekBox = (TextView) vi.findViewById(R.id.ll_checkboxItems);
             holder.tv_Add_Min_Quan = (LinearLayout) vi.findViewById(R.id.btn_lay);
             holder.minusBtn = (TextView) vi.findViewById(R.id.tv_minus);
             holder.tvPrice = (TextView) vi.findViewById(R.id.tv_price);
@@ -161,7 +161,8 @@ public class MenuListAdpater extends BaseExpandableListAdapter {
         holder.tvQuatity.setText(""+quatity);
         holder.tv_ingredients.setText("" + food.getIngredients());
         holder.tvPrice.setText("$ " + food.getPrice());
-        CompoundButton.OnCheckedChangeListener checkListner = new CompoundButton.OnCheckedChangeListener() {
+        holder.addChcekBox.setText(food.getMenu_types());
+       /* CompoundButton.OnCheckedChangeListener checkListner = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 String checkedText = compoundButton.getText() + "";
@@ -188,7 +189,7 @@ public class MenuListAdpater extends BaseExpandableListAdapter {
                 cb.setOnCheckedChangeListener(checkListner);
             }
         }
-
+*/
         final int[] qty = new int[1];
         if (!holder.tvQuatity.getText().toString().equals(""))
             qty[0] = Integer.parseInt(holder.tvQuatity.getText().toString());
@@ -198,7 +199,6 @@ public class MenuListAdpater extends BaseExpandableListAdapter {
 
             public void onClick(View v) {
 
-                if (checkedCountries.size() != 0 && !food.getMenu_types().equals("")) {
                     Log.d("click", "click add for" + food);
                     if (qty[0] < 99) {
                         qty[0]++;
@@ -208,31 +208,12 @@ public class MenuListAdpater extends BaseExpandableListAdapter {
                         sqliteoperation = new SqlOperation(context);
                         sqliteoperation.open();
                         sqliteoperation.AddOrSubstractProduct(heading, sub_item_cat,
-                                food.getMenu_item_id(), food.getName(), checkedCountries
+                                food.getMenu_item_id(), food.getName(), food.getMenu_types()
                                 , food.getIngredients(), food.getIs_special(), Float.parseFloat(String.valueOf(food.getPrice())), qty[0], 1, 1);
 
                         updateableInterface.update();
                         sqliteoperation.close();
                     }
-                } else if (food.getIs_special().equals("3")) {
-                    Log.d("click", "click add for" + food);
-                    if (qty[0] < 99) {
-                        qty[0]++;
-                        holder.tvQuatity.setText("" + qty[0]);
-                        food.setQuantity(qty[0]);
-                        sqliteoperation = new SqlOperation(context);
-                        sqliteoperation.open();
-                        sqliteoperation.AddOrSubstractProduct(heading, sub_item_cat,
-                                food.getMenu_item_id(), food.getName(), checkedCountries
-                                , food.getIngredients(), food.getIs_special(), Float.parseFloat(String.valueOf(food.getPrice())), qty[0], 1, 1);
-
-                        updateableInterface.update();
-                        sqliteoperation.close();
-                    }
-                }else
-                    Util.createOKAlert(context, "Alert", "Please select at least one option.");
-
-
             }
         });
         holder.minusBtn.setOnClickListener(new View.OnClickListener() {
@@ -247,7 +228,7 @@ public class MenuListAdpater extends BaseExpandableListAdapter {
                 sqliteoperation = new SqlOperation(context);
                 sqliteoperation.open();
                 sqliteoperation.AddOrSubstractProduct(heading, sub_item_cat,
-                        food.getMenu_item_id(), food.getName(), checkedCountries
+                        food.getMenu_item_id(), food.getName(), food.getMenu_types()
                         , food.getIngredients(), food.getIs_special(), Float.parseFloat(String.valueOf(food.getPrice())), qty[0], 1, 2);
                 sqliteoperation.close();
                 updateableInterface.update();
@@ -268,7 +249,7 @@ public class MenuListAdpater extends BaseExpandableListAdapter {
         public TextView child_text;
         public TextView tv_ingredients;
         public TextView tv_add_items;
-        public LinearLayout addChcekBox;
+        public TextView addChcekBox;
         public LinearLayout tv_Add_Min_Quan;
         public TextView minusBtn;
         public TextView tvPrice;

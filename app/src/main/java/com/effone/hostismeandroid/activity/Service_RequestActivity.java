@@ -130,7 +130,7 @@ public class Service_RequestActivity extends AppCompatActivity implements View.O
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
+                    Util.createErrorAlert(Service_RequestActivity.this, "", error.getMessage()+"Server Error");
                 }
             }) {
                 @Override
@@ -154,7 +154,7 @@ public class Service_RequestActivity extends AppCompatActivity implements View.O
             requestQueue.add(req);
         }
         else{
-            Util.createErrorAlert(Service_RequestActivity.this, "", "PLEASE SELECT TABLE NUMBER SELECTED");
+            Util.createErrorAlert(Service_RequestActivity.this, "", "Please Select Table Number. ");
         }
     }
 

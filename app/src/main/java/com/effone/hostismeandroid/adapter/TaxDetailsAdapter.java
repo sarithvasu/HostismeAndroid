@@ -16,6 +16,7 @@ import com.effone.hostismeandroid.model.Restaurant;
 import com.effone.hostismeandroid.model.TaxItems;
 import com.effone.hostismeandroid.model_for_json.TaxItem;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -58,7 +59,10 @@ public class TaxDetailsAdapter  extends ArrayAdapter<TaxItems> {
             TaxItems value = (TaxItems) taxItemses.get(position);
             /************  Set Model values in Holder elements ***********/
             holder.tv_tax_name.setText(value.getName());
-            holder.tv_tax_money.setText("$ "+value.getValue());
+            DecimalFormat f = new DecimalFormat("##.000000");
+
+            String formattedValue = String.format("%.2f", value.getValue());
+            holder.tv_tax_money.setText("$ "+formattedValue);
         }
 
         return vi;
