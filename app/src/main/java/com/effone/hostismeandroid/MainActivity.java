@@ -243,10 +243,11 @@ public class MainActivity extends AppCompatActivity
     private void declerations() {
         mTvRestaurantList = (TextView) findViewById(R.id.btn_res_list);
         mTvBook_a_table = (TextView) findViewById(R.id.btn_book_table);
-        if(appPreferences.getTABLE_NAME()==0||appPreferences.getTABLE_NAME()==9999){
+        if(appPreferences.getTABLE_NAME()==0||appPreferences.getTABLE_NAME()==9999 ){
            mTvBook_a_table.setText(getString(R.string.book_a_table));
         }
         else{
+
             mTvBook_a_table.setText(getString(R.string.move_a_table));
         }
         mTvMenu = (TextView) findViewById(R.id.btn_res_menu);
@@ -283,9 +284,10 @@ public class MainActivity extends AppCompatActivity
                     intent = new Intent(this, Service_RequestActivity.class);
                     startActivity(intent);
                 } else {
-                    Util.createOKAlert(this,  "", getString(R.string.restartung_selection_message));
-
-
+                    if (!Util.Operations.isOnline(this))
+                        Util.createNetErrorDialog(this);
+                    else
+                     Util.createOKAlert(this,  "", getString(R.string.restartung_selection_message));
                 }
                 break;
             case R.id.btn_res_list:
@@ -299,6 +301,9 @@ public class MainActivity extends AppCompatActivity
                     intent = new Intent(this, MenuActivity.class);
                     startActivity(intent);
                 } else {
+                 if (!Util.Operations.isOnline(this))
+                     Util.createNetErrorDialog(this);
+                 else
                  Util.createOKAlert(this,  "", getString(R.string.restartung_selection_message));
                 }
                 break;
@@ -307,7 +312,10 @@ public class MainActivity extends AppCompatActivity
                     intent = new Intent(this, Book_a_tableActivity.class);
                     startActivity(intent);
                 } else {
-                    Util.createOKAlert(this,  "", getString(R.string.restartung_selection_message));
+                    if (!Util.Operations.isOnline(this))
+                        Util.createNetErrorDialog(this);
+                    else
+                     Util.createOKAlert(this,  "", getString(R.string.restartung_selection_message));
                 }
                 break;
             case R.id.btn_view_pay:
@@ -315,8 +323,12 @@ public class MainActivity extends AppCompatActivity
                     if(!appPreferences.getORDER_ID().equals("")) {
                         intent = new Intent(this, View_Pay_BillActivity.class);
                         startActivity(intent);
-                    }else
-                        Util.createOKAlert(this,  "", " Order is not yet placed. ");
+                    }else {
+                        if (!Util.Operations.isOnline(this))
+                            Util.createNetErrorDialog(this);
+                        else
+                        Util.createOKAlert(this, "", " Order is not yet placed. ");
+                    }
 
                     /*SqlOperations sqliteoperation = new SqlOperations(getApplicationContext());
                     sqliteoperation.open();

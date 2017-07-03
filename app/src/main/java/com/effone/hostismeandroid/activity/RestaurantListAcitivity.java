@@ -55,6 +55,9 @@ public class RestaurantListAcitivity extends AppCompatActivity implements Adapte
         Common.setCustomTitile(this,"Restaurant List","Sydney");
         mGson = new Gson();
         mQueue = Volley.newRequestQueue(this);
+        if (!Util.Operations.isOnline(this))
+            Util.createNetErrorDialog(this);
+        else
         init();
 
     }
@@ -91,7 +94,7 @@ public class RestaurantListAcitivity extends AppCompatActivity implements Adapte
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         hidePDialog();
-                        Util.createErrorAlert(RestaurantListAcitivity.this, "", "Server Error."+error.getMessage());
+                        Util.createErrorAlert(RestaurantListAcitivity.this, "", "Server Error.");
                     }
                 });
         mQueue.add(stringRequest);
@@ -101,26 +104,29 @@ public class RestaurantListAcitivity extends AppCompatActivity implements Adapte
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Intent showLocationsIntent = new Intent(this, Book_a_tableActivity.class);
-        String restaurant = restaurants[i].getRestaurant_name();
-        String address = restaurants[i].getArea()+", "+restaurants[i].getStreet()+", "+restaurants[i].getState()+" "+restaurants[i].getPincode();
+        if (appPreferences.getORDER_ID().equals("")) {
+            Intent showLocationsIntent = new Intent(this, Book_a_tableActivity.class);
+            String restaurant = restaurants[i].getRestaurant_name();
+            String address = restaurants[i].getArea() + ", " + restaurants[i].getStreet() + ", " + restaurants[i].getState() + " " + restaurants[i].getPincode();
 
-        String restaurant_id = restaurants[i].getId();
-        if(!appPreferences.getRESTAURANT_ID().equals(restaurant_id)&&appPreferences.getTABLE_NAME()!=0){
-            appPreferences.setTABLE_NAME(0);
-            appPreferences.setORDER_ID("");
-            SqlOperation     sqlOperation = new SqlOperation(this);
-            sqlOperation.open();
-            sqlOperation.delete();
-            sqlOperation.close();
+            String restaurant_id = restaurants[i].getId();
+            if (!appPreferences.getRESTAURANT_ID().equals(restaurant_id) && appPreferences.getTABLE_NAME() != 0) {
+                appPreferences.setTABLE_NAME(0);
+                appPreferences.setORDER_ID("");
+                SqlOperation sqlOperation = new SqlOperation(this);
+                sqlOperation.open();
+                sqlOperation.delete();
+                sqlOperation.close();
+            }
+            appPreferences.setRRESTAURANT_NAME(restaurant);
+            appPreferences.setRESTAURANT_ID(restaurant_id);
+            appPreferences.setRESTAURANT_ADDRESS(address);
+            appPreferences.setNUMBER_OF_TABLES(Integer.parseInt(restaurants[i].getNo_of_tables()));
 
+            startActivity(showLocationsIntent);
+        }else {
+            Util.createOKAlert(this,"",""+getString(R.string.payment_msg));
         }
-        appPreferences.setRRESTAURANT_NAME(restaurant);
-        appPreferences.setRESTAURANT_ID(restaurant_id);
-        appPreferences.setRESTAURANT_ADDRESS(address);
-        appPreferences.setNUMBER_OF_TABLES(Integer.parseInt(restaurants[i].getNo_of_tables()));
-
-        startActivity(showLocationsIntent);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

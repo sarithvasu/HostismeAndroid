@@ -51,7 +51,7 @@
             android:drawableTint="@android:color/white"
             android:paddingLeft="5dp"
             android:paddingTop="5dp"
-            android:text="20 Items in Cart\n$ 200.00\nPlus charges"
+            android:text="20 Items in Cart\n$ 200.00\nPlus taxes"
             android:textColor="@android:color/white"
             android:textSize="11dp" />
 

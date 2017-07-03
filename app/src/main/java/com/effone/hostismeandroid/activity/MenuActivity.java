@@ -74,7 +74,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     SqlOperation sqlOperation;
     ProgressDialog pDialog;
     ArrayList<Items> itemss;
-    HashMap<String, Items[]> pagerItem = new LinkedHashMap<>();
+    LinkedHashMap<String, Items[]> pagerItem = new LinkedHashMap<>();
     Categories categories;
 
 
@@ -105,8 +105,12 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         if(mVpMainMenu!=null)
         mVpMainMenu.setAdapter(null);
-        gettingDataFromService();
-        showOrderItems();
+        if (!Util.Operations.isOnline(this))
+            Util.createNetErrorDialog(this);
+        else {
+            gettingDataFromService();
+            showOrderItems();
+        }
     }
 
     private void gettingDataFromService() {
@@ -142,58 +146,63 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                                     String countryCousin = countryCousins.next();
                                     JSONArray jsonArray = jsonObject.getJSONArray(countryCousin);
                                     Content[] contents = new Content[jsonArray.length()];
-
                                     if (!countryCousin.equals("Beverages")) {
-                                        Items items=new Items();
-                                        items.setName(countryCousin);
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            JSONObject contentJson = jsonArray.getJSONObject(i);
-                                            Content content = new Content();
-                                            content.setMenu_item_id(Integer.parseInt(contentJson.getString("id")));
-                                            content.setName(contentJson.getString("item"));
-                                            content.setMenu_types(contentJson.getString("menu_type"));
-                                            content.setCountryCusine(countryCousin);
-                                            content.setPrice(Float.parseFloat(contentJson.getString("price")));
-                                            content.setIngredients(contentJson.getString("description"));
-                                            content.setIs_special(contentJson.getString("is_special"));
-                                            content.setQuantity(0);
-                                            contents[i] = content;
+                                        if(jsonArray!=null && jsonArray.length()>0) {
+                                            Items items = new Items();
+                                            items.setName(countryCousin);
+                                            for (int i = 0; i < jsonArray.length(); i++) {
+                                                JSONObject contentJson = jsonArray.getJSONObject(i);
+                                                Content content = new Content();
+                                                content.setMenu_item_id(Integer.parseInt(contentJson.getString("id")));
+                                                content.setName(contentJson.getString("item").trim());
+                                                content.setMenu_types(contentJson.getString("menu_type").trim());
+                                                content.setCountryCusine(countryCousin);
+                                                content.setPrice(Float.parseFloat(contentJson.getString("price")));
+                                                content.setIngredients(contentJson.getString("description").trim());
+                                                content.setIs_special(contentJson.getString("is_special"));
+                                                content.setQuantity(0);
+                                                contents[i] = content;
+                                            }
+                                            items.setContent(contents);
+                                            itemses.add(items);
                                         }
-                                        items.setContent(contents);
-                                        itemses.add(items);
                                     }
-                                    else{
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            JSONObject contentJson = jsonArray.getJSONObject(i);
-                                            Iterator<String> bevTypes = contentJson.keys();
+                                    else {
+                                        if (jsonArray != null && jsonArray.length() > 0) {
+                                            for (int i = 0; i < jsonArray.length(); i++) {
+                                                JSONObject contentJson = jsonArray.getJSONObject(i);
+                                                Iterator<String> bevTypes = contentJson.keys();
 
-                                            while (bevTypes.hasNext()) {
-                                                String bevType=bevTypes.next();
-                                                Items items=new Items();
-                                                items.setName(countryCousin+"-"+bevType);
-                                                JSONArray jsonbevType = contentJson.getJSONArray(bevType);
-                                                Log.e("",""+jsonArray);
+                                                while (bevTypes.hasNext()) {
+                                                    String bevType = bevTypes.next();
 
-                                                Content[] contentBevlist = new Content[jsonbevType.length()];
-                                                for (int j = 0; j < jsonbevType.length(); j++) {
-                                                    JSONObject contentBev = jsonbevType.getJSONObject(j);
-                                                    Content content = new Content();
-                                                    content.setMenu_item_id(Integer.parseInt(contentBev.getString("id")));
-                                                    content.setName(contentBev.getString("item"));
-                                                    content.setMenu_types("");
+                                                    JSONArray jsonbevType = contentJson.getJSONArray(bevType);
+                                                    Log.e("", "" + jsonArray);
+                                                    if(jsonbevType!=null&&jsonbevType.length()>0) {
+                                                        Items items = new Items();
+                                                        items.setName(countryCousin + "-" + bevType);
+                                                        Content[] contentBevlist = new Content[jsonbevType.length()];
+                                                        for (int j = 0; j < jsonbevType.length(); j++) {
+                                                            JSONObject contentBev = jsonbevType.getJSONObject(j);
+                                                            Content content = new Content();
+                                                            content.setMenu_item_id(Integer.parseInt(contentBev.getString("id")));
+                                                            content.setName(contentBev.getString("item").trim());
+                                                            content.setMenu_types("");
                                                     /*content.setCountryCusine(countryCousin);*/
-                                                    content.setQuantity(0);
-                                                    content.setPrice(Float.parseFloat(contentBev.getString("price")));
-                                                    content.setIngredients(contentBev.getString("description"));
-                                                    content.setIs_special("3");
-                                                    contentBevlist[j] = content;
+                                                            content.setQuantity(0);
+                                                            content.setPrice(Float.parseFloat(contentBev.getString("price")));
+                                                            content.setIngredients(contentBev.getString("description").trim());
+                                                            content.setIs_special("3");
+                                                            contentBevlist[j] = content;
+                                                        }
+                                                        items.setContent(contentBevlist);
+                                                        itemses.add(items);
+                                                    }
                                                 }
-                                                items.setContent(contentBevlist);
-                                                itemses.add(items);
+
                                             }
 
                                         }
-
                                     }
                                 }
                                 Items[] item1=new Items[0];
@@ -239,98 +248,6 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         taxList  = new ArrayList<MenuTaxItens>(Arrays.asList(menuTaxItems));
     }
 
-    private void doFilterMitheCountryCusine( JSONObject menuJsonObject) {
-        ArrayList<Content> italian=new ArrayList<>();
-        ArrayList<Content> mexican=new ArrayList<>();
-        ArrayList<Content> asian=new ArrayList<>();
-        ArrayList<Content> others=new ArrayList<>();
-        Iterator<String> countryCousins = menuJsonObject.keys();
-        ArrayList<Items>  dinnerItems=new ArrayList<>();
-        ArrayList<Items>  moringItems=new ArrayList<>();
-        ArrayList<Items>  lunchItems=new ArrayList<>();
-
-
-        while (countryCousins.hasNext()) {
-
-            for (Content co :mDinnerList) {
-                if(co.getCountryCusine().equals("Italian")){
-                    italian.add(co);
-                }
-                if(co.getCountryCusine().equals("Mexican")){
-                    mexican.add(co);
-                }
-                if(co.getCountryCusine().equals("Asian")){
-                    asian.add(co);
-                }
-                if(co.getCountryCusine().equals("Others")){
-                    others.add(co);
-                }
-            }
-            for (Content co :mLunchList) {
-                if(co.getCountryCusine().equals("Italian")){
-                    italian.add(co);
-                }
-                if(co.getCountryCusine().equals("Mexican")){
-                    mexican.add(co);
-                }
-                if(co.getCountryCusine().equals("Asian")){
-                    asian.add(co);
-                }
-                if(co.getCountryCusine().equals("Others")){
-                    others.add(co);
-                }
-            }
-            for (Content co :mBreakfastList) {
-                if(co.getCountryCusine().equals("Italian")){
-                    italian.add(co);
-                }
-                if(co.getCountryCusine().equals("Mexican")){
-                    mexican.add(co);
-                }
-                if(co.getCountryCusine().equals("Asian")){
-                    asian.add(co);
-                }
-                if(co.getCountryCusine().equals("Others")){
-                    others.add(co);
-                }
-            }
-            for (Content co :mLunchList) {
-                if(co.getCountryCusine().equals("Italian")){
-                    italian.add(co);
-                }
-                if(co.getCountryCusine().equals("Mexican")){
-                    mexican.add(co);
-                }
-                if(co.getCountryCusine().equals("Asian")){
-                    asian.add(co);
-                }
-                if(co.getCountryCusine().equals("Others")){
-                    others.add(co);
-                }
-            }
-            for (Content co :mAlldayList) {
-                if(co.getCountryCusine().equals("Italian")){
-                    italian.add(co);
-                }
-                if(co.getCountryCusine().equals("Mexican")){
-                    mexican.add(co);
-                }
-                if(co.getCountryCusine().equals("Asian")){
-                    asian.add(co);
-                }
-                if(co.getCountryCusine().equals("Others")){
-                    others.add(co);
-                }
-            }
-
-
-
-
-
-            }
-
-
-    }
 
     private void hidePDialog() {
         if (pDialog != null) {
@@ -342,12 +259,6 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
-        if (!Util.Operations.isOnline(this)) {
-            Util.createNetErrorDialog(this);
-        } else {
-           // showOrderItems();
-           // gettingDataFromService();
-        }
     }
 
     private void setToolbar() {
@@ -430,7 +341,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
             totalPrice += cartItemses.get(i).getItemPrice() * cartItemses.get(i).getItemQuantity();
 
         }
-        mTvSummary.setText(totalCount + " Items in Cart \n " + totalPrice + " Plus charges");
+        mTvSummary.setText(totalCount + " Items in Cart \n " + totalPrice + " Plus taxes");
     }
 
     @Override

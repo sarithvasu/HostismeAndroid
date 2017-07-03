@@ -49,7 +49,7 @@ public final class Util {
                 .setNegativeButton(R.string.button,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                System.exit(0);
+                                dialog.cancel();
                             }
                         }
                 );
@@ -137,7 +137,31 @@ public final class Util {
         alert.show();
     }
 
+    public static void createOKAlert(Context context,String title,String msg ,DialogInterface.OnClickListener listener){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+        if(!title.equals("")) {
+            builder.setTitle(title);
 
+        }
+        builder.setMessage(msg)
+                .setCancelable(false)
+                .setNeutralButton("OK", listener);
+
+        AlertDialog alert = builder.show();
+        alert.getWindow().getAttributes().gravity = Gravity.CENTER;
+        TextView messageText = (TextView)alert.findViewById(android.R.id.message);
+        int titleId =context.getResources().getIdentifier("alertTitle", "id", "android");
+        TextView titleText = (TextView)alert.findViewById(titleId);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+
+            titleText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT));
+            titleText.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+        }
+        titleText.setGravity(Gravity.CENTER);
+        messageText.setGravity(Gravity.CENTER);
+        alert.show();
+    }
 
 
 }

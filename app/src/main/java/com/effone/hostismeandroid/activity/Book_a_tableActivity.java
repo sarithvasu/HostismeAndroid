@@ -217,7 +217,7 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
                     try {
                         tableNo = mSpTableNo.getSelectedItem().toString();
                     } catch (Exception e) {
-
+                            Log.e("",""+e);
 
                     }
                 } else {
@@ -233,15 +233,36 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
 
 
                     if (fromMoveTable) {
-                        if (tableNo.equals(getString(R.string.togo))) {
-                            requestForaTable("" + 9999);
-                            Log.e("String", "" + 9999);
-                        } else if (tableNo.equals(getString(R.string.bar))) {
-                            requestForaTable("" + 8888);
-                            Log.e("String", "" + 8888);
-                        } else {
-                            requestForaTable("" + Integer.parseInt(tableNo));
+                        if (!mAppPreferences.getORDER_ID().equals("")){
+                            if (!Util.Operations.isOnline(this))
+                                Util.createNetErrorDialog(this);
+                            else {
+                                if (tableNo.equals(getString(R.string.togo))) {
+                                    requestForaTable("" + 9999);
+                                    Log.e("String", "" + 9999);
+                                } else if (tableNo.equals(getString(R.string.bar))) {
+                                    requestForaTable("" + 8888);
+                                    Log.e("String", "" + 8888);
+                                } else {
+                                    requestForaTable("" + Integer.parseInt(tableNo));
+                                }
+                            }
+                    }else{
+                            if (tableNo.equals(getString(R.string.togo)))
+                                mAppPreferences.setTABLE_NAME(9999);
+                             else if (tableNo.equals(getString(R.string.bar)))
+                                mAppPreferences.setTABLE_NAME(8888);
+                             else
+                                mAppPreferences.setTABLE_NAME(Integer.parseInt(tableNo));
+
+                            Intent intent = new Intent(Book_a_tableActivity.this, MenuActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            finish();
+
+
                         }
+
 
                     } else {
                         if (tableNo.equals(getString(R.string.togo))) {
@@ -272,7 +293,7 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
         ServiceRequest.setService_type("Move Table_" + mAppPreferences.getTABLE_NAME() + "_" + tableNo);
         ServiceRequest.setDevice_id(Settings.Secure.getString(getApplicationContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID));
-        ServiceRequest.setOrder_id("1" + mAppPreferences.getORDER_ID());
+        ServiceRequest.setOrder_id(mAppPreferences.getORDER_ID());
         ServiceRequest.setRestaurant_id(mAppPreferences.getRESTAURANT_ID());
         ServiceRequest.setTable_no("" + mAppPreferences.getTABLE_NAME());
         mServiceRequestJson = new ServiceRequestJson();

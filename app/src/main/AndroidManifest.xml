@@ -67,11 +67,6 @@
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activity.ViewCartActivity"
-            android:screenOrientation="sensorPortrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustNothing" />
-        <activity
             android:name=".activity.Book_a_tableActivity"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.NoActionBar" />

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,35 +14,26 @@ import android.widget.RelativeLayout;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.effone.hostismeandroid.MainActivity;
 import com.effone.hostismeandroid.R;
 import com.effone.hostismeandroid.adapter.Booking_HistoryAdapter;
-import com.effone.hostismeandroid.app.AppController;
 import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.common.Common;
 import com.effone.hostismeandroid.db.SqlOperations;
 import com.effone.hostismeandroid.model.BookingHistoryItem;
-import com.effone.hostismeandroid.model.HomePageDish;
 import com.effone.hostismeandroid.model.OrderSummary;
-import com.effone.hostismeandroid.model.Order_Items;
-import com.effone.hostismeandroid.model_for_json.Bill;
 import com.effone.hostismeandroid.util.Util;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.effone.hostismeandroid.common.URL.GET_BOOKING_HISTORY;
-import static com.effone.hostismeandroid.common.URL.booking_hisory_url;
 
 /**
  * Created by sarith.vasu on 14-04-2017.
@@ -51,31 +41,32 @@ import static com.effone.hostismeandroid.common.URL.booking_hisory_url;
 
 public class My_BookingActivity extends AppCompatActivity {
     private AppPreferences appPreferences;
-    private  ListView mLvBookingHistory;
+    private ListView mLvBookingHistory;
     private Booking_HistoryAdapter bookingHistoryAdapter;
     private ArrayList<OrderSummary> orderSummaries;
     private RelativeLayout mRelativeLayout;
     private SqlOperations sqliteoperation;
-    Long bill_no= Long.valueOf(000000);
+    Long bill_no = Long.valueOf(000000);
     ArrayList<BookingHistoryItem> mBookingHistoryItem;
     private ProgressDialog pDialog;
 
     private Gson gson;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.booking_history_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-       // sqliteoperation = new SqlOperations(getApplicationContext());
+        // sqliteoperation = new SqlOperations(getApplicationContext());
         //sqliteoperation.open();
-        gson=new Gson();
+        gson = new Gson();
         //mPaymentConfirmation = (ArrayList<BookingHistoryItem>) sqliteoperation.getBookedHistory(bill_no);
-       // sqliteoperation.close();
-        appPreferences=new AppPreferences(this);
+        // sqliteoperation.close();
+        appPreferences = new AppPreferences(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        Common.setCustomTitile(this,"Booking History",null);
+        Common.setCustomTitile(this, "Booking History", null);
       /*  if(appPreferences.getREST_NAME()!= null)
         {
 
@@ -87,21 +78,25 @@ public class My_BookingActivity extends AppCompatActivity {
     }
 
     private void init() {
-        mRelativeLayout=(RelativeLayout)findViewById(R.id.relativeLayout);
+        mRelativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
         mRelativeLayout.setVisibility(View.GONE);
-        mLvBookingHistory=(ListView)findViewById(R.id.historyView);
+        mLvBookingHistory = (ListView) findViewById(R.id.historyView);
         //virtualMethod();
        /* Gson gson= new Gson();
         String json = gson.toJson(mPaymentConfirmation);*/
-       dummyUrlCode();
+        if (!Util.Operations.isOnline(this))
+            Util.createNetErrorDialog(this);
+        else
+            dummyUrlCode();
 
     }
+
     private void dummyUrlCode() {
         pDialog = new ProgressDialog(this);
         // Showing progress dialog before making http request
         pDialog.setMessage("Loading...");
         pDialog.show();
-        StringRequest movieReq = new StringRequest(GET_BOOKING_HISTORY+appPreferences.getDEVICE_ID(),
+        StringRequest movieReq = new StringRequest(GET_BOOKING_HISTORY + appPreferences.getDEVICE_ID(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -110,34 +105,34 @@ public class My_BookingActivity extends AppCompatActivity {
                         try {
                             jsonObjec = new JSONObject(response);
                             boolean status = jsonObjec.getBoolean("status");
-                        if (status) {
-                            Gson gson = new Gson();
+                            if (status) {
+                                Gson gson = new Gson();
 
-                            mBookingHistoryItem = gson.fromJson(jsonObjec.getString("bookinghistory"), new TypeToken<ArrayList<BookingHistoryItem>>() {
-                            }.getType());
-                            bookingHistoryAdapter = new Booking_HistoryAdapter(My_BookingActivity.this, R.layout.booking_history_items, mBookingHistoryItem);
-                            mLvBookingHistory.setAdapter(bookingHistoryAdapter);
-                            hidePDialog();
-                        }else{
-                            Util.createErrorAlert(My_BookingActivity.this, "", "No OrderDetails Found.");
+                                mBookingHistoryItem = gson.fromJson(jsonObjec.getString("bookinghistory"), new TypeToken<ArrayList<BookingHistoryItem>>() {
+                                }.getType());
+                                bookingHistoryAdapter = new Booking_HistoryAdapter(My_BookingActivity.this, R.layout.booking_history_items, mBookingHistoryItem);
+                                mLvBookingHistory.setAdapter(bookingHistoryAdapter);
+                                hidePDialog();
+                            } else {
+                                Util.createErrorAlert(My_BookingActivity.this, "", "No Order Details Found.");
                            /* Intent intent=new Intent(My_BookingActivity.this,MainActivity.class);
                             startActivity(intent);*/
-                        }
+                            }
                             hidePDialog();
                         } catch (JSONException e) {
                             hidePDialog();
-                                e.printStackTrace();
-                            }
+                            e.printStackTrace();
+                        }
 
 
-                            // Parsing json
+                        // Parsing json
 
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 hidePDialog();
-                Intent intent=new Intent(My_BookingActivity.this,MainActivity.class);
+                Intent intent = new Intent(My_BookingActivity.this, MainActivity.class);
                 startActivity(intent);
 //                Util.createErrorAlert(My_BookingActivity.this, "", error.getMessage());
 
@@ -148,6 +143,7 @@ public class My_BookingActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(movieReq);
     }
+
     private void hidePDialog() {
         if (pDialog != null) {
             pDialog.dismiss();

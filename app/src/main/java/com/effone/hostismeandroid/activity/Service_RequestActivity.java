@@ -1,5 +1,6 @@
 package com.effone.hostismeandroid.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -83,7 +84,10 @@ public class Service_RequestActivity extends AppCompatActivity implements View.O
                     // get selected radio button from radioGroup
                     int selectedId = mRadioGroup.getCheckedRadioButtonId();
                     if (selectedId != -1) {
-                        sendingDataServer();
+                        if (!Util.Operations.isOnline(this))
+                            Util.createNetErrorDialog(this);
+                        else
+                            sendingDataServer();
                     }
 // find the radiobutton by returned id
 
@@ -95,13 +99,13 @@ public class Service_RequestActivity extends AppCompatActivity implements View.O
 
     private void sendingDataServer() {
         if(mAppPreferences.getTABLE_NAME()!=0) {
-            ServiceRequest ServiceRequest = new ServiceRequest();
+            final ServiceRequest ServiceRequest = new ServiceRequest();
             ServiceRequest.setComplaint(mTvComplaintList.getText().toString());
             int selectedId = mRadioGroup.getCheckedRadioButtonId();
             RadioButton radioButton = (RadioButton) findViewById(selectedId);
             ServiceRequest.setService_type(radioButton.getText().toString());
             ServiceRequest.setDevice_id(mAppPreferences.getDEVICE_ID());
-            ServiceRequest.setOrder_id("1"+mAppPreferences.getORDER_ID());
+            ServiceRequest.setOrder_id(mAppPreferences.getORDER_ID());
             ServiceRequest.setRestaurant_id(mAppPreferences.getRESTAURANT_ID());
             ServiceRequest.setTable_no("" + mAppPreferences.getTABLE_NAME());
             mServiceRequestJson=new ServiceRequestJson();
@@ -117,8 +121,14 @@ public class Service_RequestActivity extends AppCompatActivity implements View.O
                                     JSONObject jsonObjec = new JSONObject(response);
                                     boolean status =jsonObjec.getBoolean("status");
                                     if(status) {
-                                        Intent intent = new Intent(Service_RequestActivity.this, MainActivity.class);
-                                        startActivity(intent);
+                                        Util.createOKAlert(Service_RequestActivity.this, "", ""+jsonObjec.getString("data"), new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                Intent intent = new Intent(Service_RequestActivity.this, MainActivity.class);
+                                                startActivity(intent);
+                                            }
+                                        });
+
                                     }
                                 }
                                 catch (JSONException e){

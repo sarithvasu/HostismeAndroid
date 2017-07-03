@@ -1,5 +1,6 @@
 package com.effone.hostismeandroid.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +31,7 @@ import com.effone.hostismeandroid.adapter.TaxDetailsAdapter;
 import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.common.Common;
 import com.effone.hostismeandroid.common.OnDataChangeListener;
+import com.effone.hostismeandroid.common.UnScrollListView;
 import com.effone.hostismeandroid.db.SqlOperation;
 import com.effone.hostismeandroid.model.CartItems;
 import com.effone.hostismeandroid.model.TaxItems;
@@ -50,13 +52,14 @@ import static com.effone.hostismeandroid.common.URL.POST_ORDER;
 
 
 public class PlaceOrderActivity extends AppCompatActivity implements View.OnClickListener, OnDataChangeListener {
-    private TextView mTvItemPrice, mTvItemCount, mTvChargers, mTvEstimatedTotal, mTableNo, mTvItemTotalPrice;
+    private TextView mTvItemPrice, mTvItemCount, mTvChargers, mTvEstimatedTotal, mTableNo, mTvItemTotalPrice,mColon;
     private TextView mTvPlaceOrder;
     private Spinner mSpTableNo;
-    private ListView mLvItemSummary;
+    private UnScrollListView mLvItemSummary;
     private AppPreferences appPrefernces;
     private Switch mCbTakeAway;
-    private ListView mLvTaxQuality;
+    private UnScrollListView mLvTaxQuality;
+    private ProgressDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +73,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void decalartion() {
-        mLvTaxQuality = (ListView) findViewById(R.id.lv_tax_menu);
+        mLvTaxQuality = (UnScrollListView) findViewById(R.id.lv_tax_menu);
         mTvItemCount = (TextView) findViewById(R.id.tv_items);
         mTvItemTotalPrice = (TextView) findViewById(R.id.tv_total_price);
         mTvItemPrice = (TextView) findViewById(R.id.tv_items_price);
@@ -79,7 +82,11 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         mTvEstimatedTotal = (TextView) findViewById(R.id.tv_estimated_price);
         mTvPlaceOrder = (TextView) findViewById(R.id.tv_place_order);
         mTableNo = (TextView) findViewById(R.id.tableNo);
+        mTableNo.setText(getString(R.string.table_no));
         mSpTableNo = (Spinner) findViewById(R.id.et_table_no);
+        mColon = (TextView) findViewById(R.id.textView7);
+
+
         ArrayList<String> tableNos = new ArrayList<>();
         tableNos.add(getString(R.string.bar));
         for (int i = 1; i <= appPrefernces.getNUMBER_OF_TABLES(); i++) {
@@ -91,11 +98,13 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         if (appPrefernces.getTABLE_NAME() == 0 || appPrefernces.getTABLE_NAME() == 9999) {
             mTableNo.setVisibility(View.INVISIBLE);
             mSpTableNo.setVisibility(View.INVISIBLE);
+            mColon.setVisibility(View.INVISIBLE);
             mCbTakeAway.setChecked(true);
         } else {
             mCbTakeAway.setChecked(false);
             mTableNo.setVisibility(View.VISIBLE);
             mSpTableNo.setVisibility(View.VISIBLE);
+            mColon.setVisibility(View.VISIBLE);
         }
         if (appPrefernces.getTABLE_NAME() != 0 && appPrefernces.getTABLE_NAME() != 9999) {
             if (appPrefernces.getTABLE_NAME() == 8888)
@@ -110,21 +119,26 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                 if (b) {
                     mTableNo.setVisibility(View.INVISIBLE);
                     mSpTableNo.setVisibility(View.INVISIBLE);
+                    mColon.setVisibility(View.INVISIBLE);
                 } else {
                     if (appPrefernces.getTABLE_NAME() != 0) {
                         if (appPrefernces.getTABLE_NAME() == 9999) {
                             mSpTableNo.setEnabled(true);
                         }
                         mTableNo.setVisibility(View.VISIBLE);
+                        mTableNo.setText(getString(R.string.select_a_table));
                         mSpTableNo.setVisibility(View.VISIBLE);
+                        mColon.setVisibility(View.VISIBLE);
                     } else {
                         mTableNo.setVisibility(View.VISIBLE);
                         mSpTableNo.setVisibility(View.VISIBLE);
+                        mColon.setVisibility(View.VISIBLE);
+                        mTableNo.setText(getString(R.string.table_no));
                     }
                 }
             }
         });
-        mLvItemSummary = (ListView) findViewById(R.id.item_summery_list);
+        mLvItemSummary = (UnScrollListView) findViewById(R.id.item_summery_list);
         mTvPlaceOrder.setOnClickListener(this);
         setValuesInto();
     }
@@ -177,8 +191,10 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
     private void getOrderItemsList() {
         MenuItemSummeryListAdapter menuItemSummeryListAdapter = new MenuItemSummeryListAdapter(this, android.R.layout.simple_list_item_1, cartItemses, taxList);
         mLvItemSummary.setAdapter(menuItemSummeryListAdapter);
-        setListViewHeightBasedOnItemss(mLvItemSummary);
-        setListViewHeightBasedOnItems(mLvTaxQuality);
+        /*setListViewHeightBasedOnItems(mLvItemSummary);
+        setListViewHeightBasedOnItemss(mLvTaxQuality);*/
+        mLvItemSummary.setExpanded(true);
+        mLvTaxQuality.setExpanded(true);
     }
 
 
@@ -266,7 +282,9 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.tv_place_order) {
+        if (!Util.Operations.isOnline(this))
+            Util.createNetErrorDialog(this);
+        else if (v.getId() == R.id.tv_place_order) {
             String mTableName = "";
             if (mCbTakeAway.isChecked())
                 mTableName = "9999";
@@ -319,11 +337,15 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                     if (!descriptoin.equals("")) {
                         if (descriptoin.equals("Breakfast")) {
                             orderToServer.setPhaseid("" + 1);
+                            appPrefernces.setPhaseId(1);
                         } else if (descriptoin.equals("Lunch")) {
+                            appPrefernces.setPhaseId(2);
                             orderToServer.setPhaseid("" + 2);
                         } else if (descriptoin.equals("Dinner")) {
+                            appPrefernces.setPhaseId(3);
                             orderToServer.setPhaseid("" + 3);
                         } else if (descriptoin.equals("Allday")) {
+                            appPrefernces.setPhaseId(4);
                             orderToServer.setPhaseid("" + 4);
                         }
                     }
@@ -337,6 +359,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                 Gson gson = new Gson();
                 String json = gson.toJson(orderPlacement);
                 if (count != 0) {
+
                     pushDataToServer(json);
                 } else {
                     Util.createOKAlert(PlaceOrderActivity.this, "Heading", "No Items Found...");
@@ -348,10 +371,15 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void pushDataToServer(final String mTableName) {
+        pDialog = new ProgressDialog(PlaceOrderActivity.this);
+        pDialog.setMessage("Loading...");
+        pDialog.setCancelable(false);
+        pDialog.show();
         StringRequest req = new StringRequest(Request.Method.POST, POST_ORDER,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        pDialog.dismiss();
                         String value = response;
                         if (!value.equals("")) {
                             // Toast.makeText(PlaceOrderActivity.this, " " + response, Toast.LENGTH_LONG).show();
@@ -363,7 +391,8 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Util.createOKAlert(PlaceOrderActivity.this, "", error.getMessage() + "Ërror has Encounterd");
+                pDialog.dismiss();
+                Util.createOKAlert(PlaceOrderActivity.this, "",getString(R.string.error));
             }
         }) {
             @Override

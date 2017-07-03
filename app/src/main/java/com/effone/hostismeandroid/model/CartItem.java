@@ -2,8 +2,6 @@ package com.effone.hostismeandroid.model;
 
 import android.content.Context;
 
-import com.effone.hostismeandroid.activity.ViewCartActivity;
-
 import org.json.JSONArray;
 
 /**

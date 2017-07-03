@@ -25,14 +25,13 @@
         android:background="@drawable/payment_background"
         android:weightSum="3.5">
 
-        <ListView
+        <com.effone.hostismeandroid.common.UnScrollListView
             android:id="@+id/lv_items_list"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:divider="@null"
-            android:nestedScrollingEnabled="true" />
+            android:divider="@null" />
 
         <TextView
             android:id="@+id/tv_discount"
@@ -64,14 +63,13 @@
             android:layout_marginBottom="5dp"
             android:background="@color/fontColor" />
 
-        <ListView
+        <com.effone.hostismeandroid.common.UnScrollListView
             android:id="@+id/lv_tax_menu"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_below="@+id/line2"
             android:divider="@null"
-            android:dividerHeight="0dp"
-            android:nestedScrollingEnabled="true" />
+            android:dividerHeight="0dp" />
 
         <View
             android:id="@+id/line3"
@@ -88,7 +86,6 @@
             android:gravity="center"
             android:padding="7dp"
             android:text="@string/order_total"
-
             android:textColor="@color/fontColor"
             android:textSize="18sp"
             android:textStyle="bold" />

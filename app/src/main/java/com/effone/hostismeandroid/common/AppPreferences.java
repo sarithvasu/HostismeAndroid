@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
  * Created by sarith.vasu on 29-02-2016.
  */
 public class AppPreferences {
+    private static final String PHASE_ID ="phase_id" ;
     private SharedPreferences sharedPrefs;
     private SharedPreferences.Editor prefsEditor;
     private String APP_SHARED_PREFS	= AppPreferences.class.getSimpleName();
@@ -30,6 +31,7 @@ public class AppPreferences {
     private String NUMBER_OF_TABLES="number_of_tables";
     private String QUANTITY ="quanity";
     private String DESCRIPTION ="desc";
+    private String FLAG="flag";
 
     public AppPreferences(Context context) {
         this.sharedPrefs = context.getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
@@ -106,5 +108,19 @@ public class AppPreferences {
         prefsEditor.putInt(NUMBER_OF_TABLES, number_of_tables);
         prefsEditor.commit();
     }
+    public int getPhaseId(){
+        return  sharedPrefs.getInt(PHASE_ID,0);
+    }
+    public void setPhaseId(int phase_id) {
+        prefsEditor.putInt(PHASE_ID, phase_id);
+        prefsEditor.commit();
+    }
 
+    public Boolean getFlag(){
+        return  sharedPrefs.getBoolean(FLAG,false);
+    }
+    public void setFlag(Boolean phase_id) {
+        prefsEditor.putBoolean(FLAG, phase_id);
+        prefsEditor.commit();
+    }
 }

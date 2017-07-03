@@ -66,6 +66,8 @@
             <TextView
                 android:id="@+id/btn_res_menu"
                 style="@style/HomepageTextView"
+                android:textAlignment="center"
+                android:paddingTop="20dp"
                 android:drawableTop="@drawable/res_menu"
                 android:text="Menu" />
         </LinearLayout>

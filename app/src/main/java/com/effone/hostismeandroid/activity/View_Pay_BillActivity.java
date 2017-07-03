@@ -32,6 +32,7 @@ import com.effone.hostismeandroid.adapter.TaxDetailsAdapter;
 import com.effone.hostismeandroid.app.AppController;
 import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.common.Common;
+import com.effone.hostismeandroid.common.UnScrollListView;
 import com.effone.hostismeandroid.db.SqlOperations;
 
 import com.effone.hostismeandroid.model.Order_Items;
@@ -62,9 +63,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.effone.hostismeandroid.activity.ConfirmationActivity.setListViewHeightBasedOnItems;
-import static com.effone.hostismeandroid.activity.ViewCartActivity.ser;
-import static com.effone.hostismeandroid.activity.ViewCartActivity.serviceTax;
-import static com.effone.hostismeandroid.activity.ViewCartActivity.vatTax;
+
 import static com.effone.hostismeandroid.common.URL.APPLY_PROMOCODE;
 import static com.effone.hostismeandroid.common.URL.GET_BILL;
 import static com.effone.hostismeandroid.common.URL.POST_ORDER;
@@ -77,7 +76,7 @@ import static com.effone.hostismeandroid.common.URL.bill_url;
 
 public class View_Pay_BillActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView mTvSelectedDate;
-    private ListView mLvItemQuantity,mLvTaxQuality;
+    private UnScrollListView mLvItemQuantity,mLvTaxQuality;
     private TaxDetailsAdapter taxDetailsAdapter;
     private OrderItemDetailsAdapter orderItemDetails;
     private  TextView mTvSubmit,mEtPromocodeMsg;
@@ -128,6 +127,19 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
         mBtApply=(Button)findViewById(R.id.bt_apply);
         mPaymentJson=new PaymentJson();
         mPayment=new Payment();
+        mPayment.setDevice_id(appPreferences.getDEVICE_ID());
+        mPayment.setOrder_id(appPreferences.getORDER_ID());
+
+        mPayment.setOrderprice(""+orderAmount);
+        mPayment.setDiscountprice("");
+        mPayment.setOrderstatus("2");
+        mPayment.setPhaseid(""+appPreferences.getPhaseId());//we need to save this form confrimation screem
+        mPayment.setRestaurant_id(appPreferences.getRESTAURANT_ID());
+        mPayment.setPromocode("");
+        mPayment.setTableno(""+appPreferences.getTABLE_NAME());
+        mPayment.setTax(""+taxAmmount);
+        //mPayment.setTotalprice(""+mBill.getBilldetails().getOrderTotal());
+        mPaymentJson.setPayment(mPayment);
         mBtApply.setOnClickListener(this);
     }
 
@@ -135,8 +147,8 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
 
     private void init() {
 
-        mLvItemQuantity=(ListView)findViewById(R.id.lv_items_list);
-        mLvTaxQuality=(ListView)findViewById(R.id.lv_tax_menu);
+        mLvItemQuantity=(UnScrollListView) findViewById(R.id.lv_items_list);
+        mLvTaxQuality=(UnScrollListView)findViewById(R.id.lv_tax_menu);
         mTvSubmit=(TextView)findViewById(R.id.tv_submit);
         mTvSubmit.setOnClickListener(this);
 
@@ -161,6 +173,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
                             if (status) {
                                 Gson gson = new Gson();
                                 mBill = gson.fromJson(jsonObjec.getString("Bill"), Bill.class);
+                                mPayment.setTotalprice(""+mBill.getBilldetails().getOrderTotal());
                                 JSONObject os=jsonObjec.getJSONObject("Bill");
                                getingtax(os);
 
@@ -168,7 +181,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
                             }
                         }catch (JSONException e){
                             e.printStackTrace();
-                            Util.createOKAlert(View_Pay_BillActivity.this,  "", e.getMessage());
+                            Util.createOKAlert(View_Pay_BillActivity.this,  "", e.getMessage()+"Server Error");
                         }
 
                     }
@@ -176,7 +189,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Util.createOKAlert(View_Pay_BillActivity.this,  "", error.getMessage());
+                        Util.createOKAlert(View_Pay_BillActivity.this,  "", error.getMessage()+"Server Error");
 
                     }
                 });
@@ -221,8 +234,9 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
                     taxitem.setValue(value);
 
                     taxItemses.add(taxitem);
-                    orderAmmount();
+
                 }
+                orderAmmount();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -245,7 +259,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
 
         orderItemDetails=new OrderItemDetailsAdapter(this,R.layout.order_summary_items,order_itemses);
         mLvItemQuantity.setAdapter(orderItemDetails);
-        setListViewHeightBasedOnItems(mLvItemQuantity);
+        //setListViewHeightBasedOnItems(mLvItemQuantity);
 
       //  getTaxItems();
 
@@ -253,7 +267,9 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
         taxDetailsAdapter=new TaxDetailsAdapter(this,R.layout.tax_items,
                 taxItemses);
         mLvTaxQuality.setAdapter(taxDetailsAdapter);
-        setListViewHeightBasedOnItems(mLvTaxQuality);
+        mLvItemQuantity.setExpanded(true);
+        mLvTaxQuality.setExpanded(true);
+      //  setListViewHeightBasedOnItems(mLvTaxQuality);
     }
 
 
@@ -304,23 +320,23 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
     if (v.getId() == R.id.tv_submit){
         int selectedId = mRadioGroup.getCheckedRadioButtonId();
         if(selectedId != -1){
-            totalbyOrder +=serviceTax+ser+vatTax;
+
             RadioButton radioButton = (RadioButton) mRadioGroup.findViewById(selectedId);
           //  paymentToServer();
 
           /* */
             mPayment.setDevice_id(appPreferences.getDEVICE_ID());
             mPayment.setOrder_id(appPreferences.getORDER_ID());
-            mPayment.setTotalprice("");
+
             mPayment.setOrderprice(""+orderAmount);
-            mPayment.setDiscountprice("");
+
             mPayment.setOrderstatus("2");
-            mPayment.setPhaseid("2");//we need to save this form confrimation screem
+            mPayment.setPhaseid(""+appPreferences.getPhaseId());//we need to save this form confrimation screem
             mPayment.setRestaurant_id(appPreferences.getRESTAURANT_ID());
-            mPayment.setPromocode("");
+
             mPayment.setTableno(""+appPreferences.getTABLE_NAME());
             mPayment.setTax(""+taxAmmount);
-            mPayment.setTotalprice(""+mBill.getBilldetails().getOrderTotal());
+
             mPaymentJson.setPayment(mPayment);
 
 
@@ -336,7 +352,10 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
             intent.putExtra("bill_no",tsLong);
             startActivity(intent);*/
              //   mSelectDbHelper.updateOrderHistory(mOrderId,comments, (String) radioButton.getText());
-            paymentToServer();
+            if (!Util.Operations.isOnline(this))
+                Util.createNetErrorDialog(this);
+            else
+                paymentToServer();
         }else {
             Util.createErrorAlert(View_Pay_BillActivity.this, "", "Please Select Payment Type.");
         }
@@ -369,9 +388,8 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
                                    appPreferences.setORDER_ID("");
                                    appPreferences.setNUMBER_OF_TABLES(0);
                                    appPreferences.setNUMBER_OF_TABLES(0);
-                                   Intent intent = new Intent(View_Pay_BillActivity.this, MainActivity.class);
-                                   intent.putExtra("Order_id", response);
-                                   startActivity(intent);
+                                   appPreferences.setFlag(false);
+                                   finish();
                                }
                                else{
                                    Util.createOKAlert(View_Pay_BillActivity.this,"","Payment Failed");
@@ -408,7 +426,8 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
     }
 
     private void promocodeServerSending(final String promoCode) {
-        String url=APPLY_PROMOCODE+"?restaurant_id="+appPreferences.getRESTAURANT_ID()+"&promocode="+promoCode+"&device_id="+appPreferences.getDEVICE_ID();
+
+        String url=APPLY_PROMOCODE+"?restaurant_id="+appPreferences.getRESTAURANT_ID()+"&promocode="+promoCode+"&device_id="+appPreferences.getDEVICE_ID()+"&orderid="+appPreferences.getORDER_ID();
         final StringRequest stringRequest=new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -425,6 +444,8 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
                         mPayment.setPromocode(promoCode);
                         mPayment.setDiscountprice(""+ammount);
                         mPayment.setOrderprice(""+finalAmmount);
+                        mPayment.setDiscountprice(""+ammount);
+                        mPayment.setTotalprice(""+finalAmmount);
                     }
                     Util.createErrorAlert(View_Pay_BillActivity.this, "", status);
                     double amounts=Double.parseDouble(mBill.getBilldetails().getOrderTotal())- ammount;
@@ -438,7 +459,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Util.createErrorAlert(View_Pay_BillActivity.this, "", error.getMessage());
+                Util.createErrorAlert(View_Pay_BillActivity.this, "", "Server Error");
             }
         });
         RequestQueue requestQueue = Volley.newRequestQueue(this);

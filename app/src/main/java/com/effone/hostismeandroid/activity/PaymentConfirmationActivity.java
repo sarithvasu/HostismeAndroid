@@ -78,7 +78,9 @@ public class PaymentConfirmationActivity extends AppCompatActivity {
         mTvQuantits = (TextView) findViewById(R.id.tv_bill_ammount);
         mTvOrderTotal = (TextView) findViewById(R.id.tv_order_total);
         mTvStatus = (TextView) findViewById(R.id.tv_order_status);
-
+        if (!Util.Operations.isOnline(this))
+            Util.createNetErrorDialog(this);
+        else
         settingValues();
     }
     ProgressDialog pDialog;

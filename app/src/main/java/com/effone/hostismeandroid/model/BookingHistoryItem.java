@@ -5,6 +5,8 @@ package com.effone.hostismeandroid.model;
  */
 
 public class BookingHistoryItem {
+    private String promocode;
+
     private String status;
 
     private String description;
@@ -19,7 +21,19 @@ public class BookingHistoryItem {
 
     private String date;
 
+    private String discountamount;
+
     private String restaurant_name;
+
+    public String getPromocode ()
+    {
+        return promocode;
+    }
+
+    public void setPromocode (String promocode)
+    {
+        this.promocode = promocode;
+    }
 
     public String getStatus ()
     {
@@ -91,6 +105,16 @@ public class BookingHistoryItem {
         this.date = date;
     }
 
+    public String getDiscountamount ()
+    {
+        return discountamount;
+    }
+
+    public void setDiscountamount (String discountamount)
+    {
+        this.discountamount = discountamount;
+    }
+
     public String getRestaurant_name ()
     {
         return restaurant_name;
@@ -104,7 +128,7 @@ public class BookingHistoryItem {
     @Override
     public String toString()
     {
-        return "ClassPojo [status = "+status+", description = "+description+", table_no = "+table_no+", bill_amount = "+bill_amount+", bill_no = "+bill_no+", order_id = "+order_id+", date = "+date+", restaurant_name = "+restaurant_name+"]";
+        return "ClassPojo [promocode = "+promocode+", status = "+status+", description = "+description+", table_no = "+table_no+", bill_amount = "+bill_amount+", bill_no = "+bill_no+", order_id = "+order_id+", date = "+date+", discountamount = "+discountamount+", restaurant_name = "+restaurant_name+"]";
     }
 
 }

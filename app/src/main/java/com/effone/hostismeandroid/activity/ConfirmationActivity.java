@@ -25,6 +25,7 @@ import com.effone.hostismeandroid.adapter.OrderItemConfirmationAdapter;
 import com.effone.hostismeandroid.adapter.TaxitemConfirmationAdapter;
 import com.effone.hostismeandroid.common.AppPreferences;
 import com.effone.hostismeandroid.common.Common;
+import com.effone.hostismeandroid.common.UnScrollListView;
 import com.effone.hostismeandroid.db.SqlOperation;
 import com.effone.hostismeandroid.model.OrderSummary;
 import com.effone.hostismeandroid.model.TaxItems;
@@ -56,7 +57,8 @@ public class ConfirmationActivity extends AppCompatActivity {
 
     private TextView mTvDateTime, mTvRestName, mTvBookingId, mTvDescription, mTvTableNo, mTvQuantits, mTvOrderTotal, mTvStatus, mTvTotalPrice;
     private TextView mTvConfirmationMessage;
-    private ListView mLvItemQuantity, mLvTaxQuality, mListView;
+    private UnScrollListView mLvItemQuantity, mLvTaxQuality;
+            private ListView mListView;
     private RelativeLayout mRelativeLayout;
     private SqlOperation sqliteoperation;
     private String order_id, mStatus;
@@ -95,13 +97,14 @@ public class ConfirmationActivity extends AppCompatActivity {
 
 
         try {
+            mAppPrefernces.setFlag(true);
             JSONObject jsonObjec = new JSONObject(jsondata);
             JSONObject menuJsonObject = jsonObjec.getJSONObject("orderConfirmation");
             String oderSummary = menuJsonObject.getString("order_summary");
             JSONObject order_details = menuJsonObject.getJSONObject("order_details");
             String orderIterms = order_details.getString("orderItems");
             String taxItems = order_details.getString("taxItems");
-            mLvTaxQuality = (ListView) findViewById(R.id.lv_tax_menu);
+            mLvTaxQuality = (UnScrollListView) findViewById(R.id.lv_tax_menu);
             getingtax(order_details);
             orderItems = mGson.fromJson(String.valueOf(orderIterms), OrderItem[].class);
             orderSumm = mGson.fromJson(oderSummary, OrderSumm.class);
@@ -135,7 +138,7 @@ public class ConfirmationActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void init() {
         mTvConfirmationMessage = (TextView) findViewById(R.id.tv_confiramtion_msg);
-        mLvItemQuantity = (ListView) findViewById(R.id.lv_items_list);
+        mLvItemQuantity = (UnScrollListView) findViewById(R.id.lv_items_list);
         mListView = (ListView) findViewById(R.id.historyView);
         mListView.setVisibility(View.GONE);
         AppBarLayout titel_na = (AppBarLayout) findViewById(R.id.titel_na);
@@ -183,7 +186,7 @@ public class ConfirmationActivity extends AppCompatActivity {
 
         mTvDescription.setText(": " + mAppPrefernces.getDescription());
         if (mAppPrefernces.getTABLE_NAME() == 9999)
-               mTvTableNo.setText(": " +getString(R.string.take_away));
+               mTvTableNo.setText(": " +getString(R.string.togo));
         else if (mAppPrefernces.getTABLE_NAME() == 8888)
             mTvTableNo.setText(": " + getString(R.string.bar));
         else
@@ -204,7 +207,8 @@ public class ConfirmationActivity extends AppCompatActivity {
         List<OrderItem> list = Arrays.asList(orderItems);
         orderItemDetails = new OrderItemConfirmationAdapter(ConfirmationActivity.this, R.layout.order_summary_items, list);
         mLvItemQuantity.setAdapter(orderItemDetails);
-        setListViewHeightBasedOnItems(mLvItemQuantity);
+        mLvItemQuantity.setExpanded(true);
+        //setListViewHeightBasedOnItems(mLvItemQuantity);
 
         //populatingTaxMenuList();
 
@@ -267,7 +271,8 @@ public class ConfirmationActivity extends AppCompatActivity {
                 mLvTaxQuality.setAdapter(taxDetailsAdapter);
                /* double sum = mBill.getOrderConfirmation().getOrderSummary().getTotalprice()+ serviceTax + ser + vatTax;
                 mTvTotalPrice.setText("$ " + sum);*/
-                setListViewHeightBasedOnItems(mLvTaxQuality);
+                mLvTaxQuality.setExpanded(true);
+               //setListViewHeightBasedOnItems(mLvTaxQuality);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -278,14 +283,12 @@ public class ConfirmationActivity extends AppCompatActivity {
 
 
     private void populatingTaxMenuList() {
-
         taxItemses = new ArrayList<TaxItems>();
         TaxItems res1 = new TaxItems("Total before Tax", totalPrice);
-
-
         taxItemses.add(res1);
         taxDetailsAdapter = new TaxitemConfirmationAdapter(this, R.layout.tax_items, taxItemses);
         mLvTaxQuality.setAdapter(taxDetailsAdapter);
+        mLvTaxQuality.setExpanded(true);
         double sum = Double.parseDouble(mOrderToServers[0].getTotal_price()) + serviceTax + ser + vatTax;
         mTvTotalPrice.setText("$ " + sum);
     }

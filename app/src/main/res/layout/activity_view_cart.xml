@@ -43,11 +43,41 @@
             android:id="@+id/relative_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/price_summary"
             android:background="@drawable/payment_background"
-            android:padding="5dp">
+            android:padding="5dp"
+            android:layout_below="@+id/price_summary"
+            android:layout_alignParentStart="true">
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/tv_estimated"
+                android:layout_toEndOf="@+id/tv_estimated"
+                android:text="@string/coln"
+                android:layout_marginLeft="5dp"
+                android:layout_below="@+id/tv_chargrss" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/tableNo"
+                android:text="@string/coln"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:layout_below="@+id/cb_take_away"
+                android:layout_alignEnd="@+id/textView6" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/tv_items"
+                android:layout_toEndOf="@+id/tv_items"
+                android:text="@string/coln"
+                android:layout_marginLeft="5dp"
+                android:layout_alignParentTop="true" />
 
             <TextView
                 android:id="@+id/tv_items"
@@ -59,6 +89,7 @@
                 android:layout_alignRight="@+id/tv_estimated"
                 android:layout_marginBottom="3dp"
                 android:text="@string/items"
+
                 android:textColor="@color/fontColor"
                 android:textSize="15sp" />
 
@@ -96,7 +127,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/tv_estimated"
                 android:layout_marginBottom="5dp"
-                android:text="Take Away"
+                android:text="@string/togo"
                 android:textColor="@color/fontColor"
                 android:textSize="15sp"
                 android:thumbTint="@android:color/holo_green_light"
@@ -113,7 +144,8 @@
                 android:gravity="left|center"
                 android:text="Table No  "
                 android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_alignEnd="@+id/tv_estimated" />
 
 
             <TextView
@@ -200,37 +232,38 @@
             android:layout_below="@+id/item_summary"
             android:layout_marginBottom="6dp"
             android:background="@drawable/payment_background"
-            android:padding="5dp">
+            android:padding="5dp"
+            android:fillViewport="true">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-            <ListView
-                android:id="@+id/item_summery_list"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:divider="@null"
-                android:nestedScrollingEnabled="true"
-                />
+                <com.effone.hostismeandroid.common.UnScrollListView
+                    android:id="@+id/item_summery_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:divider="@null"
+                    android:nestedScrollingEnabled="true" />
+
                 <View
                     android:id="@+id/line4"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="3dp"
                     android:layout_below="@+id/item_summery_list"
+                    android:layout_marginTop="3dp"
                     android:background="@color/fontColor" />
-            <!--    <view
+                <!--    <view
                     android:layout_width="match_parent"
                     android:layout_height="1dp"></view>-->
-                <ListView
+                <com.effone.hostismeandroid.common.UnScrollListView
                     android:id="@+id/lv_tax_menu"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_below="@+id/line4"
                     android:divider="@null"
-                    android:dividerHeight="0dp"
-                    android:nestedScrollingEnabled="true" />
+                    android:dividerHeight="0dp" />
 
 
                 <View
@@ -239,43 +272,57 @@
                     android:layout_height="1dp"
                     android:layout_below="@+id/lv_tax_menu"
                     android:background="@color/fontColor" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:weightSum="1">
+                    android:weightSum="1"
+                    android:layout_marginBottom="2dp">
+
                     <TextView
-                    android:id="@+id/tv_order_total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/line3"
-                    android:gravity="left"
-                    android:padding="7dp"
-                    android:text="@string/order_total"
+                        android:id="@+id/tv_order_total"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/line3"
+                        android:layout_weight="0.98"
+                        android:gravity="left"
+                        android:padding="2dp"
+                        android:text="@string/order_total"
+                        android:textColor="@color/fontColor"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
-                    android:textColor="@color/fontColor"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                        android:layout_weight="0.98" />
-
-                <TextView
-                    android:id="@+id/tv_total_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/line3"
-                    android:gravity="center"
-                    android:padding="7dp"
-                    android:text="$20.00"
-                    android:textColor="@android:color/holo_red_light"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/tv_total_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/line3"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:text="$20.00"
+                        android:textColor="@android:color/holo_red_light"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
 
             </LinearLayout>
         </ScrollView>
+
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="122dp"
+        android:layout_marginTop="61dp"
+        android:text="@string/coln"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/titel_na"
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>
