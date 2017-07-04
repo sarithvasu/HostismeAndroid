@@ -86,7 +86,7 @@
     <string name="enter_table_no">Enter table no:</string>
     <string name="View_Menu">View Menu</string>
     <string name="payment_msg">Please make Payment before selecting another restaurant.</string>
-    <string name="service_request_table_msg">You can\'t place a request for To-Go and Bar</string>
+    <string name="service_request_table_msg">You can\'t place a request for To-Go and Bar,</string>
 
     <string name="select_the_table">Please Select Table Number.</string>
     <string name="service_type_msg">Please Select Service Type.</string>
@@ -130,7 +130,7 @@
     <string name="please_enter_table_no">Please enter the Table no</string>
     <string name="server_error">Server Error.</string>
     <string name="select_payment_type">Please Select Payment Type.</string>
-    <string name="promo_not_avialble">\"Promo code not available</string>
+    <string name="promo_not_avialble">Promo code not available</string>
     <string name="payment_failed">Payment Failed</string>
     <string name="error_encounted">Ërror has Encounterd</string>
     <string name="no_data">No Data</string>
