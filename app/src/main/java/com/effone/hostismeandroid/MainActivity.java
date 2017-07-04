@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity
         TextView cust_ttile = (TextView) getSupportActionBar().getCustomView().findViewById(R.id.tv_custom_titile);
         cust_ttile.setText(getString(R.string.home));
         TextView cust_sub_ttile = (TextView) getSupportActionBar().getCustomView().findViewById(R.id.tv_custom_sub_titile);
-        cust_sub_ttile.setText("Sydney");
+        cust_sub_ttile.setText(getString(R.string.Sydney));
 
 
     }
@@ -348,7 +348,7 @@ public class MainActivity extends AppCompatActivity
                         if (!Util.Operations.isOnline(this))
                             Util.createNetErrorDialog(this);
                         else
-                        Util.createOKAlert(this, "", " Order is not yet placed. ");
+                        Util.createOKAlert(this, "", getString(R.string.order_missing_message));
                     }
 
                     /*SqlOperations sqliteoperation = new SqlOperations(getApplicationContext());

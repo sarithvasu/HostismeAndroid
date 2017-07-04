@@ -166,7 +166,7 @@ public class ConfirmationActivity extends AppCompatActivity {
     private void settingValues() {
         pDialog = new ProgressDialog(this);
         // Showing progress dialog before making http request
-        pDialog.setMessage("Loading...");
+        pDialog.setMessage(getString(R.string.loading));
         pDialog.show();
         showingDataIntoListView();
 

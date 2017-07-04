@@ -92,7 +92,7 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
         final ArrayList<String> checkedCountries ;
            checkedCountries = new ArrayList<String>();
         if (orderedItemSummaries.size() <= 0) {
-            holder.tv_summery_item_name.setText("No Data");
+            holder.tv_summery_item_name.setText(getContext().getString(R.string.no_data));
 
         } else {
             /***** Get each Model object from Arraylist ********/
@@ -173,7 +173,7 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
 
                     if(sqliteoperation.cartItemDelete(value.getItemMenuCatId(), value.getItemName(),value.getMenuType(),value.getSpecial()))
                     {
-                        Toast.makeText(mContext,"Item removed",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext,getContext().getString(R.string.item_removed),Toast.LENGTH_SHORT).show();
                     }
                 }else{
                     sqliteoperation.cartItemDelete(value.getItemMenuCatId(), value.getItemName(),value.getMenuType(),value.getSpecial());

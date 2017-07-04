@@ -52,7 +52,7 @@ public class RestaurantListAcitivity extends AppCompatActivity implements Adapte
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        Common.setCustomTitile(this,"Restaurant List","Sydney");
+        Common.setCustomTitile(this,getString(R.string.Restaurant_List),getString(R.string.Sydney));
         mGson = new Gson();
         mQueue = Volley.newRequestQueue(this);
         if (!Util.Operations.isOnline(this))
@@ -65,7 +65,7 @@ public class RestaurantListAcitivity extends AppCompatActivity implements Adapte
     private void init() {
         pDialog = new ProgressDialog(this);
         // Showing progress dialog before making http request
-        pDialog.setMessage("Loading...");
+        pDialog.setMessage(getString(R.string.loading));
         pDialog.show();
         restList = (ListView) findViewById(R.id.restaurantList);
         StringRequest stringRequest = new StringRequest(GET_RESTAURANT_LIST,
@@ -94,7 +94,7 @@ public class RestaurantListAcitivity extends AppCompatActivity implements Adapte
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         hidePDialog();
-                        Util.createErrorAlert(RestaurantListAcitivity.this, "", "Server Error.");
+                        Util.createErrorAlert(RestaurantListAcitivity.this, "", getString(R.string.server_error));
                     }
                 });
         mQueue.add(stringRequest);

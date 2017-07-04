@@ -151,8 +151,8 @@ public class MenuListAdpater extends BaseExpandableListAdapter {
 
         //setting valuse into the textview of the exapanable listview
         if (food.getIs_special().equals("1")) {
-            holder.child_text.setText("" + food.getName() + "( Special )");
-            String text = food.getName() + "<font color=#ff0000 > (Special) </font>";
+            holder.child_text.setText("" + food.getName() + "( "+ context.getString(R.string.Special)+ ")");
+            String text = food.getName() + "<font color=#ff0000 > ( "+ context.getString(R.string.Special)+ ") </font>";
             holder.child_text.setText(Html.fromHtml(text));
         } else {
             holder.child_text.setText("" + food.getName());

@@ -68,7 +68,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         appPrefernces = new AppPreferences(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Common.setCustomTitile(this, "View Order", null);
+        Common.setCustomTitile(this, ""+getString(R.string.View_Order), null);
         decalartion();
     }
 
@@ -168,7 +168,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         }
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         mTvItemPrice.setText("" + totalPrice);
-        mTvItemCount.setText("Items (" + Math.round(totalCount) + ")");
+        mTvItemCount.setText(""+getString(R.string.items)+" ( "+ Math.round(totalCount) + " )");
 
         float twoDigitsFs = Float.valueOf(decimalFormat.format(taxAmountCalculation(totalPrice)));
         mTvChargers.setText("" + twoDigitsFs);
@@ -257,7 +257,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
 
     private void getTaxDetails(float totalByItems) {
         taxItemses = new ArrayList<TaxItems>();
-        TaxItems res1 = new TaxItems("Total Before Tax", totalByItems);
+        TaxItems res1 = new TaxItems(""+getString(R.string.total_before_tax), totalByItems);
         taxItemses.add(res1);
         for (int i = 0; i < taxList.size(); i++) {
             float chargers = 0;
@@ -336,16 +336,16 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                       appPrefernces.setQunatity(count);
                       try {
                           if (!descriptoin.equals("")) {
-                              if (descriptoin.equals("Breakfast")) {
+                              if (descriptoin.equals(""+getString(R.string.Breakfast))) {
                                   orderToServer.setPhaseid("" + 1);
                                   appPrefernces.setPhaseId(1);
-                              } else if (descriptoin.equals("Lunch")) {
+                              } else if (descriptoin.equals(""+getString(R.string.Lunch))) {
                                   appPrefernces.setPhaseId(2);
                                   orderToServer.setPhaseid("" + 2);
-                              } else if (descriptoin.equals("Dinner")) {
+                              } else if (descriptoin.equals(""+getString(R.string.Dinner))) {
                                   appPrefernces.setPhaseId(3);
                                   orderToServer.setPhaseid("" + 3);
-                              } else if (descriptoin.equals("Allday")) {
+                              } else if (descriptoin.equals(""+getString(R.string.Allday))) {
                                   appPrefernces.setPhaseId(4);
                                   orderToServer.setPhaseid("" + 4);
                               }
@@ -363,10 +363,10 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
 
                           pushDataToServer(json);
                       } else {
-                          Util.createOKAlert(PlaceOrderActivity.this, "Heading", "No Items Found...");
+                          Util.createOKAlert(PlaceOrderActivity.this, ""+getString(R.string.heading), getString(R.string.No_Items_Found));
                       }
                   } else {
-                      Util.createOKAlert(PlaceOrderActivity.this, "Heading", "Please enter the Table no");
+                      Util.createOKAlert(PlaceOrderActivity.this, getString(R.string.heading), getString(R.string.please_enter_table_no));
                   }
               }
           }
@@ -374,7 +374,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
 
     private void pushDataToServer(final String mTableName) {
         pDialog = new ProgressDialog(PlaceOrderActivity.this);
-        pDialog.setMessage("Loading...");
+        pDialog.setMessage(getString(R.string.loading));
         pDialog.setCancelable(false);
         pDialog.show();
         StringRequest req = new StringRequest(Request.Method.POST, POST_ORDER,

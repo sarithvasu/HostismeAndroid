@@ -50,7 +50,7 @@ public class OrderItemDetailsAdapter extends ArrayAdapter<OrderItem> {
             holder = (FilterViewHolder) vi.getTag();
 
         if (taxItemses.size() <= 0) {
-            holder.tv_tax_name.setText("No Data");
+            holder.tv_tax_name.setText(getContext().getString(R.string.no_data));
 
         } else {
             /***** Get each Model object from Arraylist ********/

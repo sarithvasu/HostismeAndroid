@@ -59,7 +59,7 @@ public class Service_RequestActivity extends AppCompatActivity implements View.O
         mGson=new Gson();
 
         // getSupportActionBar().setTitle(getString(R.string.booking_history));
-        Common.setCustomTitile(this,"Request Service",null);
+        Common.setCustomTitile(this,getString(R.string.request_service),null);
 
         init();
     }
@@ -79,7 +79,7 @@ public class Service_RequestActivity extends AppCompatActivity implements View.O
 
                 if (mRadioGroup.getCheckedRadioButtonId() == -1) {
 
-                    Util.createOKAlert(Service_RequestActivity.this,"Alert","Please Select Service Type.");
+                    Util.createOKAlert(Service_RequestActivity.this,getString(R.string.Alert),getString(R.string.service_type_msg));
                 } else {
                     // get selected radio button from radioGroup
                     int selectedId = mRadioGroup.getCheckedRadioButtonId();
@@ -140,7 +140,7 @@ public class Service_RequestActivity extends AppCompatActivity implements View.O
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Util.createErrorAlert(Service_RequestActivity.this, "", error.getMessage()+"Server Error");
+                    Util.createErrorAlert(Service_RequestActivity.this, "", error.getMessage()+""+getString(R.string.server_error));
                 }
             }) {
                 @Override
@@ -164,7 +164,7 @@ public class Service_RequestActivity extends AppCompatActivity implements View.O
             requestQueue.add(req);
         }
         else{
-            Util.createErrorAlert(Service_RequestActivity.this, "", "Please Select Table Number. ");
+            Util.createErrorAlert(Service_RequestActivity.this, "",     getString(R.string.select_the_table));
         }
     }
 

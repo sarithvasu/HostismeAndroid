@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:padding="5dp"
-                android:text="Thanks you, we have received your order."
+                android:text="@string/order_confirmation_message"
                 android:textColor="@android:color/holo_green_dark"
                 android:textSize="@dimen/text_size_small"
                 android:gravity="center"

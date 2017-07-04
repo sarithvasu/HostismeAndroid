@@ -53,7 +53,7 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant>{
             holder = (FilterViewHolder) vi.getTag();
 
         if (restaurants.length < 0 ) {
-            holder.tv_restaurant_name.setText("No Data");
+            holder.tv_restaurant_name.setText(getContext().getString(R.string.no_data));
 
         } else {
             /***** Get each Model object from Arraylist ********/

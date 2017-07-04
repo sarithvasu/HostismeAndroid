@@ -66,7 +66,7 @@ public class My_BookingActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        Common.setCustomTitile(this, "Booking History", null);
+        Common.setCustomTitile(this, getString(R.string.booking_history), null);
       /*  if(appPreferences.getREST_NAME()!= null)
         {
 
@@ -94,7 +94,7 @@ public class My_BookingActivity extends AppCompatActivity {
     private void dummyUrlCode() {
         pDialog = new ProgressDialog(this);
         // Showing progress dialog before making http request
-        pDialog.setMessage("Loading...");
+        pDialog.setMessage(getString(R.string.loading));
         pDialog.show();
         StringRequest movieReq = new StringRequest(GET_BOOKING_HISTORY + appPreferences.getDEVICE_ID(),
                 new Response.Listener<String>() {
@@ -114,7 +114,7 @@ public class My_BookingActivity extends AppCompatActivity {
                                 mLvBookingHistory.setAdapter(bookingHistoryAdapter);
                                 hidePDialog();
                             } else {
-                                Util.createErrorAlert(My_BookingActivity.this, "", "No Order Details Found.");
+                                Util.createErrorAlert(My_BookingActivity.this, "", ""+getString(R.string.no_order_items));
                            /* Intent intent=new Intent(My_BookingActivity.this,MainActivity.class);
                             startActivity(intent);*/
                             }

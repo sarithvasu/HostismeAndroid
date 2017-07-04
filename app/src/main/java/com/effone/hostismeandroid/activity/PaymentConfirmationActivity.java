@@ -58,7 +58,7 @@ public class PaymentConfirmationActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        Common.setCustomTitile(this,"Payment Confirmation",null);
+        Common.setCustomTitile(this,""+getString(R.string.Payment_Confirmation),null);
         init();
 
 
@@ -66,7 +66,7 @@ public class PaymentConfirmationActivity extends AppCompatActivity {
 
     private void init() {
         mTvHeadingText=(TextView)findViewById(R.id.tv_order_Summery);
-        mTvHeadingText.setText("Payment Summary");
+        mTvHeadingText.setText(""+getString(R.string.payment_summary));
         LinearLayout mRelativLayout=(LinearLayout)findViewById(R.id.relativeLayout);
         mRelativLayout.setBackground(getDrawable(R.drawable.payment_background));
 

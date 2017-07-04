@@ -105,7 +105,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        Common.setCustomTitile(this,"View & Pay Bill",null);
+        Common.setCustomTitile(this,getString(R.string.view_pay_bill),null);
         mRadioGroup=(RadioGroup)findViewById(R.id.radioGroup);
 
         decalartion();
@@ -156,7 +156,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
         order_itemses=new ArrayList<OrderItem>();
         pDialog = new ProgressDialog(this);
         // Showing progress dialog before making http request
-        pDialog.setMessage("Loading...");
+        pDialog.setMessage(getString(R.string.loading));
         pDialog.show();
         /*save order id and restaurant id in preference*/
         String url=GET_BILL+"?order_id="+appPreferences.getORDER_ID()+"&restaurant_id="+appPreferences.getRESTAURANT_ID()+"&deviceid="+appPreferences.getDEVICE_ID()+"&tableno="+appPreferences.getTABLE_NAME();
@@ -181,7 +181,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
                             }
                         }catch (JSONException e){
                             e.printStackTrace();
-                            Util.createOKAlert(View_Pay_BillActivity.this,  "", e.getMessage()+"Server Error");
+                            Util.createOKAlert(View_Pay_BillActivity.this,  "", e.getMessage()+getString(R.string.server_error));
                         }
 
                     }
@@ -189,7 +189,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Util.createOKAlert(View_Pay_BillActivity.this,  "", error.getMessage()+"Server Error");
+                        Util.createOKAlert(View_Pay_BillActivity.this,  "", error.getMessage()+getString(R.string.server_error));
 
                     }
                 });
@@ -357,7 +357,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
             else
                 paymentToServer();
         }else {
-            Util.createErrorAlert(View_Pay_BillActivity.this, "", "Please Select Payment Type.");
+            Util.createErrorAlert(View_Pay_BillActivity.this, "", getString(R.string.select_payment_type));
         }
 
     }else  if(v.getId() == R.id.bt_apply){
@@ -365,7 +365,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
         if(promoCode.length() == 10)
             promocodeServerSending(promoCode);
         else
-            mEtPromocodeMsg.setText("Promo code not available");
+            mEtPromocodeMsg.setText(getString(R.string.promo_not_avialble));
     }
 
     }
@@ -392,7 +392,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
                                    finish();
                                }
                                else{
-                                   Util.createOKAlert(View_Pay_BillActivity.this,"","Payment Failed");
+                                   Util.createOKAlert(View_Pay_BillActivity.this,"",getString(R.string.payment_failed));
                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -403,7 +403,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Util.createOKAlert(View_Pay_BillActivity.this,"",error.getMessage()+"Ërror has Encounterd");
+                Util.createOKAlert(View_Pay_BillActivity.this,"",error.getMessage()+getString(R.string.error_encounted));
             }
         }) {
             @Override
@@ -459,7 +459,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Util.createErrorAlert(View_Pay_BillActivity.this, "", "Server Error");
+                Util.createErrorAlert(View_Pay_BillActivity.this, "", getString(R.string.server_error));
             }
         });
         RequestQueue requestQueue = Volley.newRequestQueue(this);

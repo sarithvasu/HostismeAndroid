@@ -317,7 +317,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                     Intent intent = new Intent(this, PlaceOrderActivity.class);
                     startActivity(intent);
                 } else {
-                    Util.createOKAlert(MenuActivity.this,"Alert","Please Select One Item.");
+                    Util.createOKAlert(MenuActivity.this,getString(R.string.Alert),getString(R.string.please_select_one_item));
 
                 }
 
@@ -341,7 +341,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
             totalPrice += cartItemses.get(i).getItemPrice() * cartItemses.get(i).getItemQuantity();
 
         }
-        mTvSummary.setText(totalCount + " Items in Cart \n " + totalPrice + " Plus taxes");
+        mTvSummary.setText(totalCount + ""+getString(R.string.item_cart)+" \n " + totalPrice + " "+getString(R.string.plus_taxes));
 
     }
 

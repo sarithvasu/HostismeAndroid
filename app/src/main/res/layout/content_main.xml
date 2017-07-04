@@ -61,7 +61,7 @@
                 android:id="@+id/btn_book_table"
                 style="@style/HomepageTextView"
                 android:drawableTop="@drawable/book_table"
-                android:text="Book a Table" />
+                android:text="@string/book_a_table"/>
 
             <TextView
                 android:id="@+id/btn_res_menu"
@@ -69,7 +69,7 @@
                 android:textAlignment="center"
                 android:paddingTop="20dp"
                 android:drawableTop="@drawable/res_menu"
-                android:text="Menu" />
+                android:text="@string/Menu" />
         </LinearLayout>
 
         <LinearLayout
@@ -86,7 +86,7 @@
                 android:id="@+id/btn_res_list"
                 style="@style/HomepageTextView"
                 android:drawableTop="@drawable/resturant_list"
-                android:text="Restaurant List"
+                android:text="@string/Restaurant_List"
 
                 />
 
@@ -111,7 +111,7 @@
                 android:id="@+id/btn_view_pay"
                 style="@style/HomepageTextView"
                 android:drawableTop="@drawable/view_and_pay_bill"
-                android:text="View  &amp; Pay Bill" />
+                android:text="@string/view_pay_bill" />
 
             <TextView
                 android:id="@+id/btn_my_booking"

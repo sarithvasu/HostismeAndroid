@@ -63,7 +63,7 @@
             android:layout_weight="1"
             android:background="@color/confirm"
             android:gravity="center"
-            android:text="View Order"
+            android:text="@string/View_Order"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="24sp" />
