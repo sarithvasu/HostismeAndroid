@@ -162,6 +162,24 @@ public final class Util {
         messageText.setGravity(Gravity.CENTER);
         alert.show();
     }
+    public static boolean isInternetOn(Context context) {
 
+        // get Connectivity Manager object to check connection
+        ConnectivityManager connec = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
+
+        // Check for network connections
+
+        if (connec != null) {
+            NetworkInfo nInfo = connec.getActiveNetworkInfo();
+
+            if (nInfo != null && nInfo.getState() == NetworkInfo.State.CONNECTED) {
+                return true;
+            }
+        }
+        return false;
+
+
+
+    }
 
 }

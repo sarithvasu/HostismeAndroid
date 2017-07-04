@@ -342,6 +342,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
 
         }
         mTvSummary.setText(totalCount + " Items in Cart \n " + totalPrice + " Plus taxes");
+
     }
 
     @Override

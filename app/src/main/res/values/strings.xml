@@ -80,4 +80,5 @@
     <string name="select_a_table">Select A Table</string>
     <string name="table_no">Table No.</string>
     <string name="payment_msg">Please make Payment before selecting another restaurant.</string>
+    <string name="service_request_table_msg">You can\'t place a request for To-Go and Bar</string>
 </resources>

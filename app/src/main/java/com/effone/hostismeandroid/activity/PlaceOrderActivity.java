@@ -84,7 +84,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         mTableNo = (TextView) findViewById(R.id.tableNo);
         mTableNo.setText(getString(R.string.table_no));
         mSpTableNo = (Spinner) findViewById(R.id.et_table_no);
-        mColon = (TextView) findViewById(R.id.textView7);
+        mColon = (TextView) findViewById(R.id.textView3);
 
 
         ArrayList<String> tableNos = new ArrayList<>();
@@ -257,7 +257,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
 
     private void getTaxDetails(float totalByItems) {
         taxItemses = new ArrayList<TaxItems>();
-        TaxItems res1 = new TaxItems("Total before Tax", totalByItems);
+        TaxItems res1 = new TaxItems("Total Before Tax", totalByItems);
         taxItemses.add(res1);
         for (int i = 0; i < taxList.size(); i++) {
             float chargers = 0;
@@ -282,92 +282,94 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        if (!Util.Operations.isOnline(this))
-            Util.createNetErrorDialog(this);
-        else if (v.getId() == R.id.tv_place_order) {
-            String mTableName = "";
-            if (mCbTakeAway.isChecked())
-                mTableName = "9999";
-            else
 
-                mTableName = mSpTableNo.getSelectedItem().toString().trim();
-            if (mTableName.equals(getString(R.string.bar))) {
-                mTableName = "" + 8888;
-            }
-            if (mTableName.length() >= 1) {
+          if (v.getId() == R.id.tv_place_order) {
+              if (!Util.Operations.isOnline(this))
+                  Util.createNetErrorDialog(this);
+              else {
+                  String mTableName = "";
+                  if (mCbTakeAway.isChecked())
+                      mTableName = "9999";
+                  else
+                      mTableName = mSpTableNo.getSelectedItem().toString().trim();
+                  if (mTableName.equals(getString(R.string.bar))) {
+                      mTableName = "" + 8888;
+                  }
+                  if (mTableName.length() >= 1) {
 
-                ArrayList<Order> orderToServers = new ArrayList<>();
-                Order orderToServer = new Order();
-                orderToServer.setRestaurantId(appPrefernces.getRESTAURANT_ID());
-                orderToServer.setDeviceId(appPrefernces.getDEVICE_ID());
+                      ArrayList<Order> orderToServers = new ArrayList<>();
+                      Order orderToServer = new Order();
+                      orderToServer.setRestaurantId(appPrefernces.getRESTAURANT_ID());
+                      orderToServer.setDeviceId(appPrefernces.getDEVICE_ID());
 
 
-                if (appPrefernces.getORDER_ID() != null)
-                    orderToServer.setId(appPrefernces.getORDER_ID());
-                else
-                    orderToServer.setId("");
-                appPrefernces.setTABLE_NAME(Integer.parseInt(mTableName));
-                orderToServer.setTableno(Integer.parseInt(mTableName));
-                orderToServer.setOrderprice(totalPrice);
-                double sum = totalPrice + taxAmountCalculation(totalPrice);
-                orderToServer.setTotalprice(sum);
-                orderToServer.setTax(taxAmountCalculation(totalPrice));
-                int count = 0;
-                String descriptoin = null;
-                ArrayList<Menuitems> orderingMenus = new ArrayList<>();
-                for (CartItems cartItems : cartItemses) {
-                    if (cartItems.getSpecial() != null) {
-                        if (cartItems.getSpecial().equals("0")) {
-                            cartItems.setSpecial("1");//not special item will be 1
-                        } else if (cartItems.getSpecial().equals("1")) {
-                            cartItems.setSpecial("3");//  special item will be 3
-                        } else {
-                            cartItems.setSpecial("2");//BEVARAGERS WILL BE 3
-                        }
-                    } else {
-                        cartItems.setSpecial("2");//bevagrages will be 2
-                    }
-                    count = count + cartItems.getItemQuantity();
-                    descriptoin = cartItems.getItemCatagerie();
+                      if (appPrefernces.getORDER_ID() != null)
+                          orderToServer.setId(appPrefernces.getORDER_ID());
+                      else
+                          orderToServer.setId("");
+                      appPrefernces.setTABLE_NAME(Integer.parseInt(mTableName));
+                      orderToServer.setTableno(Integer.parseInt(mTableName));
+                      orderToServer.setOrderprice(totalPrice);
+                      double sum = totalPrice + taxAmountCalculation(totalPrice);
+                      orderToServer.setTotalprice(sum);
+                      orderToServer.setTax(taxAmountCalculation(totalPrice));
+                      int count = 0;
+                      String descriptoin = null;
+                      ArrayList<Menuitems> orderingMenus = new ArrayList<>();
+                      for (CartItems cartItems : cartItemses) {
+                          if (cartItems.getSpecial() != null) {
+                              if (cartItems.getSpecial().equals("0")) {
+                                  cartItems.setSpecial("1");//not special item will be 1
+                              } else if (cartItems.getSpecial().equals("1")) {
+                                  cartItems.setSpecial("3");//  special item will be 3
+                              } else {
+                                  cartItems.setSpecial("2");//BEVARAGERS WILL BE 3
+                              }
+                          } else {
+                              cartItems.setSpecial("2");//bevagrages will be 2
+                          }
+                          count = count + cartItems.getItemQuantity();
+                          descriptoin = cartItems.getItemCatagerie();
 
-                    orderingMenus.add(new Menuitems(cartItems.getItemMenuCatId(), cartItems.getItemQuantity(), cartItems.getSpecial(), cartItems.getMenuType()));
-                }
-                appPrefernces.setQunatity(count);
-                try {
-                    if (!descriptoin.equals("")) {
-                        if (descriptoin.equals("Breakfast")) {
-                            orderToServer.setPhaseid("" + 1);
-                            appPrefernces.setPhaseId(1);
-                        } else if (descriptoin.equals("Lunch")) {
-                            appPrefernces.setPhaseId(2);
-                            orderToServer.setPhaseid("" + 2);
-                        } else if (descriptoin.equals("Dinner")) {
-                            appPrefernces.setPhaseId(3);
-                            orderToServer.setPhaseid("" + 3);
-                        } else if (descriptoin.equals("Allday")) {
-                            appPrefernces.setPhaseId(4);
-                            orderToServer.setPhaseid("" + 4);
-                        }
-                    }
-                } catch (Exception e) {
-                }
+                          orderingMenus.add(new Menuitems(cartItems.getItemMenuCatId(), cartItems.getItemQuantity(), cartItems.getSpecial(), cartItems.getMenuType()));
+                      }
+                      appPrefernces.setQunatity(count);
+                      try {
+                          if (!descriptoin.equals("")) {
+                              if (descriptoin.equals("Breakfast")) {
+                                  orderToServer.setPhaseid("" + 1);
+                                  appPrefernces.setPhaseId(1);
+                              } else if (descriptoin.equals("Lunch")) {
+                                  appPrefernces.setPhaseId(2);
+                                  orderToServer.setPhaseid("" + 2);
+                              } else if (descriptoin.equals("Dinner")) {
+                                  appPrefernces.setPhaseId(3);
+                                  orderToServer.setPhaseid("" + 3);
+                              } else if (descriptoin.equals("Allday")) {
+                                  appPrefernces.setPhaseId(4);
+                                  orderToServer.setPhaseid("" + 4);
+                              }
+                          }
+                      } catch (Exception e) {
+                      }
 
-                appPrefernces.setDESCRIPTION(descriptoin);
-                orderToServer.setMenuitems(orderingMenus);
-                OrderPlacement orderPlacement = new OrderPlacement();
-                orderPlacement.setOrder(orderToServer);
-                Gson gson = new Gson();
-                String json = gson.toJson(orderPlacement);
-                if (count != 0) {
+                      appPrefernces.setDESCRIPTION(descriptoin);
+                      orderToServer.setMenuitems(orderingMenus);
+                      OrderPlacement orderPlacement = new OrderPlacement();
+                      orderPlacement.setOrder(orderToServer);
+                      Gson gson = new Gson();
+                      String json = gson.toJson(orderPlacement);
+                      if (count != 0) {
 
-                    pushDataToServer(json);
-                } else {
-                    Util.createOKAlert(PlaceOrderActivity.this, "Heading", "No Items Found...");
-                }
-            } else {
-                Util.createOKAlert(PlaceOrderActivity.this, "Heading", "Please enter the Table no");
-            }
-        }
+                          pushDataToServer(json);
+                      } else {
+                          Util.createOKAlert(PlaceOrderActivity.this, "Heading", "No Items Found...");
+                      }
+                  } else {
+                      Util.createOKAlert(PlaceOrderActivity.this, "Heading", "Please enter the Table no");
+                  }
+              }
+          }
     }
 
     private void pushDataToServer(final String mTableName) {

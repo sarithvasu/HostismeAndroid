@@ -1,8 +1,14 @@
 package com.effone.hostismeandroid;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.NavigationView;
@@ -20,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -67,6 +74,7 @@ public class MainActivity extends AppCompatActivity
     private ProgressDialog pDialog;
     private CustomPagerAdapter mCustomPagerAdapter;
     private AppPreferences appPreferences;
+
 
 
     @Override
@@ -127,6 +135,14 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mConnReceiver != null) {
+            unregisterReceiver(mConnReceiver);
+        }
+    }
+
     private void setToolbar() {
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         LinearLayout customView = (LinearLayout)
@@ -167,6 +183,7 @@ public class MainActivity extends AppCompatActivity
         else{
             mTvBook_a_table.setText(getString(R.string.move_a_table));
         }
+        registerReceiver(this.mConnReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         super.onResume();
 
     }
@@ -281,8 +298,12 @@ public class MainActivity extends AppCompatActivity
         switch (view.getId()) {
             case R.id.btn_appointments:
                 if (appPreferences.getRESTAURANT_NAME() != "") {
-                    intent = new Intent(this, Service_RequestActivity.class);
-                    startActivity(intent);
+                    if(appPreferences.getTABLE_NAME() != 9999 && appPreferences.getTABLE_NAME() != 8888) {
+                        intent = new Intent(this, Service_RequestActivity.class);
+                        startActivity(intent);
+                    }else {
+                        Util.createOKAlert(this,  "", getString(R.string.service_request_table_msg));
+                    }
                 } else {
                     if (!Util.Operations.isOnline(this))
                         Util.createNetErrorDialog(this);
@@ -414,4 +435,12 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    public BroadcastReceiver mConnReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            if (!Util.isInternetOn(context)) {
+
+            }
+
+        }
+    };
 }
