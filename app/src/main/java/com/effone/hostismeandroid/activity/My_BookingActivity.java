@@ -3,6 +3,7 @@ package com.effone.hostismeandroid.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -84,8 +85,11 @@ public class My_BookingActivity extends AppCompatActivity {
         //virtualMethod();
        /* Gson gson= new Gson();
         String json = gson.toJson(mPaymentConfirmation);*/
-        if (!Util.Operations.isOnline(this))
-            Util.createNetErrorDialog(this);
+        if (!Util.Operations.isOnline(this)) {
+            Intent intent = new Intent(getApplicationContext(), NoNetworkActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
         else
             dummyUrlCode();
 
@@ -165,6 +169,21 @@ public class My_BookingActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                final View v = findViewById(R.id.home_btn);
+
+                if (v != null) {
+                    v.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            return false;
+                        }
+                    });
+                }
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 

@@ -3,6 +3,7 @@ package com.effone.hostismeandroid.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -46,13 +47,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.effone.hostismeandroid.activity.ConfirmationActivity.setListViewHeightBasedOnItems;
 import static com.effone.hostismeandroid.activity.MenuActivity.taxList;
 import static com.effone.hostismeandroid.common.URL.POST_ORDER;
 
 
 public class PlaceOrderActivity extends AppCompatActivity implements View.OnClickListener, OnDataChangeListener {
-    private TextView mTvItemPrice, mTvItemCount, mTvChargers, mTvEstimatedTotal, mTableNo, mTvItemTotalPrice,mColon;
+    private TextView mTvItemPrice, mTvItemCount, mTvChargers, mTvEstimatedTotal, mTableNo, mTvItemTotalPrice, mColon;
     private TextView mTvPlaceOrder;
     private Spinner mSpTableNo;
     private UnScrollListView mLvItemSummary;
@@ -68,7 +68,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         appPrefernces = new AppPreferences(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Common.setCustomTitile(this, ""+getString(R.string.View_Order), null);
+        Common.setCustomTitile(this, "" + getString(R.string.View_Order), null);
         decalartion();
     }
 
@@ -88,7 +88,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
 
 
         ArrayList<String> tableNos = new ArrayList<>();
-        tableNos.add(getString(R.string.bar));
+            tableNos.add(getString(R.string.bar));
         for (int i = 1; i <= appPrefernces.getNUMBER_OF_TABLES(); i++) {
             tableNos.add("" + i);
         }
@@ -106,11 +106,8 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
             mSpTableNo.setVisibility(View.VISIBLE);
             mColon.setVisibility(View.VISIBLE);
         }
-        if (appPrefernces.getTABLE_NAME() != 0 && appPrefernces.getTABLE_NAME() != 9999) {
-            if (appPrefernces.getTABLE_NAME() == 8888)
-                mSpTableNo.setSelection(0);
-            else
-                mSpTableNo.setSelection(tableNos.indexOf(""+appPrefernces.getTABLE_NAME()));
+        if (appPrefernces.getTABLE_NAME() != 0 && appPrefernces.getTABLE_NAME() != 9999 && appPrefernces.getTABLE_NAME() != 8888) {
+            mSpTableNo.setSelection(tableNos.indexOf("" + appPrefernces.getTABLE_NAME()));
             mSpTableNo.setEnabled(false);
         }
         mCbTakeAway.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -121,15 +118,14 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                     mSpTableNo.setVisibility(View.INVISIBLE);
                     mColon.setVisibility(View.INVISIBLE);
                 } else {
-                    if (appPrefernces.getTABLE_NAME() != 0) {
-                        if (appPrefernces.getTABLE_NAME() == 9999) {
+                    if (appPrefernces.getTABLE_NAME() == 0||appPrefernces.getTABLE_NAME() == 9999 || appPrefernces.getTABLE_NAME() == 8888) {
                             mSpTableNo.setEnabled(true);
-                        }
                         mTableNo.setVisibility(View.VISIBLE);
                         mTableNo.setText(getString(R.string.select_a_table));
                         mSpTableNo.setVisibility(View.VISIBLE);
                         mColon.setVisibility(View.VISIBLE);
                     } else {
+                        mSpTableNo.setEnabled(false);
                         mTableNo.setVisibility(View.VISIBLE);
                         mSpTableNo.setVisibility(View.VISIBLE);
                         mColon.setVisibility(View.VISIBLE);
@@ -167,17 +163,17 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
 
         }
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
-        mTvItemPrice.setText("" + totalPrice);
-        mTvItemCount.setText(""+getString(R.string.items)+" ( "+ Math.round(totalCount) + " )");
+        mTvItemPrice.setText("$ " + totalPrice);
+        mTvItemCount.setText("" + getString(R.string.items) + " ( " + Math.round(totalCount) + " )");
 
         float twoDigitsFs = Float.valueOf(decimalFormat.format(taxAmountCalculation(totalPrice)));
-        mTvChargers.setText("" + twoDigitsFs);
+        mTvChargers.setText("$ " + twoDigitsFs);
 
         double sum = totalPrice + taxAmountCalculation(totalPrice);
 
         float twoDigitsF = Float.valueOf(decimalFormat.format(sum));
-        mTvEstimatedTotal.setText("" + twoDigitsF);
-        mTvItemTotalPrice.setText("" + twoDigitsF);
+        mTvEstimatedTotal.setText("$ " + twoDigitsF);
+        mTvItemTotalPrice.setText("$" + twoDigitsF);
         getTaxDetails((float) totalPrice);
         taxDetailsAdapter = new TaxDetailsAdapter(this, R.layout.tax_items,
                 taxItemses);
@@ -257,7 +253,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
 
     private void getTaxDetails(float totalByItems) {
         taxItemses = new ArrayList<TaxItems>();
-        TaxItems res1 = new TaxItems(""+getString(R.string.total_before_tax), totalByItems);
+        TaxItems res1 = new TaxItems("" + getString(R.string.total_before_tax), totalByItems);
         taxItemses.add(res1);
         for (int i = 0; i < taxList.size(); i++) {
             float chargers = 0;
@@ -283,93 +279,95 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View v) {
 
-          if (v.getId() == R.id.tv_place_order) {
-              if (!Util.Operations.isOnline(this))
-                  Util.createNetErrorDialog(this);
-              else {
-                  String mTableName = "";
-                  if (mCbTakeAway.isChecked())
-                      mTableName = "9999";
-                  else
-                      mTableName = mSpTableNo.getSelectedItem().toString().trim();
-                  if (mTableName.equals(getString(R.string.bar))) {
-                      mTableName = "" + 8888;
-                  }
-                  if (mTableName.length() >= 1) {
+        if (v.getId() == R.id.tv_place_order) {
+            if (!Util.Operations.isOnline(this)) {
+                Intent intent = new Intent(getApplicationContext(), NoNetworkActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            } else {
+                String mTableName = "";
+                if (mCbTakeAway.isChecked())
+                    mTableName = "9999";
+                else
+                    mTableName = mSpTableNo.getSelectedItem().toString().trim();
+                if (mTableName.equals(getString(R.string.bar))) {
+                    mTableName = "" + 8888;
+                }
+                if (mTableName.length() >= 1) {
 
-                      ArrayList<Order> orderToServers = new ArrayList<>();
-                      Order orderToServer = new Order();
-                      orderToServer.setRestaurantId(appPrefernces.getRESTAURANT_ID());
-                      orderToServer.setDeviceId(appPrefernces.getDEVICE_ID());
+                    ArrayList<Order> orderToServers = new ArrayList<>();
+                    Order orderToServer = new Order();
+                    orderToServer.setRestaurantId(appPrefernces.getRESTAURANT_ID());
+                    orderToServer.setDeviceId(appPrefernces.getDEVICE_ID());
 
 
-                      if (appPrefernces.getORDER_ID() != null)
-                          orderToServer.setId(appPrefernces.getORDER_ID());
-                      else
-                          orderToServer.setId("");
-                      appPrefernces.setTABLE_NAME(Integer.parseInt(mTableName));
-                      orderToServer.setTableno(Integer.parseInt(mTableName));
-                      orderToServer.setOrderprice(totalPrice);
-                      double sum = totalPrice + taxAmountCalculation(totalPrice);
-                      orderToServer.setTotalprice(sum);
-                      orderToServer.setTax(taxAmountCalculation(totalPrice));
-                      int count = 0;
-                      String descriptoin = null;
-                      ArrayList<Menuitems> orderingMenus = new ArrayList<>();
-                      for (CartItems cartItems : cartItemses) {
-                          if (cartItems.getSpecial() != null) {
-                              if (cartItems.getSpecial().equals("0")) {
-                                  cartItems.setSpecial("1");//not special item will be 1
-                              } else if (cartItems.getSpecial().equals("1")) {
-                                  cartItems.setSpecial("3");//  special item will be 3
-                              } else {
-                                  cartItems.setSpecial("2");//BEVARAGERS WILL BE 3
-                              }
-                          } else {
-                              cartItems.setSpecial("2");//bevagrages will be 2
-                          }
-                          count = count + cartItems.getItemQuantity();
-                          descriptoin = cartItems.getItemCatagerie();
+                    if (appPrefernces.getORDER_ID() != null)
+                        orderToServer.setId(appPrefernces.getORDER_ID());
+                    else
+                        orderToServer.setId("");
+                    appPrefernces.setTABLE_NAME(Integer.parseInt(mTableName));
+                    orderToServer.setTableno(Integer.parseInt(mTableName));
+                    orderToServer.setOrderprice(totalPrice);
+                    double sum = totalPrice + taxAmountCalculation(totalPrice);
+                    orderToServer.setTotalprice(sum);
+                    orderToServer.setTax(taxAmountCalculation(totalPrice));
+                    int count = 0;
+                    String descriptoin = null;
+                    ArrayList<Menuitems> orderingMenus = new ArrayList<>();
+                    for (CartItems cartItems : cartItemses) {
+                        if (cartItems.getSpecial() != null) {
+                            if (cartItems.getSpecial().equals("0")) {
+                                cartItems.setSpecial("1");//Normal item will be 1
+                            } else if (cartItems.getSpecial().equals("1")) {
+                                cartItems.setSpecial("3");//  special item will be 3
+                            } else {
+                                cartItems.setSpecial("2");//BEVARAGERS WILL BE 2
+                            }
+                        } else {
+                            cartItems.setSpecial("2");//bevagrages will be 2
+                        }
+                        count = count + cartItems.getItemQuantity();
+                        descriptoin = cartItems.getItemCatagerie();
 
-                          orderingMenus.add(new Menuitems(cartItems.getItemMenuCatId(), cartItems.getItemQuantity(), cartItems.getSpecial(), cartItems.getMenuType()));
-                      }
-                      appPrefernces.setQunatity(count);
-                      try {
-                          if (!descriptoin.equals("")) {
-                              if (descriptoin.equals(""+getString(R.string.Breakfast))) {
-                                  orderToServer.setPhaseid("" + 1);
-                                  appPrefernces.setPhaseId(1);
-                              } else if (descriptoin.equals(""+getString(R.string.Lunch))) {
-                                  appPrefernces.setPhaseId(2);
-                                  orderToServer.setPhaseid("" + 2);
-                              } else if (descriptoin.equals(""+getString(R.string.Dinner))) {
-                                  appPrefernces.setPhaseId(3);
-                                  orderToServer.setPhaseid("" + 3);
-                              } else if (descriptoin.equals(""+getString(R.string.Allday))) {
-                                  appPrefernces.setPhaseId(4);
-                                  orderToServer.setPhaseid("" + 4);
-                              }
-                          }
-                      } catch (Exception e) {
-                      }
+                        orderingMenus.add(new Menuitems(cartItems.getItemMenuCatId(), cartItems.getItemQuantity(), cartItems.getSpecial(), cartItems.getMenuType()));
+                    }
+                    appPrefernces.setQunatity(count);
+                    try {
+                        if (!descriptoin.equals("")) {
+                            if (descriptoin.equals("" + getString(R.string.Breakfast))) {
+                                orderToServer.setPhaseid("" + 1);
+                                appPrefernces.setPhaseId(1);
+                            } else if (descriptoin.equals("" + getString(R.string.Lunch))) {
+                                appPrefernces.setPhaseId(2);
+                                orderToServer.setPhaseid("" + 2);
+                            } else if (descriptoin.equals("" + getString(R.string.Dinner))) {
+                                appPrefernces.setPhaseId(3);
+                                orderToServer.setPhaseid("" + 3);
+                            } else if (descriptoin.equals("" + getString(R.string.Allday))) {
+                                appPrefernces.setPhaseId(4);
+                                orderToServer.setPhaseid("" + 4);
+                            }
+                        }
+                    } catch (Exception e) {
+                    }
 
-                      appPrefernces.setDESCRIPTION(descriptoin);
-                      orderToServer.setMenuitems(orderingMenus);
-                      OrderPlacement orderPlacement = new OrderPlacement();
-                      orderPlacement.setOrder(orderToServer);
-                      Gson gson = new Gson();
-                      String json = gson.toJson(orderPlacement);
-                      if (count != 0) {
+                    appPrefernces.setDESCRIPTION(descriptoin);
+                    orderToServer.setMenuitems(orderingMenus);
+                    OrderPlacement orderPlacement = new OrderPlacement();
+                    orderPlacement.setOrder(orderToServer);
+                    Gson gson = new Gson();
+                    String json = gson.toJson(orderPlacement);
+                    if (count != 0) {
 
-                          pushDataToServer(json);
-                      } else {
-                          Util.createOKAlert(PlaceOrderActivity.this, ""+getString(R.string.heading), getString(R.string.No_Items_Found));
-                      }
-                  } else {
-                      Util.createOKAlert(PlaceOrderActivity.this, getString(R.string.heading), getString(R.string.please_enter_table_no));
-                  }
-              }
-          }
+                        pushDataToServer(json);
+                    } else {
+                        Util.createOKAlert(PlaceOrderActivity.this, "" + getString(R.string.heading), getString(R.string.No_Items_Found));
+                    }
+                } else {
+                    Util.createOKAlert(PlaceOrderActivity.this, getString(R.string.heading), getString(R.string.please_enter_table_no));
+                }
+            }
+        }
     }
 
     private void pushDataToServer(final String mTableName) {
@@ -394,7 +392,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onErrorResponse(VolleyError error) {
                 pDialog.dismiss();
-                Util.createOKAlert(PlaceOrderActivity.this, "",getString(R.string.error));
+                Util.createOKAlert(PlaceOrderActivity.this, "", getString(R.string.error));
             }
         }) {
             @Override
@@ -426,6 +424,21 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                final View v = findViewById(R.id.home_btn);
+
+                if (v != null) {
+                    v.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            return false;
+                        }
+                    });
+                }
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 

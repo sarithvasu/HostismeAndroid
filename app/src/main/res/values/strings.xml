@@ -5,8 +5,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="restartung_selection_message">Please select a restaurant.</string>
-
-
+    <string name="Email">Email</string>
+    <string name="Mob">Mob</string>
+    <string name="Phone">Phone</string>
 
     <string name="order_confirmation_message">Thank you, we have received your order.</string>
     <string name="order_missing_message">Order is not yet placed.</string>
@@ -29,7 +30,7 @@
 
     <string name="address">Address</string>
     <string name="price_summary">Price Summary</string>
-    <string name="items">Items (20)    </string>
+    <string name="items">Items     </string>
     <string name="charges">Taxes       </string>
     <string name="estimated_total">Estimated Total   </string>
     <string name="proceed">proceed to Checkout</string>
@@ -86,7 +87,7 @@
     <string name="enter_table_no">Enter table no:</string>
     <string name="View_Menu">View Menu</string>
     <string name="payment_msg">Please make Payment before selecting another restaurant.</string>
-    <string name="service_request_table_msg">You can\'t place a request for To-Go and Bar,</string>
+    <string name="service_request_table_msg">You can\'t place a request for To-Go and Bar.</string>
 
     <string name="select_the_table">Please Select Table Number.</string>
     <string name="service_type_msg">Please Select Service Type.</string>
@@ -103,7 +104,6 @@
     <string name="BillNo">Bill No</string>
     <string name="BookingID">Booking ID</string>
     <string name="Ordertotal">Order total</string>
-
 
 
     <string name="Menu">Menu</string>
@@ -130,10 +130,15 @@
     <string name="please_enter_table_no">Please enter the Table no</string>
     <string name="server_error">Server Error.</string>
     <string name="select_payment_type">Please Select Payment Type.</string>
-    <string name="promo_not_avialble">Promo code not available</string>
+    <string name="promo_not_avialble">Invalid Promo Code.</string>
     <string name="payment_failed">Payment Failed</string>
     <string name="error_encounted">Ërror has Encounterd</string>
     <string name="no_data">No Data</string>
     <string name="item_removed">Item removed</string>
     <string name="Special">Special</string>
+    <string name="no_internet_connection_and_try_again">Please check your Internet connection and try again.</string>
+    <string name="try_again">Try again</string>
+    <string name="warning_restarant_selection">Selecting a new restaurant will remove all the items from the cart.</string>
+    <string name="you_have_selected_to_go">You have selected To-Go</string>
+
 </resources>

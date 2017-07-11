@@ -3,6 +3,7 @@ package com.effone.hostismeandroid.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -53,7 +54,7 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
     Button mBtViewMenu;
     private AppPreferences mAppPreferences;
     private Spinner mSpTableToNo;
-    private TextView mMoveTableTitle, mTvTableNoForm;
+    private TextView mMoveTableTitle, mTvTableNoForm,mTvSelectedTableNo;
     private LinearLayout mMoveTableLay;
     private RelativeLayout mBookTableLay;
     private ProgressDialog pDialog;
@@ -89,9 +90,12 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
     protected void onStart() {
         super.onStart();
         if (!Util.Operations.isOnline(this)) {
-            Util.createNetErrorDialog(this);
+            Intent intent = new Intent(getApplicationContext(), NoNetworkActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }else {
+            init();
         }
-        init();
     }
 
     @Override
@@ -101,6 +105,8 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void init() {
+        mTvSelectedTableNo=(TextView)findViewById(R.id.tv_selected_table_no);
+        mTvSelectedTableNo.setVisibility(View.GONE);
         mSpTableNo = (Spinner) findViewById(R.id.et_table_no);
         mSpTableToNo = (Spinner) findViewById(R.id.tv_table_no_to);
         mTvTableNoForm = (TextView) findViewById(R.id.tv_table_no_form);
@@ -109,11 +115,19 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
         mBookTableLay = (RelativeLayout) findViewById(R.id.book_table_lay);
         mBtViewMenu = (Button) findViewById(R.id.bt_subit);
         if (mAppPreferences.getTABLE_NAME() == 0 || mAppPreferences.getTABLE_NAME() == 9999) {
+            if(mAppPreferences.getTABLE_NAME()==9999){
+                mTvSelectedTableNo.setVisibility(View.VISIBLE);
+                mTvSelectedTableNo.setText(getString(R.string.you_have_selected_to_go));
+            }
+            else {
+                mTvSelectedTableNo.setVisibility(View.GONE);
+            }
             mBookTableLay.setVisibility(View.VISIBLE);
             mMoveTableTitle.setVisibility(View.GONE);
             mMoveTableLay.setVisibility(View.GONE);
             //  mBtViewMenu.setText(getString(R.string.view_cart));
         } else {
+            mTvSelectedTableNo.setVisibility(View.GONE);
             mBookTableLay.setVisibility(View.GONE);
             mMoveTableTitle.setVisibility(View.VISIBLE);
             mMoveTableLay.setVisibility(View.VISIBLE);
@@ -190,6 +204,21 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                final View v = findViewById(R.id.home_btn);
+
+                if (v != null) {
+                    v.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            return false;
+                        }
+                    });
+                }
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -234,8 +263,11 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
 
                     if (fromMoveTable) {
                         if (!mAppPreferences.getORDER_ID().equals("")){
-                            if (!Util.Operations.isOnline(this))
-                                Util.createNetErrorDialog(this);
+                            if (!Util.Operations.isOnline(this)) {
+                                Intent intent = new Intent(getApplicationContext(), NoNetworkActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                            }
                             else {
                                 if (tableNo.equals(getString(R.string.togo))) {
                                     requestForaTable("" + 9999);

@@ -3,6 +3,7 @@ package com.effone.hostismeandroid.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -105,8 +106,11 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         if(mVpMainMenu!=null)
         mVpMainMenu.setAdapter(null);
-        if (!Util.Operations.isOnline(this))
-            Util.createNetErrorDialog(this);
+        if (!Util.Operations.isOnline(this)) {
+            Intent intent = new Intent(getApplicationContext(), NoNetworkActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
         else {
             gettingDataFromService();
             showOrderItems();
@@ -134,11 +138,8 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                             JSONArray taxName=jsonObjec.getJSONArray("Taxes");
                             gettingTaxValues(taxName);
                             Iterator<String> foodTimes = menuJsonObject.keys();
-
-
                             while (foodTimes.hasNext()) {
-                                String foodTime = foodTimes.next();
-
+                                String foodTime = foodTimes.next();// her will get FoodType(Breakfast,lunch,dinner,allday)..
                                 JSONObject jsonObject = menuJsonObject.getJSONObject(foodTime);// her i will get the cousin(Italin,..etc) of muenu list
                                 Iterator<String> countryCousins = jsonObject.keys();
                                 ArrayList<Items> itemses=new ArrayList();
@@ -288,6 +289,21 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                final View v = findViewById(R.id.home_btn);
+
+                if (v != null) {
+                    v.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            return false;
+                        }
+                    });
+                }
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -341,7 +357,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
             totalPrice += cartItemses.get(i).getItemPrice() * cartItemses.get(i).getItemQuantity();
 
         }
-        mTvSummary.setText(totalCount + ""+getString(R.string.item_cart)+" \n " + totalPrice + " "+getString(R.string.plus_taxes));
+        mTvSummary.setText(totalCount + " "+getString(R.string.item_cart)+" \n$ " + totalPrice + "\n"+getString(R.string.plus_taxes));
 
     }
 

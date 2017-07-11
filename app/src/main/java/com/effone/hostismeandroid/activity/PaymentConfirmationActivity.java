@@ -2,12 +2,14 @@ package com.effone.hostismeandroid.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -78,8 +80,11 @@ public class PaymentConfirmationActivity extends AppCompatActivity {
         mTvQuantits = (TextView) findViewById(R.id.tv_bill_ammount);
         mTvOrderTotal = (TextView) findViewById(R.id.tv_order_total);
         mTvStatus = (TextView) findViewById(R.id.tv_order_status);
-        if (!Util.Operations.isOnline(this))
-            Util.createNetErrorDialog(this);
+        if (!Util.Operations.isOnline(this)) {
+            Intent intent = new Intent(getApplicationContext(), NoNetworkActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
         else
         settingValues();
     }
@@ -127,6 +132,21 @@ public class PaymentConfirmationActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                final View v = findViewById(R.id.home_btn);
+
+                if (v != null) {
+                    v.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            return false;
+                        }
+                    });
+                }
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 

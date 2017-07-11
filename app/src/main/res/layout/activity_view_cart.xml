@@ -140,8 +140,7 @@
                 android:text="@string/togo"
                 android:textColor="@color/fontColor"
                 android:textSize="15sp"
-                android:thumbTint="@android:color/holo_green_light"
-                android:trackTint="@android:color/holo_green_light" />
+           />
 
             <TextView
                 android:id="@+id/tableNo"

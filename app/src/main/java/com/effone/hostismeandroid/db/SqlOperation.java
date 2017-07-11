@@ -3,6 +3,7 @@ package com.effone.hostismeandroid.db;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -176,6 +177,11 @@ public class SqlOperation {
 /*      this is what your database delete method should look like
         this method deletes by id, the first column in your database*/
         return database.delete(TABLE_NAME_ORDERITEM, null, null) > 0;
+    }
+    public int getCount(){
+        int count=0;
+        count  =(int) DatabaseUtils.queryNumEntries(database, TABLE_NAME_ORDERITEM);
+        return count;
     }
 
 

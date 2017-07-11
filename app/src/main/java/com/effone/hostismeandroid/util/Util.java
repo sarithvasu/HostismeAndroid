@@ -2,6 +2,7 @@ package com.effone.hostismeandroid.util;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -181,5 +183,26 @@ public final class Util {
 
 
     }
+    public static void createOkCancelDialog(AppCompatActivity context, String text, DialogInterface.OnClickListener listner) {
+        Dialog dialog = null;
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(
+                text)
+                .setCancelable(false)
+                .setPositiveButton("Ok",listner )
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                                int id) {
+
+                                dialog.cancel();
+                            }
+                        });
+        AlertDialog alert = builder.create();
+        dialog = alert;
+        dialog.show();
+
+
+    }
 }

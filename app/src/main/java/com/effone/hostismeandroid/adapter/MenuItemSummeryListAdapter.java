@@ -99,7 +99,7 @@ public class MenuItemSummeryListAdapter extends ArrayAdapter<CartItems> {
             final CartItems value = (CartItems) orderedItemSummaries.get(position);
 //            final TaxItems taxItems=(TaxItems) taxItemses.get(position);
             /************  Set Model values in Holder elements ***********/
-            holder.tv_summery_item_name.setText(value.getItemName()+" ("+value.getItemQuantity() +" X "+ value.getItemPrice()+") ");
+            holder.tv_summery_item_name.setText(value.getItemName()+" ("+value.getItemQuantity() +" X $ "+ value.getItemPrice()+") ");
             holder.tv_item_total_price.setText("$ "+value.getItemPrice()*value.getItemQuantity());
             double ammount=value.getItemPrice()*+value.getItemQuantity()+Float.parseFloat(taxList.get(0).getChargevalue());
             holder.mTaxName1.setText(taxList.get(0).getName());

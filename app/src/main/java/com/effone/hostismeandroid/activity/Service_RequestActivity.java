@@ -2,6 +2,7 @@ package com.effone.hostismeandroid.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
@@ -84,8 +85,11 @@ public class Service_RequestActivity extends AppCompatActivity implements View.O
                     // get selected radio button from radioGroup
                     int selectedId = mRadioGroup.getCheckedRadioButtonId();
                     if (selectedId != -1) {
-                        if (!Util.Operations.isOnline(this))
-                            Util.createNetErrorDialog(this);
+                        if (!Util.Operations.isOnline(this)) {
+                            Intent intent = new Intent(getApplicationContext(), NoNetworkActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                        }
                         else
                             sendingDataServer();
                     }
@@ -171,6 +175,21 @@ public class Service_RequestActivity extends AppCompatActivity implements View.O
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                final View v = findViewById(R.id.home_btn);
+
+                if (v != null) {
+                    v.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            return false;
+                        }
+                    });
+                }
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 

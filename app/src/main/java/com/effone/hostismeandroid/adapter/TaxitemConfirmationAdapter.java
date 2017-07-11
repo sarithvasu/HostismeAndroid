@@ -62,8 +62,5 @@ public class TaxitemConfirmationAdapter extends ArrayAdapter<TaxItems> {
     public static  class FilterViewHolder {
         TextView tv_tax_name;
         TextView tv_tax_money;
-
-
-
     }
 }

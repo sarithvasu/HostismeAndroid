@@ -29,22 +29,24 @@
 
         <TextView
             android:id="@+id/tv_restaurant_email_label"
-            android:layout_width="50dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Email"
+            android:text="@string/Email"
             android:textColor="@color/text_color_grey"
             android:textColorLink="@color/text_color_grey"
-            android:textSize="@dimen/text_size_small" />
+            android:textSize="@dimen/text_size_small"
+            android:layout_weight=".3"/>
 
         <TextView
             android:id="@+id/tv_restaurant_email"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:textColor="@color/text_color_grey"
             android:textColorLink="@color/text_color_grey"
-            android:textSize="@dimen/text_size_small" />
+            android:textSize="@dimen/text_size_small"
+            android:layout_weight=".7"/>
     </LinearLayout>
 
     <LinearLayout
@@ -53,47 +55,52 @@
 
         <TextView
             android:id="@+id/tv_restaurant_mob_label"
-            android:layout_width="50dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Mob"
+            android:text="@string/Mob"
             android:textColor="@color/text_color_grey"
             android:textColorLink="@color/text_color_grey"
-            android:textSize="@dimen/text_size_small" />
+            android:textSize="@dimen/text_size_small"
+            android:layout_weight=".3"/>
 
         <TextView
             android:id="@+id/tv_restaurant_mob"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:autoLink="phone"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:textColor="@color/text_color_grey"
             android:textColorLink="@color/text_color_grey"
-            android:textSize="@dimen/text_size_small" />
+            android:textSize="@dimen/text_size_small"
+            android:layout_weight=".7"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <TextView
             android:id="@+id/tv_restaurant_land_label"
-            android:layout_width="50dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Phone"
+            android:text="@string/Phone"
             android:textColor="@color/text_color_grey"
             android:textColorLink="@color/text_color_grey"
-            android:textSize="@dimen/text_size_small" />
+            android:textSize="@dimen/text_size_small"
+            android:layout_weight=".3"/>
 
         <TextView
             android:id="@+id/tv_restaurant_land"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:autoLink="phone"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:textColor="@color/text_color_grey"
             android:textColorLink="@color/text_color_grey"
-            android:textSize="@dimen/text_size_small" />
+            android:textSize="@dimen/text_size_small"
+            android:layout_weight=".7"/>
     </LinearLayout>
 </LinearLayout>

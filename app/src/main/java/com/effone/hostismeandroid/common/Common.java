@@ -1,7 +1,10 @@
 package com.effone.hostismeandroid.common;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -80,4 +83,5 @@ public class Common {
         }
         return newQuery;
     }
+
 }

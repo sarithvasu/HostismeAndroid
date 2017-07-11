@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.widget.DrawerLayout;
@@ -41,6 +42,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.effone.hostismeandroid.activity.Book_a_tableActivity;
 import com.effone.hostismeandroid.activity.MenuActivity;
 import com.effone.hostismeandroid.activity.My_BookingActivity;
+import com.effone.hostismeandroid.activity.NoNetworkActivity;
 import com.effone.hostismeandroid.activity.RestaurantListAcitivity;
 import com.effone.hostismeandroid.activity.Service_RequestActivity;
 import com.effone.hostismeandroid.activity.View_Pay_BillActivity;
@@ -131,7 +133,9 @@ public class MainActivity extends AppCompatActivity
         ///as off now i am setting the values
         appPreferences.setDEVICE_ID(Settings.Secure.getString(getApplicationContext().getContentResolver(),Settings.Secure.ANDROID_ID));
         if (!Util.Operations.isOnline(this)) {
-            Util.createNetErrorDialog(this);
+            Intent intent = new Intent(getApplicationContext(), NoNetworkActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         }
     }
 
@@ -288,7 +292,7 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+                ActivityCompat.finishAffinity(this);
         }
     }
 
@@ -297,7 +301,12 @@ public class MainActivity extends AppCompatActivity
         Intent intent;
         switch (view.getId()) {
             case R.id.btn_appointments:
-                if (appPreferences.getRESTAURANT_NAME() != "") {
+                if (!Util.Operations.isOnline(this)) {
+                    Intent intent1 = new Intent(getApplicationContext(), NoNetworkActivity.class);
+                    intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent1);
+                }
+                else if (appPreferences.getRESTAURANT_NAME() != "") {
                     if(appPreferences.getTABLE_NAME() != 9999 && appPreferences.getTABLE_NAME() != 8888) {
                         intent = new Intent(this, Service_RequestActivity.class);
                         startActivity(intent);
@@ -312,13 +321,23 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case R.id.btn_res_list:
-
-                intent = new Intent(this, RestaurantListAcitivity.class);
-                startActivity(intent);
+                if (!Util.Operations.isOnline(this)) {
+                    Intent intent1 = new Intent(getApplicationContext(), NoNetworkActivity.class);
+                    intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent1);
+                }else {
+                    intent = new Intent(this, RestaurantListAcitivity.class);
+                    startActivity(intent);
+                }
 
                 break;
             case R.id.btn_res_menu:
-             if (appPreferences.getRESTAURANT_NAME() != "") {
+                if (!Util.Operations.isOnline(this)) {
+                    Intent intent1 = new Intent(getApplicationContext(), NoNetworkActivity.class);
+                    intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent1);
+                }
+            else if (appPreferences.getRESTAURANT_NAME() != "") {
                     intent = new Intent(this, MenuActivity.class);
                     startActivity(intent);
                 } else {
@@ -329,7 +348,12 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case R.id.btn_book_table:
-                if (appPreferences.getRESTAURANT_NAME() != "") {
+                if (!Util.Operations.isOnline(this)) {
+                    Intent intent1 = new Intent(getApplicationContext(), NoNetworkActivity.class);
+                    intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent1);
+                }
+               else if (appPreferences.getRESTAURANT_NAME() != "") {
                     intent = new Intent(this, Book_a_tableActivity.class);
                     startActivity(intent);
                 } else {
@@ -340,7 +364,12 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case R.id.btn_view_pay:
-                if (appPreferences.getRESTAURANT_NAME() != "") {
+                if (!Util.Operations.isOnline(this)) {
+                    Intent intent1 = new Intent(getApplicationContext(), NoNetworkActivity.class);
+                    intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent1);
+                }
+                else if (appPreferences.getRESTAURANT_NAME() != "") {
                     if(!appPreferences.getORDER_ID().equals("")) {
                         intent = new Intent(this, View_Pay_BillActivity.class);
                         startActivity(intent);
@@ -364,8 +393,14 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case R.id.btn_my_booking:
-                intent = new Intent(this, My_BookingActivity.class);
-                startActivity(intent);
+                if (!Util.Operations.isOnline(this)) {
+                    Intent intent1 = new Intent(getApplicationContext(), NoNetworkActivity.class);
+                    intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent1);
+                }else {
+                    intent = new Intent(this, My_BookingActivity.class);
+                    startActivity(intent);
+                }
                 break;
         }
     }
@@ -443,4 +478,5 @@ public class MainActivity extends AppCompatActivity
 
         }
     };
+
 }

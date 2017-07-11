@@ -52,10 +52,10 @@ public class HISMenuPageAdapter extends FragmentPagerAdapter  {
              preheading=(String) (mFullmenu.keySet().toArray())[ position-1 ];
              postheading=(String) (mFullmenu.keySet().toArray())[ position+1 ];
         }
-        if(position==0){
+        if(position==0&&mFullmenu.size()!=1){
             postheading=(String) (mFullmenu.keySet().toArray())[ position+1 ];
         }
-        if(position==(mFullmenu.size()-1)){
+        if(position==(mFullmenu.size()-1)&&mFullmenu.size()!=1){
             preheading=(String) (mFullmenu.keySet().toArray())[ position-1 ];
         }
         Items[] hisMenuItems = mFullmenu.get( heading );

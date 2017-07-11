@@ -2,7 +2,9 @@ package com.effone.hostismeandroid.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -107,9 +109,14 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         Common.setCustomTitile(this,getString(R.string.view_pay_bill),null);
         mRadioGroup=(RadioGroup)findViewById(R.id.radioGroup);
-
-        decalartion();
-        init();
+        if (!Util.Operations.isOnline(this)) {
+            Intent intent = new Intent(getApplicationContext(), NoNetworkActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }else {
+            decalartion();
+            init();
+        }
     }
 
     private void decalartion() {
@@ -296,6 +303,21 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                final View v = findViewById(R.id.home_btn);
+
+                if (v != null) {
+                    v.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            return false;
+                        }
+                    });
+                }
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -352,8 +374,11 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
             intent.putExtra("bill_no",tsLong);
             startActivity(intent);*/
              //   mSelectDbHelper.updateOrderHistory(mOrderId,comments, (String) radioButton.getText());
-            if (!Util.Operations.isOnline(this))
-                Util.createNetErrorDialog(this);
+            if (!Util.Operations.isOnline(this)) {
+                Intent intent = new Intent(getApplicationContext(), NoNetworkActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
             else
                 paymentToServer();
         }else {
@@ -366,6 +391,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
             promocodeServerSending(promoCode);
         else
             mEtPromocodeMsg.setText(getString(R.string.promo_not_avialble));
+        mEtPromocodeMsg.setTextColor(Color.RED);
     }
 
     }
@@ -451,6 +477,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
                     double amounts=Double.parseDouble(mBill.getBilldetails().getOrderTotal())- ammount;
                     mTvOrderTotal.setText("$ "+amounts);
                     mEtPromocodeMsg.setText(status);
+                    mEtPromocodeMsg.setTextColor(Color.BLACK);
                     mTvDiscount.setText("$ "+ammount);
                 } catch (JSONException e) {
                     e.printStackTrace();
