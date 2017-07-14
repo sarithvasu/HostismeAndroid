@@ -1,6 +1,7 @@
 package com.effone.hostismeandroid.activity;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -262,56 +263,70 @@ public class Book_a_tableActivity extends AppCompatActivity implements View.OnCl
 
 
                     if (fromMoveTable) {
-                        if (!mAppPreferences.getORDER_ID().equals("")){
-                            if (!Util.Operations.isOnline(this)) {
-                                Intent intent = new Intent(getApplicationContext(), NoNetworkActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                            }
-                            else {
-                                if (tableNo.equals(getString(R.string.togo))) {
-                                    requestForaTable("" + 9999);
-                                    Log.e("String", "" + 9999);
-                                } else if (tableNo.equals(getString(R.string.bar))) {
-                                    requestForaTable("" + 8888);
-                                    Log.e("String", "" + 8888);
-                                } else {
-                                    requestForaTable("" + Integer.parseInt(tableNo));
+                        final String finalTableNo = tableNo;
+                        Util.createYesNoDialog(Book_a_tableActivity.this, getString(R.string.move_table_confirmation) + tableNo +" ?", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                if (!mAppPreferences.getORDER_ID().equals("")){
+                                    if (!Util.Operations.isOnline(Book_a_tableActivity.this)) {
+                                        Intent intent = new Intent(getApplicationContext(), NoNetworkActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
+                                    }
+                                    else {
+                                        if (finalTableNo.equals(getString(R.string.togo))) {
+                                            requestForaTable("" + 9999);
+                                            Log.e("String", "" + 9999);
+                                        } else if (finalTableNo.equals(getString(R.string.bar))) {
+                                            requestForaTable("" + 8888);
+                                            Log.e("String", "" + 8888);
+                                        } else {
+                                            requestForaTable("" + Integer.parseInt(finalTableNo));
+                                        }
+                                    }
+                                }else{
+                                    if (finalTableNo.equals(getString(R.string.togo)))
+                                        mAppPreferences.setTABLE_NAME(9999);
+                                    else if (finalTableNo.equals(getString(R.string.bar)))
+                                        mAppPreferences.setTABLE_NAME(8888);
+                                    else
+                                        mAppPreferences.setTABLE_NAME(Integer.parseInt(finalTableNo));
+
+                                    Intent intent = new Intent(Book_a_tableActivity.this, MenuActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(intent);
+                                    finish();
+
+
                                 }
                             }
-                    }else{
-                            if (tableNo.equals(getString(R.string.togo)))
-                                mAppPreferences.setTABLE_NAME(9999);
-                             else if (tableNo.equals(getString(R.string.bar)))
-                                mAppPreferences.setTABLE_NAME(8888);
-                             else
-                                mAppPreferences.setTABLE_NAME(Integer.parseInt(tableNo));
+                        });
 
-                            Intent intent = new Intent(Book_a_tableActivity.this, MenuActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-                            finish();
-
-
-                        }
 
 
                     } else {
-                        if (tableNo.equals(getString(R.string.togo))) {
-                            mAppPreferences.setTABLE_NAME(9999);
-                            Log.e("String", "" + 9999);
-                        } else if (tableNo.equals(getString(R.string.bar))) {
-                            mAppPreferences.setTABLE_NAME(8888);
-                            Log.e("String", "" + 8888);
-                        } else {
-                            mAppPreferences.setTABLE_NAME(Integer.parseInt(tableNo));
-                            Log.e("String", "" + 8888);
-                        }
+                        final String finalTableNo1 = tableNo;
+                        Util.createYesNoDialog(Book_a_tableActivity.this, getString(R.string.book_a_table_confirmation) + tableNo+" ?", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                if (finalTableNo1.equals(getString(R.string.togo))) {
+                                    mAppPreferences.setTABLE_NAME(9999);
+                                    Log.e("String", "" + 9999);
+                                } else if (finalTableNo1.equals(getString(R.string.bar))) {
+                                    mAppPreferences.setTABLE_NAME(8888);
+                                    Log.e("String", "" + 8888);
+                                } else {
+                                    mAppPreferences.setTABLE_NAME(Integer.parseInt(finalTableNo1));
+                                    Log.e("String", "" + 8888);
+                                }
 
-                        Intent intent = new Intent(Book_a_tableActivity.this, MenuActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        finish();
+                                Intent intent = new Intent(Book_a_tableActivity.this, MenuActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+
                     }
 
                 }

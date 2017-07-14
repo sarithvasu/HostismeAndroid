@@ -205,4 +205,26 @@ public final class Util {
 
 
     }
+    public static void createYesNoDialog(AppCompatActivity context, String text, DialogInterface.OnClickListener listner) {
+        Dialog dialog = null;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(
+                text)
+                .setCancelable(false)
+                .setPositiveButton("Yes",listner )
+                .setNegativeButton("No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                                int id) {
+
+                                dialog.cancel();
+                            }
+                        });
+        AlertDialog alert = builder.create();
+        dialog = alert;
+        dialog.show();
+
+
+    }
 }

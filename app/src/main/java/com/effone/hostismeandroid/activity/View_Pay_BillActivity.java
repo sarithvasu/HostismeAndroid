@@ -351,7 +351,7 @@ public class View_Pay_BillActivity extends AppCompatActivity implements View.OnC
             mPayment.setOrder_id(appPreferences.getORDER_ID());
 
             mPayment.setOrderprice(""+orderAmount);
-
+            /* order status 2 for booked*/
             mPayment.setOrderstatus("2");
             mPayment.setPhaseid(""+appPreferences.getPhaseId());//we need to save this form confrimation screem
             mPayment.setRestaurant_id(appPreferences.getRESTAURANT_ID());

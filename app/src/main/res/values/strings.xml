@@ -44,8 +44,8 @@
     <string name="vat">VAT. Tax</string>
     <string name="ser_tax">Serv. Tax</string>
     <string name="payment_method">Payment Method</string>
-    <string name="paypal">Paypal</string>
-    <string name="stripe">Stripe</string>
+    <string name="paypal">PayPal</string>
+    <string name="stripe">stripe</string>
     <string name="make_payment">Make Payment</string>
     <string name="book_a_table">Book a Table</string>
     <string name="view_pay">View pay</string>
@@ -140,5 +140,7 @@
     <string name="try_again">Try again</string>
     <string name="warning_restarant_selection">Selecting a new restaurant will remove all the items from the cart.</string>
     <string name="you_have_selected_to_go">You have selected To-Go</string>
+    <string name="move_table_confirmation">Do you want to move to the table No.</string>
+    <string name="book_a_table_confirmation">Do you want to Book Table No.</string>
 
 </resources>

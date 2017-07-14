@@ -195,7 +195,7 @@
                     android:layout_toStartOf="@+id/radioGroup"
                     android:buttonTint="@color/radio_btn"
                     android:padding="15dp"
-                    android:text="Paypal" />
+                    android:text="PayPal" />
 
                 <RadioButton
                     android:id="@+id/rb_no"
@@ -207,7 +207,7 @@
                     android:layout_below="@+id/line1"
                     android:buttonTint="@color/radio_btn"
                     android:padding="15dp"
-                    android:text="Stripe" />
+                    android:text="stripe" />
 
 
             </RadioGroup>

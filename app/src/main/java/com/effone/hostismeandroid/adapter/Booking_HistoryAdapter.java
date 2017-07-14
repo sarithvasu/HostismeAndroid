@@ -74,7 +74,7 @@ public class Booking_HistoryAdapter extends ArrayAdapter<BookingHistoryItem> {
                 holder.tv_table_no.setText(": " + value.getTable_no());
             holder.tv_order_total.setText(": " + value.getBill_no());
             holder.tv_order_status.setText(": " + value.getStatus());
-            holder.tv_bill_ammount.setText(": " + value.getBill_amount());
+            holder.tv_bill_ammount.setText(": $ " + value.getBill_amount());
 
         }
 
